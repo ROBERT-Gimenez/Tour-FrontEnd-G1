@@ -76,7 +76,7 @@ function Admin() {
         </div>
       </div>
 
-      <div className="max-h-[25rem] overflow-y-auto">
+      <div className="max-h-[60vh] overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 sticky top-0 z-10">
             <tr>

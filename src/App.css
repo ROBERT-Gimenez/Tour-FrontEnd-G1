@@ -28,4 +28,23 @@
 
   .table-admin{
     padding: 1rem;
+    height: 78vh;
+    background-color: rgb(245 245 220 / 1);
   }
+
+  /* Header */
+
+  .btn-init {
+    @apply px-4 py-2 bg-transparent text-[#544013] border border-[#544013] font-semibold rounded hover:bg-[#544013] hover:text-[#ffff];
+  }
+
+  .btn-session {
+    @apply px-4 py-2 bg-[#544013] text-white font-semibold rounded hover:bg-[#544013];
+  }
+
+  .link-logo img{
+    object-fit: cover;
+    height: auto;
+    width: 10%;
+    transform: scale(1.9);
+  } 

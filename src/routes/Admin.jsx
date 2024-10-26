@@ -2,50 +2,40 @@
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faEdit,
-  faTrash,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-
+import AdminPopup from '../components/admin/AdminPopup.jsx'
+import DeletePopup from '../components/admin/DeletePopup.jsx'
+import mockProducto from "../components/utils/mockProducto.json"
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [productos, setProductos] = useState(mockProducto);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleEdit = (item) => {
-    console.log("Editar:", item);
+  const handleSave = (item) => {
+    console.log("Enviar:", item)
+    let updateList
+    const existingProductIndex = productos.findIndex((producto) => producto.id === item.id);
+    if (existingProductIndex !== -1) {
+      updateList = productos.map((producto, index) =>
+        index === existingProductIndex ? item : producto
+      );
+    }else{
+      updateList = [...prevProductos, item];
+    }
+    setProductos(updateList) 
   };
 
   const handleDelete = (item) => {
     console.log("Eliminar:", item);
   };
+ 
 
-  const handleAdd = () => {
-    console.log("Agregar nuevo elemento");
-  };
-
-  const data = [
-    { destino: "Nueva York", precio: "$500", stock: 10, comprados: 5 },
-    { destino: "Los Ángeles", precio: "$600", stock: 20, comprados: 10 },
-    { destino: "Chicago", precio: "$400", stock: 15, comprados: 7 },
-    { destino: "Miami", precio: "$450", stock: 12, comprados: 3 },
-    { destino: "Nueva York", precio: "$500", stock: 10, comprados: 5 },
-    { destino: "Los Ángeles", precio: "$600", stock: 20, comprados: 10 },
-    { destino: "Chicago", precio: "$400", stock: 15, comprados: 7 },
-    { destino: "Miami", precio: "$450", stock: 12, comprados: 3 },
-    { destino: "Nueva York", precio: "$500", stock: 10, comprados: 5 },
-    { destino: "Los Ángeles", precio: "$600", stock: 20, comprados: 10 },
-    { destino: "Chicago", precio: "$400", stock: 15, comprados: 7 },
-    { destino: "Miami", precio: "$450", stock: 12, comprados: 3 },
-  ];
-
-  const filteredData = data.filter((item) =>
-    item.destino.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = productos.filter((item) =>
+    item.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -56,23 +46,16 @@ function Admin() {
         </h1>
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <input
-              type="text"
+            <input type="text" className="input-search"
+              value={searchTerm}  onChange={handleSearch}
               placeholder="Buscar destino..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="input-search"
             />
             <FontAwesomeIcon
               icon={faSearch}
               className="absolute top-2.5 right-3 text-gray-400"
             />
           </div>
-
-          <button onClick={handleAdd} className="button-add">
-            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Agregar
-          </button>
+          <AdminPopup item={productos[0]} onEdit={handleSave} isEditing={false} />
         </div>
       </div>
 
@@ -81,6 +64,7 @@ function Admin() {
           <thead className="bg-gray-100 sticky top-0 z-10">
             <tr>
               <th className="table-header">Destino</th>
+              <th className="table-header">Nombre</th>
               <th className="table-header">Precio</th>
               <th className="table-header">Disponible</th>
               <th className="table-header">Comprados</th>
@@ -90,26 +74,16 @@ function Admin() {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredData.map((item, index) => (
               <tr key={index}>
-                <td className="table-cell">{item.destino}</td>
+                <td className="table-cell">{item.ubicacion}</td>
+                <td className="table-cell">{item.nombre}</td>
                 <td className="table-cell">{item.precio}</td>
                 <td className="table-cell">{item.stock - item.comprados}</td>
                 <td className="table-cell">{item.comprados}</td>
                 <td className="table-cell">
                   <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(item)}
-                      className="button-edit"
-                    >
-                      <FontAwesomeIcon icon={faEdit} className="mr-2" />
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item)}
-                      className="button-delete"
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                      Eliminar
-                    </button>
+                  <AdminPopup key={item.id} item={item} onEdit={handleSave} isEditing={true} />
+
+                  <DeletePopup itemDelete={item} onDelete={handleDelete} />
                   </div>
                 </td>
               </tr>

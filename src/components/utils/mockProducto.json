@@ -1,0 +1,59 @@
+[
+    {
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/11/ac/fe/ea.jpg"],
+      "categoria": "Cultura",
+      "nombre": "Recorrido por los jardines de versalles",
+      "ubicacion": "Paris",
+      "precio": "$450", 
+      "stock": 12, "comprados": 3 
+    },
+    {
+        "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8a/69/1e.jpg"],
+        "categoria": "Arquitectura",
+        "nombre": "Mirador edge",
+        "ubicacion": "Nueva York",
+        "precio": "$450",
+        "stock": 12,
+        "comprados": 3 
+    },
+    {
+      "img":[ "https://media.tacdn.com/media/attractions-splice-spp-674x446/09/6c/b2/b0.jpg"],
+      "categoria": "Gatronomia",
+      "nombre": "Royal High Tea en los jardines del Palacio de Kensington",
+      "ubicacion": "Londres",
+      "precio": "$450",
+       "stock": 12, "comprados": 3 
+    },
+    {
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"],
+      "categoria": "Arquitectura",
+      "nombre": "Visita a la Estatua de la Libertad",
+      "ubicacion": "Nueva York",
+      "precio": "$450",
+       "stock": 12, "comprados": 3 
+    },
+    {
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"],
+      "categoria": "Arquitectura",
+      "nombre": "Visita a la Estatua de la Libertad",
+      "ubicacion": "Nueva York",
+      "precio": "$450",
+       "stock": 12, "comprados": 3 
+    },
+    {
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
+      "ubicacion": "Paris",
+      "precio": "$450",
+       "stock": 12, "comprados": 3 
+    },
+    {
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
+      "ubicacion": "Paris",
+      "precio": "$450",
+       "stock": 12, "comprados": 3 
+    }
+  ]

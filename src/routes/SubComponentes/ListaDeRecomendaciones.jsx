@@ -1,83 +1,9 @@
 //src\routes\SubComponentes\ListaDeRecomendaciones.jsx
 import React, { useState, useEffect } from "react";
+import mockProducto from "../../components/utils/mockProducto.json"
 
 const ListaDeRecomendaciones = () => {
-  const [productos, setProductos] = useState([
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/11/ac/fe/ea.jpg",
-      categoria: "Cultura",
-      nombre: "Recorrido por los jardines de versalles",
-      ubicacion: "Paris",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6f/4c/27.jpg",
-      categoria: "Cultura",
-      nombre: "Museo del Louvre",
-      ubicacion: "Paris",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/70/dc/71.jpg",
-      categoria: "Gastronomia",
-      nombre:
-        "Recorrido gastronómico a pie por París con visitas gastronómicas secretas",
-      ubicacion: "Paris",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/7f/62/57.jpg",
-      categoria: "Cultura",
-      nombre: "Entrada para el Museo conmemorativo del 11-S",
-      ubicacion: "Nueva York",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/0d/07/f1/c6.jpg",
-      categoria: "Gastronomia",
-      nombre:
-        "Recorrido gastronómico local ciudad de Nueva York dirigido por guías de la policía de Nueva York",
-      ubicacion: "Nueva York",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8a/69/1e.jpg",
-      categoria: "Arquitectura",
-      nombre: "Mirador edge",
-      ubicacion: "Nueva York",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/09/6c/b2/b0.jpg",
-      categoria: "Gatronomia",
-      nombre: "Royal High Tea en los jardines del Palacio de Kensington",
-      ubicacion: "Londres",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/10/76/69/2c.jpg",
-      categoria: "Cultura",
-      nombre: "Sin marco: experiencia artística inmersiva en Londres",
-      ubicacion: "Londres",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/75/6c/92.jpg",
-      categoria: "Arquitectura",
-      nombre: "Visita a pie a la Torre de Londres y el Tower Bridge",
-      ubicacion: "Londres",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/71/41/53.jpg",
-      categoria: "Cultura",
-      nombre: "Excursión de Jack el Destripador con Ripper-Vision en Londres",
-      ubicacion: "Londres",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
-      categoria: "Arquitectura",
-      nombre: "Visita a la Estatua de la Libertad",
-      ubicacion: "Nueva York",
-    },
-    {
-      img: "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg",
-      categoria: "Gastronomia",
-      nombre: "Cata de vinos en París con almuerzo de queso y charcutería",
-      ubicacion: "Paris",
-    },
-  ]);
+  const [productos, setProductos] = useState(mockProducto)
 
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 10;
@@ -150,7 +76,7 @@ const ListaDeRecomendaciones = () => {
         <button
           onClick={() => cambiarPagina(paginaActual - 1)}
           disabled={paginaActual === 1}
-          className="px-4 py-2 mx-1 mb-2 bg-[#e46d37] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
+          className="px-4 py-2 mx-1 mb-2 bg-[#544013] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
         >
           Anterior
         </button>
@@ -160,14 +86,14 @@ const ListaDeRecomendaciones = () => {
         <button
           onClick={() => cambiarPagina(paginaActual + 1)}
           disabled={paginaActual === totalPaginas}
-          className="px-4 py-2 mx-1 mb-2 bg-[#e46d37] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
+          className="px-4 py-2 mx-1 mb-2 bg-[#544013] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
         >
           Siguiente
         </button>
         <button
           onClick={() => cambiarPagina(totalPaginas)}
           disabled={paginaActual === totalPaginas}
-          className="px-4 py-2 mx-1 mb-2 bg-[#e46d37] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
+          className="px-4 py-2 mx-1 mb-2 bg-[#544013] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
         >
           Final
         </button>

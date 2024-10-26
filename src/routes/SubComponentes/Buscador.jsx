@@ -65,7 +65,7 @@ const Buscador = () => {
           {/* Botón para enviar la búsqueda */}
           <button
             type="submit"
-            className="h-10 px-4 py-2 bg-[#e46d37] text-white font-semibold rounded hover:bg-[#e46d20]"
+            className="h-10 px-4 py-2 bg-[#544013] text-white font-semibold rounded hover:bg-[#e46d20]"
           >
             Buscar
           </button>

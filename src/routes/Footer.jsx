@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#6da590] text-white py-4">
+    <footer className="w-full bg-[#757575] text-white py-4">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-start md:items-center">
         {/* Isologotipo de la empresa */}
         <img

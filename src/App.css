@@ -48,3 +48,8 @@
     width: 3rem;;
     transform: scale(1.9);
   } 
+
+  /* Footer */
+  .isologo{
+    transform: scale(1.9);
+  }

@@ -6,11 +6,9 @@ export default function Header() {
   return (
     <header className="w-full fixed top-0 bg-[#fff0c0] shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Bloque alineado a la izquierda: Logotipo y lema */}
         <div className="flex items-center space-x-3">
           <Link to="/" className="link-logo flex items-center">
-            <img src="src\assets\Logo.svg.svg" alt="Logo" className="h-10" />{" "}
-            {/* Ajusta la ruta de tu logotipo */}
+            <img src="src/assets/Logo.svg.svg" alt="Logo" className="h-10" />{" "}
             <span className="ml-2 text-xl font-bold text-gray-800">
             Travel Trails Tour
             </span>

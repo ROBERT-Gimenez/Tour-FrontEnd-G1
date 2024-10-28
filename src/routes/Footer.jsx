@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-start md:items-center">
         {/* Isologotipo de la empresa */}
         <img
-          src="src\assets\isoLogotipo.svg"
+          src="src/assets/Logo.svg.svg"
           alt="Isologotipo"
           className="h-8 mb-2 md:mb-0 md:mr-3 isologo"
         />

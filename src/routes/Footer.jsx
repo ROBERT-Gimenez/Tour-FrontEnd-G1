@@ -15,7 +15,7 @@ const Footer = () => {
         />
         {/* Información de copyright */}
         <span className="text-center md:text-left text-lg font-bold">
-          &copy; {currentYear} Mi Empresa. Todos los derechos reservados.
+          &copy; {currentYear} Travel Trails Tours. Todos los derechos reservados.
         </span>
       </div>
     </footer>

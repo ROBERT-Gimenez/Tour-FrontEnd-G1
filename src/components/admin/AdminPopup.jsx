@@ -19,7 +19,8 @@ function AdminPopup({ item, onEdit, isEditing }) {
           categoria :'' ,
           ubicacion :'',
           precio : '',
-          stock:'',  
+          stock:0,
+          comprados:0  
         });
       }
       setIsOpen(true);

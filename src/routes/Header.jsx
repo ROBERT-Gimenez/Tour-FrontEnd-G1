@@ -12,7 +12,7 @@ export default function Header() {
             <img src="src\assets\Logo.svg.svg" alt="Logo" className="h-10" />{" "}
             {/* Ajusta la ruta de tu logotipo */}
             <span className="ml-2 text-xl font-bold text-gray-800">
-            Trabel Trails Tour
+            Travel Trails Tour
             </span>
           </Link>
         </div>

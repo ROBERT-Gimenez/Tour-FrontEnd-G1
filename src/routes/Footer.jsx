@@ -1,6 +1,6 @@
 //src\routes\Footer.jsx
 import React from "react";
-import isologotipo from "../assets/isologo.svg"
+import isologotipo from "../assets/IsoLogotipo.svg"
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 

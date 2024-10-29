@@ -50,6 +50,25 @@
   } 
 
   /* Footer */
-  .isologo{
-    transform: scale(1.9);
-  }
+  .svg-wrapper {
+    background-color: #fff0c0;
+    border-radius: 50%; 
+    width: 60px; 
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.isologo {
+    width: 80%; 
+    height: 80%;
+    object-fit: contain; 
+    transform: scale(3);
+    margin: 0 !important;
+}
+
+.span-derechos{
+  margin-left: 1rem;
+}

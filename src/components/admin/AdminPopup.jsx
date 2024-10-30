@@ -13,6 +13,7 @@ function AdminPopup({ item, onEdit, isEditing }) {
         setFormData({ ...item });
       } else {
         setFormData({
+          id:null,
           nombre: '', 
           img: [] , 
           precio : '' , 
@@ -20,7 +21,8 @@ function AdminPopup({ item, onEdit, isEditing }) {
           ubicacion :'',
           precio : '',
           stock:0,
-          comprados:0  
+          comprados:0 ,
+          fecha : null,
         });
       }
       setIsOpen(true);

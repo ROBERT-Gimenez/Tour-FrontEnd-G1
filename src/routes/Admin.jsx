@@ -25,17 +25,26 @@ function Admin() {
   };
 
   const handleSave = (item) => {
-    console.log("Enviar:", item)
-    let updateList
+    console.log("Enviar:", item);
+  
+    const isDuplicateName = productos.some((producto) => producto.nombre === item.nombre && producto.id !== item.id);
+    if (isDuplicateName) {
+      alert("Ya existe un producto con ese nombre. Por favor, elija un nombre diferente.");
+      return; 
+    }
+  
+    let updateList;
     const existingProductIndex = productos.findIndex((producto) => producto.id === item.id);
+  
     if (existingProductIndex !== -1) {
       updateList = productos.map((producto, index) =>
         index === existingProductIndex ? item : producto
       );
-    }else{
-      updateList = [...prevProductos, item];
+    } else {
+      updateList = [...productos, item];
     }
-    setProductos(updateList) 
+  
+    setProductos(updateList); 
   };
 
   const handleDelete = (item) => {
@@ -84,13 +93,14 @@ function Admin() {
         </div>
       </div>
 
-      <div className="max-h-[60vh] overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+    <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
+      <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 sticky top-0 z-10">
             <tr>
               <th className="table-header">Destino</th>
               <th className="table-header">Nombre</th>
               <th className="table-header">Precio</th>
+              <th className="table-header">Fecha</th>
               <th className="table-header">Disponible</th>
               <th className="table-header">Comprados</th>
               <th className="table-header">Acciones</th>
@@ -102,6 +112,7 @@ function Admin() {
                 <td className="table-cell">{item.ubicacion}</td>
                 <td className="table-cell">{item.nombre}</td>
                 <td className="table-cell">{item.precio}</td>
+                <td className="table-cell">{item.fecha}</td>
                 <td className="table-cell">{item.stock - item.comprados}</td>
                 <td className="table-cell">{item.comprados}</td>
                 <td className="table-cell">

@@ -7,6 +7,8 @@ import Header from "./routes/Header";
 import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
 import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
+import { ProductDetail } from "./routes/ProductDetail";
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen pt-16">
@@ -16,6 +18,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
         <Route path="/iniciar-sesion" element={<IniciarSesion />} />
+        <Route path="/producto/:id" element={<ProductDetail />} />
         <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
       </Routes>
       <Footer />

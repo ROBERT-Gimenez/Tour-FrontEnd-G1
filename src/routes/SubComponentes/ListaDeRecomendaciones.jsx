@@ -1,9 +1,11 @@
 //src\routes\SubComponentes\ListaDeRecomendaciones.jsx
 import React, { useState, useEffect } from "react";
 import mockProducto from "../../components/utils/mockProducto.json"
+import { useNavigate } from 'react-router-dom';
 
 const ListaDeRecomendaciones = () => {
   const [productos, setProductos] = useState(mockProducto)
+  const navigate = useNavigate();
 
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 10;
@@ -43,24 +45,25 @@ const ListaDeRecomendaciones = () => {
       {productosPaginaActual.length === 0 ? (
         <p>No hay productos disponibles en esta página.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {productosPaginaActual.map((producto, index) => (
-            <div
-              key={index}
-              className="flex bg-[#ffff] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl"
-            >
-              <img
-                src={producto.img}
-                alt="imagen producto"
-                className="w-1/3 h-auto object-cover rounded-l-lg"
-              />
-              <div className="flex flex-col justify-between p-4 w-2/3">
-                <h3 className="text-sm text-gray-600">{producto.categoria}</h3>
-                <h2 className="text-lg font-bold">{producto.nombre}</h2>
-                <p className="text-sm text-gray-600">{producto.ubicacion}</p>
-              </div>
-            </div>
-          ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {productosPaginaActual.map((producto, index) => (
+        <div
+          key={index}
+          className="flex bg-[#ffff] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
+          onClick={() => navigate(`/producto/${producto.id}`)}
+          >
+          <img
+            src={producto.img}
+            alt="imagen producto"
+            className="w-1/3 h-auto object-cover rounded-l-lg"
+          />
+          <div className="flex flex-col justify-between p-4 w-2/3">
+            <h3 className="text-sm text-gray-600">{producto.categoria}</h3>
+            <h2 className="text-lg font-bold">{producto.nombre}</h2>
+            <p className="text-sm text-gray-600">{producto.ubicacion}</p>
+          </div>
+          </div>
+        ))}
         </div>
       )}
 

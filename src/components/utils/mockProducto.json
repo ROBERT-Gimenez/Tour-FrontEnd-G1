@@ -8,7 +8,8 @@
       "precio": "$450", 
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-04-24"
+      "fecha":"12-04-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":2,
@@ -19,7 +20,8 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-05-24"
+      "fecha":"12-05-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":3,
@@ -30,7 +32,8 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-06-24"
+      "fecha":"12-06-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":4,
@@ -41,7 +44,8 @@
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
-      "fecha":"12-07-24"
+      "fecha":"12-07-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":5,
@@ -52,7 +56,8 @@
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
-      "fecha":"12-08-24"
+      "fecha":"12-08-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":6,
@@ -63,7 +68,8 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"02-09-24"
+      "fecha":"02-09-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":7,
@@ -74,7 +80,8 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-10-24"
+      "fecha":"12-10-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":8,
@@ -85,18 +92,27 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"10-10-24"
+      "fecha":"10-10-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":9,
-      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg",
+              "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"
+            ],
       "categoria": "Gastronomia",
       "nombre": "Castillo de San Juan de Ulúa",
       "ubicacion": "VERACRUZ",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"21-10-24"
+      "fecha":"21-10-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":10,
@@ -107,7 +123,8 @@
       "precio": "$CHILE",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"22-09-24"
+      "fecha":"22-09-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":11,
@@ -118,7 +135,8 @@
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"01-10-24"
+      "fecha":"01-10-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":12,
@@ -129,6 +147,7 @@
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"11-12-24"
+      "fecha":"11-12-24",
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     }
   ]

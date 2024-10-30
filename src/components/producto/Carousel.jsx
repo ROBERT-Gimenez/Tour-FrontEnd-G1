@@ -22,14 +22,14 @@ const Carousel =  ({ images, onClose }) => {
           onClick={onClose}>
           <FontAwesomeIcon icon={faTimes} size="lg" />
         </button>
-
+  
         <Slider {...settings}>
           {images.map((image, index) => (
-            <div key={index}>
+            <div key={index} className="h-[82vh] overflow-hidden">
               <img 
                 src={image} 
                 alt={`Imagen ${index + 1}`} 
-                className="w-full h-auto object-cover rounded-lg" 
+                className="w-full h-full object-cover rounded-lg" 
               />
             </div>
           ))}
@@ -37,6 +37,6 @@ const Carousel =  ({ images, onClose }) => {
       </div>
     </div>
   );
-};
+}
 
 export default Carousel;

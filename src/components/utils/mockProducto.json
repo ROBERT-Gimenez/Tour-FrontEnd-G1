@@ -1,59 +1,134 @@
 [
     {
+      "id":1,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/11/ac/fe/ea.jpg"],
       "categoria": "Cultura",
       "nombre": "Recorrido por los jardines de versalles",
       "ubicacion": "Africa",
       "precio": "$450", 
-      "stock": 12, "comprados": 3 
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"12-04-24"
     },
     {
-        "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8a/69/1e.jpg"],
-        "categoria": "Arquitectura",
-        "nombre": "Mirador edge",
-        "ubicacion": "Paraguay",
-        "precio": "$450",
-        "stock": 12,
-        "comprados": 3 
+      "id":2,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8a/69/1e.jpg"],
+      "categoria": "Arquitectura",
+      "nombre": "Mirador edge",
+      "ubicacion": "Paraguay",
+      "precio": "$450",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"12-05-24"
     },
     {
+      "id":3,
       "img":[ "https://media.tacdn.com/media/attractions-splice-spp-674x446/09/6c/b2/b0.jpg"],
       "categoria": "Gatronomia",
       "nombre": "Royal High Tea en los jardines del Palacio de Kensington",
       "ubicacion": "Londres",
       "precio": "$450",
-       "stock": 12, "comprados": 3 
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"12-06-24"
     },
     {
+      "id":4,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"],
       "categoria": "Arquitectura",
       "nombre": "Visita a la Estatua de la Libertad",
       "ubicacion": "Nueva York",
       "precio": "$450",
-       "stock": 12, "comprados": 3 
+      "stock": 12, 
+      "comprados": 3 ,
+      "fecha":"12-07-24"
     },
     {
+      "id":5,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"],
       "categoria": "Arquitectura",
       "nombre": "Visita a la Estatua de la Libertad",
       "ubicacion": "Colombia",
       "precio": "$450",
-       "stock": 12, "comprados": 3 
+      "stock": 12, 
+      "comprados": 3 ,
+      "fecha":"12-08-24"
     },
     {
+      "id":6,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
       "categoria": "Gastronomia",
       "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
       "ubicacion": "Paris",
       "precio": "$450",
-       "stock": 12, "comprados": 3 
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"02-09-24"
     },
     {
+      "id":7,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "riviera maya",
+      "ubicacion": "Mexico",
+      "precio": "$450",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"12-10-24"
+    },
+    {
+      "id":8,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "Nichupté, Villas Otoch",
+      "ubicacion": "CANCUN",
+      "precio": "$450",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"10-10-24"
+    },
+    {
+      "id":9,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "Castillo de San Juan de Ulúa",
+      "ubicacion": "VERACRUZ",
+      "precio": "$450",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"21-10-24"
+    },
+    {
+      "id":10,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
       "categoria": "Gastronomia",
       "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
       "ubicacion": "Mexico",
-      "precio": "$450",
-       "stock": 12, "comprados": 3 
+      "precio": "$CHILE",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"22-09-24"
+    },
+    {
+      "id":11,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "Camino de las Pardines , Valle del Madriu ...",
+      "ubicacion": "ANDORRA",
+      "precio": "$850",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"01-10-24"
+    },
+    {
+      "id":12,
+      "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
+      "categoria": "Gastronomia",
+      "nombre": "BARCELONA",
+      "ubicacion": "ESPAÑA",
+      "precio": "$850",
+      "stock": 12,
+      "comprados": 3 ,
+      "fecha":"11-12-24"
     }
   ]

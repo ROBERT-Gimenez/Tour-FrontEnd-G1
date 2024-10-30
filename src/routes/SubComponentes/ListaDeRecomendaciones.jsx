@@ -53,7 +53,7 @@ const ListaDeRecomendaciones = () => {
           onClick={() => navigate(`/producto/${producto.id}`)}
           >
           <img
-            src={producto.img}
+            src={producto.img[0]}
             alt="imagen producto"
             className="w-1/3 h-auto object-cover rounded-l-lg"
           />

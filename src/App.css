@@ -72,3 +72,19 @@
 .span-derechos{
   margin-left: 1rem;
 }
+
+/* Carousel */
+.content-carousel{
+  padding: 2rem !important;
+  .slick-arrow {
+    color: black !important;
+    background-color: black !important;
+    border-radius: 50%;
+  }
+}
+.btn-close{
+  position: absolute;
+  z-index: 50;
+  top: 3rem;
+  right: 17rem;
+}

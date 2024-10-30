@@ -1,5 +1,5 @@
 import React from "react";
-import GaleriaImagenes from "./GaleriaImagenes";
+import ImagenesForm from "./ImagenesForm";
 
 export default function FormProduct({ formData, onFieldChange, onImagesChange }) {
 
@@ -7,7 +7,7 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
     const value = e.target.value.replace(/[^0-9]/g, ''); 
     onFieldChange({ target: { value: value } }, "precio");
   };
-  
+
     return (
       <form>
         <div className="grid grid-cols-2 gap-4">
@@ -56,7 +56,7 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
           );
         })}
       </div>
-          <GaleriaImagenes images={formData.img} onImagesChange={onImagesChange} />
+          <ImagenesForm images={formData.img} onImagesChange={onImagesChange} />
       </form>
     );
   }

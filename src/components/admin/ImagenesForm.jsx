@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-export default function GaleriaImagenes({ images, onImagesChange }) {
+export default function ImagenesForm({ images, onImagesChange }) {
     const [newImageUrl, setNewImageUrl] = useState("");
   
     const handleArrayChange = (index, value) => {

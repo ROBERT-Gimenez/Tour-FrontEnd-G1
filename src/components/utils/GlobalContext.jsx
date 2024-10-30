@@ -15,7 +15,6 @@ export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    // Comentar la llamada a Axios
     // axios(url).then((res) => {
     //   dispatch({ type: "GET_PRODUCTOS", payload: res.data });
     // });

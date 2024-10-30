@@ -23,16 +23,17 @@ export const GaleriaImagenes = ({ images }) => {
               />
             </div>
             
-            <div className="md:w-1/2 grid grid-cols-2 grid-rows-2 gap-2 p-2"> 
-              {images.slice(1, 5).map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Imagen ${index + 2}`}
-                  className="w-full h-auto object-cover rounded-lg"
-                />
-              ))}
+            <div className="md:w-1/2 grid grid-cols-2 grid-rows-2 p-2"> 
+                {images.slice(1, 5).map((img, index) => (
+                    <div key={index} className="h-48">
+                    <img
+                    src={img}
+                    alt={`Imagen ${index + 2}`}
+                    className="w-full h-full object-cover rounded-lg p-1"
+                    />
             </div>
+  ))}
+</div>
           </div>
         
           <div className="flex justify-end mt-2">

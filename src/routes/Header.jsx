@@ -10,8 +10,9 @@ export default function Header() {
         <div className="flex items-center space-x-3">
           <Link to="/" className="link-logo flex items-center">
             <img src={logo} alt="Logo" className="h-10" />
-            <span className="ml-2 text-xl font-bold text-gray-800">
-              Travel Trails Tours
+            <span className="ml-2 text-xl font-bold text-gray-800 flex flex-col font-bebas">
+              <span className="text-2xl">Trails</span>
+              <span>Travel Tours</span>
             </span>
           </Link>
         </div>
@@ -19,12 +20,12 @@ export default function Header() {
         {/* Botones en todas las pantallas */}
         <div className="flex space-x-2">
           <Link to="/crear-cuenta">
-            <button className="btn-session px-3 py-2 text-sm md:px-4 md:py-2">
+            <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
               Crear cuenta
             </button>
           </Link>
           <Link to="/iniciar-sesion">
-            <button className="btn-init px-3 py-2 text-sm md:px-4 md:py-2">
+            <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
               Iniciar sesión
             </button>
           </Link>

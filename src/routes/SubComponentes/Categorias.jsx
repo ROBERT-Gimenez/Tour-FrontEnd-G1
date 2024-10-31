@@ -19,7 +19,7 @@ const Categorias = () => {
 
   return (
     <section className="mb-8 w-full p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Categorías</h2>
+      <h2 className="text-4xl font-bold mb-6 text-center py-10">Categorías</h2>
       <div className="flex flex-wrap">
         {listaCategorias.map((categoria, index) => (
           <div key={index} className="w-full sm:w-1/2 md:w-1/3 p-4">

@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#757575] text-white py-4">
+    <footer className="w-full bg-[#000] text-white py-4">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-start md:items-center">
         <div className="svg-wrapper">
           <img

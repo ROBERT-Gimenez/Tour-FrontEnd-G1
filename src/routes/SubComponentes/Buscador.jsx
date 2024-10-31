@@ -21,7 +21,7 @@ const Buscador = () => {
 
   return (
     <div className="mb-4">
-      <h2 className="text-3xl font-bold mb-6 text-center">
+      <h2 className="text-4xl font-bold mb-6 text-center py-10">
         Buscador de Tours Turísticos
       </h2>
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">

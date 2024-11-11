@@ -1,5 +1,5 @@
 //src\routes\SubComponentes\IniciarSesion.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './session.css'; 
 import { useNavigate } from 'react-router-dom';
 import { useContextGlobal } from '../../components/utils/GlobalContext';
@@ -16,18 +16,18 @@ const IniciarSesion = () => {
     e.preventDefault();
 
     if (email === 'user@example.com' && password === 'password123') {
-      setUser({ name: 'John Doe', email });
+      const newUser = { name: 'John Doe', email: 'user@example.com' , token:"token" };
+      setUser(newUser);
       setError('');
-      const token = 'token';
-      localStorage.setItem("token",token)
-      dispatch({ type: 'LOGIN', payload: token });
+      localStorage.setItem("user", JSON.stringify(newUser));
+      dispatch({ type: 'LOGIN', payload: newUser });
+      
       setTimeout(() => {
         navigate('/'); 
       }, 2000);
     } else {
       setError('Correo electrónico o contraseña incorrectos');
     }
-
   };
 
   return (

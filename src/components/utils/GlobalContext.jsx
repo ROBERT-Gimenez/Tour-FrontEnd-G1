@@ -4,12 +4,13 @@ import mockProducto from "../../components/utils/mockProducto.json";
 
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
+const user = JSON.parse(localStorage.getItem("user")) || [];
 
 const initialState = {
   productos: [],
   favs: lsFavs,
   theme: true,
-  token: localStorage.getItem("token") || null,
+  user: user || {},
 };
 
 export const ContextProvider = ({ children }) => {
@@ -28,12 +29,8 @@ export const ContextProvider = ({ children }) => {
   }, [state.favs]);
 
   useEffect(() => {
-    if (state.token) {
-      localStorage.setItem("token", state.token);
-    } else {
-      localStorage.removeItem("token");
-    }
-  }, [state.token]);
+      localStorage.setItem("user", JSON.stringify(state.user));
+  }, [state.user]);
 
   return (
     <ContextGlobal.Provider value={{ state, dispatch }}>

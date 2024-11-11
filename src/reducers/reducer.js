@@ -12,9 +12,9 @@ export const reducer = (state, action) => {
         );
         return { ...state, favs: filteredFavs };
       case "LOGIN":
-        return { ...state, token: action.payload };
+        return { ...state, user: action.payload };
       case "LOGOUT":
-        return { ...state, token: null };
+        return { ...state, user: null };
       default:
         return state;
     }

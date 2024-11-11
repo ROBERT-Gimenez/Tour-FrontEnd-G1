@@ -23,25 +23,34 @@ export default function Header() {
             </span>
           </Link>
         </div>
-
-        <div className="flex space-x-2">
-          <Link to="/crear-cuenta">
+        <div className="btns-sessions flex space-x-2">
+        {!state?.user?.token ? (
+          <>
+            <Link to="/crear-cuenta">
             <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
               Crear cuenta
             </button>
           </Link>
-          {!state?.token ? (
+         
             <Link to="/iniciar-sesion">
               <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
                 Iniciar sesión
               </button>
-            </Link>)
+            </Link>
+          </>
+            )
             : (
+            <>
+            <div className="avatar animate">
+              {state.user?.name?.split(' ').map((n) => n[0]).join('')}
+            </div>
             <Link to="/iniciar-sesion">
-              <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
+              <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate" >
                 Cerrar sesión
               </button>
-          </Link>)
+            </Link>
+            </>
+          )
           }
         </div>
       </div>

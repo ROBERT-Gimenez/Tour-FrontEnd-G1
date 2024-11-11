@@ -9,11 +9,13 @@ import {
 import AdminPopup from "../components/admin/AdminPopup.jsx";
 import DeletePopup from "../components/admin/DeletePopup.jsx";
 import mockProducto from "../components/utils/mockProducto.json";
+import { CharacteristicsForm } from "../components/admin/characteristicsForm.jsx";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [productos, setProductos] = useState(mockProducto);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [features, setFeatures] = useState([]);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
@@ -59,6 +61,10 @@ function Admin() {
     console.log("Eliminar:", item);
   };
 
+  const handleFeatureUpdate = (updatedFeatures) => {
+    setFeatures(updatedFeatures);
+  };
+
   const filteredData = productos.filter((item) =>
     item.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -86,26 +92,19 @@ function Admin() {
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 p-10">
             Administración
           </h1>
-          <div className="flex items-center space-x-4">
+          
+          <div className="flex items-center space-x-4 content-search-inputs">
             <div className="relative">
-              <input
-                type="text"
-                className="input-search"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="Buscar destino..."
-              />
-              <FontAwesomeIcon
-                icon={faSearch}
-                className="absolute top-2.5 right-3 text-gray-400"
-              />
+              <input type="text" className="input-search" value={searchTerm} onChange={handleSearch}
+                placeholder="Buscar destino..." />
+              <FontAwesomeIcon icon={faSearch} className="absolute top-2.5 right-3 text-gray-400" />
             </div>
-            <AdminPopup
-              item={productos[0]}
-              onEdit={handleSave}
-              isEditing={false}
-            />
+            <div className="btns-popus">
+            <AdminPopup item={productos[0]} onEdit={handleSave} isEditing={false}/>
+              <CharacteristicsForm onFeatureUpdate={handleFeatureUpdate} />
+            </div>
           </div>
+
         </div>
 
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">

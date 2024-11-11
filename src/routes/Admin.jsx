@@ -9,7 +9,7 @@ import {
 import AdminPopup from "../components/admin/AdminPopup.jsx";
 import DeletePopup from "../components/admin/DeletePopup.jsx";
 import mockProducto from "../components/utils/mockProducto.json";
-import { CharacteristicsForm } from "../components/admin/characteristicsForm.jsx";
+import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");

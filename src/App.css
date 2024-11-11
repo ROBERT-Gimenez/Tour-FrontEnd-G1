@@ -88,3 +88,21 @@
   top: 3rem;
   right: 17rem;
 }
+
+
+
+/* ADMIN */
+.btns-popus{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.content-search-inputs{
+  align-items: revert;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: 30px;
+}
+/*  */

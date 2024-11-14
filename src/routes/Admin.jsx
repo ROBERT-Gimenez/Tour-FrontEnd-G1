@@ -18,6 +18,8 @@ function Admin() {
   const [productos, setProductos] = useState(mockProducto);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [features, setFeatures] = useState([]);
+  const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
+  const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
 
   const navigate = useNavigate();
 
@@ -33,6 +35,17 @@ function Admin() {
 
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // Simulamos la obtención de los usuarios
+  useEffect(() => {
+    // Simula una llamada a la API para obtener los usuarios
+    const fetchedUsuarios = [
+      { id: 1, nombre: "Juan Perez", email: "juan@ejemplo.com" },
+      { id: 2, nombre: "Ana Gomez", email: "ana@ejemplo.com" },
+      { id: 3, nombre: "Carlos Ruiz", email: "carlos@ejemplo.com" },
+    ];
+    setUsuarios(fetchedUsuarios);
   }, []);
 
   const handleSearch = (e) => {
@@ -84,6 +97,10 @@ function Admin() {
     item.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const toggleUsuariosList = () => {
+    setShowUsuarios(!showUsuarios); // Alternamos la visibilidad de la lista de usuarios
+  };
+
   return isMobile ? (
     <div className="flex flex-col items-center justify-center min-h-screen bg-red-50">
       <div className="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -131,8 +148,37 @@ function Admin() {
               <CharacteristicsForm onFeatureUpdate={handleFeatureUpdate} />
               <CatalagoForm onCatalogUpdate={handleCatalogoUpdate} />
             </div>
+            <div className="flex space-x-4">
+              <button
+                className="btn bg-blue-500 text-white p-2 rounded-md"
+                onClick={toggleUsuariosList}
+              >
+                + Administradores
+              </button>
+              <AdminPopup
+                item={productos[0]}
+                onEdit={handleSave}
+                isEditing={false}
+              />
+            </div>
           </div>
         </div>
+
+        {/* Mostrar la lista de administradores */}
+        {showUsuarios && (
+          <div className="mt-4 p-4 bg-gray-100 rounded-md">
+            <h2 className="text-xl font-bold mb-4">Lista de Administradores</h2>
+            <ul>
+              {usuarios.map((usuario) => (
+                <li key={usuario.id} className="mb-2">
+                  <span>
+                    {usuario.nombre} ({usuario.email})
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200">

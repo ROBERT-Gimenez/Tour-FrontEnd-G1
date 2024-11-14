@@ -134,9 +134,9 @@
 /* ADMIN */
 .btns-popus{
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 5px;
+  flex-flow: row-reverse;
 }
 .content-search-inputs{
   align-items: revert;

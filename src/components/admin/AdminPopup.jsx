@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPlus, faTrash, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FormProduct from './FormProduct';
-
+import { CatalagoForm } from './CatalagoForm';
 function AdminPopup({ item, onEdit, isEditing }) {
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState(isEditing ? { ...item } : {});
@@ -48,7 +48,7 @@ function AdminPopup({ item, onEdit, isEditing }) {
           <FontAwesomeIcon icon={isEditing ? faEdit : faPlus} className="mr-2" />
           {isEditing ? 'Editar' : 'Agregar'}
         </button>
-  
+
         {isOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[95vh] overflow-y-auto relative z-60">

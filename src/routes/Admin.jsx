@@ -10,6 +10,7 @@ import AdminPopup from "../components/admin/AdminPopup.jsx";
 import DeletePopup from "../components/admin/DeletePopup.jsx";
 import mockProducto from "../components/utils/mockProducto.json";
 import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
+import { CatalagoForm } from "../components/admin/CatalagoForm.jsx";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +66,10 @@ function Admin() {
     setFeatures(updatedFeatures);
   };
 
+  const handleCatalogoUpdate = (updatedFeatures) => {
+    setFeatures(updatedFeatures);
+  };
+
   const filteredData = productos.filter((item) =>
     item.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -102,6 +107,7 @@ function Admin() {
             <div className="btns-popus">
             <AdminPopup item={productos[0]} onEdit={handleSave} isEditing={false}/>
               <CharacteristicsForm onFeatureUpdate={handleFeatureUpdate} />
+              <CatalagoForm onCatalogUpdate = {handleCatalogoUpdate}/>
             </div>
           </div>
 

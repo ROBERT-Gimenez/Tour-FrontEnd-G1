@@ -10,7 +10,7 @@ import AdminPopup from "../components/admin/AdminPopup.jsx";
 import DeletePopup from "../components/admin/DeletePopup.jsx";
 import mockProducto from "../components/utils/mockProducto.json";
 import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
-import { CatalagoForm } from "../components/admin/CatalagoForm.jsx";
+import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");

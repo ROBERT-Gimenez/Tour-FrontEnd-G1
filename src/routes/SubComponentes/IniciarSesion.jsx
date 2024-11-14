@@ -1,8 +1,7 @@
-// src/routes/SubComponentes/IniciarSesion.jsx
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./session.css";
 import { useNavigate } from "react-router-dom";
-import { useContextGlobal } from "../../components/utils/GlobalContext";
+import axios from "axios";
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState("");
@@ -10,27 +9,41 @@ const IniciarSesion = () => {
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const { dispatch } = useContextGlobal();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email === "user@example.com" && password === "password123") {
-      const newUser = {
-        name: "John Doe",
-        email: "user@example.com",
-        token: "token",
-      };
-      setUser(newUser);
-      setError("");
-      localStorage.setItem("user", JSON.stringify(newUser));
-      dispatch({ type: "LOGIN", payload: newUser });
+    try {
+      // Aquí hacemos la solicitud al backend
+      const response = await axios.post(
+        "http://localhost:8080/travel/usuarios/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
 
-      setTimeout(() => {
-        navigate("/Admin"); // Redirige a /Admin
-      }, 2000);
-    } else {
-      setError("Correo electrónico o contraseña incorrectos");
+      // Simulamos la respuesta
+      const userData = response.data;
+
+      // Verificamos si los datos coinciden con el usuario administrador
+      if (
+        userData.email === "correo@ejemplo.com" &&
+        userData.password === "contraseña123"
+      ) {
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+        navigate("/admin"); // Redirige al panel de administración
+      } else {
+        setError("Acceso denegado. Usuario no autorizado");
+      }
+    } catch (error) {
+      // En caso de error en la respuesta, mostramos un mensaje adecuado
+      if (error.response && error.response.status === 401) {
+        setError("Correo electrónico o contraseña incorrectos");
+      } else {
+        setError("Error al conectar con el servidor");
+      }
     }
   };
 

@@ -8,7 +8,19 @@ import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
 import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
 import { ProductDetail } from "./routes/ProductDetail";
-import PrivateRoute from "./routes/SubComponentes/PrivateRoute"; // Importamos el componente PrivateRoute
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/iniciar-sesion"); // Si no está autenticado, redirige al login
+    }
+  }, [navigate, user]);
+
+  return user ? children : null;
+};
 
 function App() {
   return (
@@ -17,11 +29,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
-          path="/Admin"
+          path="/admin"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <Admin />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />

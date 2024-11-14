@@ -1,5 +1,6 @@
-//src\routes\SubComponentes\CrearCuenta.jsx
+// src/routes/SubComponentes/CrearCuenta.jsx
 import React, { useState } from "react";
+import emailjs from "emailjs-com";
 
 const CrearCuenta = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const CrearCuenta = () => {
   });
   const [errors, setErrors] = useState({});
   const [mensaje, setMensaje] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Validaciones de los campos
   const validarCampos = () => {
@@ -31,27 +33,37 @@ const CrearCuenta = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensaje("");
+    setLoading(true);
 
     if (validarCampos()) {
       try {
-        // Aquí enviamos los datos al backend (aún por conectar)
-        const response = await fetch("http://localhost:8080/travel/usuarios", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        // Enviar el correo de bienvenida usando EmailJS
+        const templateParams = {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          email: formData.email,
+        };
 
-        if (response.ok) {
-          setMensaje("Registro exitoso, revisa tu correo para confirmación");
-          setFormData({ nombre: "", apellido: "", email: "", password: "" });
-        } else {
-          setMensaje("Hubo un problema con el registro");
-        }
+        // Enviar correo con EmailJS
+        await emailjs.send(
+          "service_es6ytu7", // Reemplaza con tu ID de servicio de EmailJS
+          "template_5mgr01j", // El ID de tu plantilla
+          templateParams, // Los parámetros que reemplazan las variables en la plantilla
+          "aA4AqwF37UADVtIXe" // Tu ID de usuario de EmailJS
+        );
+
+        setMensaje(
+          "¡Te has registrado correctamente! Revisa tu correo para más detalles."
+        );
+        setFormData({ nombre: "", apellido: "", email: "", password: "" });
       } catch (error) {
-        setMensaje("Error de conexión, intenta más tarde");
+        console.log("Error al enviar el correo:", error);
+        setMensaje(
+          "Hubo un problema al enviar el correo. Por favor, intenta más tarde."
+        );
       }
+    } else {
+      setLoading(false);
     }
   };
 
@@ -135,8 +147,9 @@ const CrearCuenta = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white rounded-md py-2 font-semibold hover:bg-blue-600 transition duration-300"
+          disabled={loading}
         >
-          Registrarse
+          {loading ? "Registrando..." : "Registrarse"}
         </button>
 
         {mensaje && <p className="mt-4 text-center text-gray-700">{mensaje}</p>}

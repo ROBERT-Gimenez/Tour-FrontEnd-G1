@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo.svg";
+import { useContextGlobal } from "../components/utils/GlobalContext";
 
 export default function Header() {
+  const { state, dispatch } = useContextGlobal();
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
+
   return (
     <header className="w-full fixed top-0 bg-[#fff0c0] shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -16,19 +23,35 @@ export default function Header() {
             </span>
           </Link>
         </div>
-
-        {/* Botones en todas las pantallas */}
-        <div className="flex space-x-2">
-          <Link to="/crear-cuenta">
+        <div className="btns-sessions flex space-x-2">
+        {!state?.user?.token ? (
+          <>
+            <Link to="/crear-cuenta">
             <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
               Crear cuenta
             </button>
           </Link>
-          <Link to="/iniciar-sesion">
-            <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
-              Iniciar sesión
-            </button>
-          </Link>
+         
+            <Link to="/iniciar-sesion">
+              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105">
+                Iniciar sesión
+              </button>
+            </Link>
+          </>
+            )
+            : (
+            <>
+            <div className="avatar animate">
+              {state.user?.name?.split(' ').map((n) => n[0]).join('')}
+            </div>
+            <Link to="/iniciar-sesion">
+              <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate" >
+                Cerrar sesión
+              </button>
+            </Link>
+            </>
+          )
+          }
         </div>
       </div>
     </header>

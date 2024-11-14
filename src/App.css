@@ -34,6 +34,46 @@
 
   /* Header */
 
+  .avatar {
+    background-color: #007bff;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+  }
+
+  .btns-sessions{
+    display: flex;
+    align-items: center;
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px); 
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .btns-sessions {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+  
+  .animate {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 1;
+  }
+
   .btn-init {
     @apply px-4 py-2 bg-transparent text-[#544013] border border-[#544013] font-semibold rounded hover:bg-[#544013] hover:text-[#ffff];
   }
@@ -88,3 +128,21 @@
   top: 3rem;
   right: 17rem;
 }
+
+
+
+/* ADMIN */
+.btns-popus{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-flow: row-reverse;
+}
+.content-search-inputs{
+  align-items: revert;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: 30px;
+}
+/*  */

@@ -1,4 +1,5 @@
 // src/routes/Admin.jsx
+
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,33 +9,24 @@ import {
 import AdminPopup from "../components/admin/AdminPopup.jsx";
 import DeletePopup from "../components/admin/DeletePopup.jsx";
 import mockProducto from "../components/utils/mockProducto.json";
+import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
+import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [productos, setProductos] = useState(mockProducto);
-  const [usuarios, setUsuarios] = useState([
-    {
-      name: "John Doe",
-      email: "user@example.com",
-      password: "password123",
-      isAdmin: true,
-    },
-    {
-      name: "Jane Smith",
-      email: "jane@example.com",
-      password: "password456",
-      isAdmin: false,
-    },
-    {
-      name: "Bob Brown",
-      email: "bob@example.com",
-      password: "password789",
-      isAdmin: false,
-    },
-  ]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [features, setFeatures] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || user.email !== "correo@ejemplo.com") {
+      navigate("/iniciar-sesion");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
@@ -80,27 +72,17 @@ function Admin() {
     console.log("Eliminar:", item);
   };
 
+  const handleFeatureUpdate = (updatedFeatures) => {
+    setFeatures(updatedFeatures);
+  };
+
+  const handleCatalogoUpdate = (updatedFeatures) => {
+    setFeatures(updatedFeatures);
+  };
+
   const filteredData = productos.filter((item) =>
     item.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleOpenAdminModal = () => {
-    setIsAdminModalOpen(true);
-  };
-
-  const handleCloseAdminModal = () => {
-    setIsAdminModalOpen(false);
-  };
-
-  const handleAssignAdmin = (user) => {
-    setUsuarios((prevUsuarios) =>
-      prevUsuarios.map((u) =>
-        u.email === user.email ? { ...u, isAdmin: true } : u
-      )
-    );
-    setSelectedUser(user);
-    setIsAdminModalOpen(false);
-  };
 
   return isMobile ? (
     <div className="flex flex-col items-center justify-center min-h-screen bg-red-50">
@@ -125,7 +107,8 @@ function Admin() {
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 p-10">
             Administración
           </h1>
-          <div className="flex items-center space-x-4">
+
+          <div className="flex items-center space-x-4 content-search-inputs">
             <div className="relative">
               <input
                 type="text"
@@ -139,47 +122,17 @@ function Admin() {
                 className="absolute top-2.5 right-3 text-gray-400"
               />
             </div>
-            <div className="flex space-x-4">
+            <div className="btns-popus">
               <AdminPopup
                 item={productos[0]}
                 onEdit={handleSave}
                 isEditing={false}
               />
-              <button
-                onClick={handleOpenAdminModal}
-                className="bg-blue-500 text-white p-2 rounded-md"
-              >
-                Agregar Administradores
-              </button>
+              <CharacteristicsForm onFeatureUpdate={handleFeatureUpdate} />
+              <CatalagoForm onCatalogUpdate={handleCatalogoUpdate} />
             </div>
           </div>
         </div>
-
-        {/* Lista de usuarios disponibles para asignar como administradores */}
-        {isAdminModalOpen && (
-          <div className="modal fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-4">Selecciona un Usuario</h2>
-              <ul>
-                {usuarios.map((user) => (
-                  <li
-                    key={user.email}
-                    className="cursor-pointer p-2 hover:bg-gray-100"
-                    onClick={() => handleAssignAdmin(user)}
-                  >
-                    {user.name} ({user.email})
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={handleCloseAdminModal}
-                className="mt-4 bg-red-500 text-white p-2 rounded-md"
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
-        )}
 
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200">

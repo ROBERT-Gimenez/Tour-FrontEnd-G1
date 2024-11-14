@@ -8,6 +8,7 @@ import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
 import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
 import { ProductDetail } from "./routes/ProductDetail";
+import PrivateRoute from "./routes/SubComponentes/PrivateRoute"; // Importamos el componente PrivateRoute
 
 function App() {
   return (
@@ -15,7 +16,14 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/Admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
         <Route path="/iniciar-sesion" element={<IniciarSesion />} />
         <Route path="/producto/:id" element={<ProductDetail />} />

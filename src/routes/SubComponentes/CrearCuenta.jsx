@@ -35,13 +35,14 @@ const CrearCuenta = () => {
     if (validarCampos()) {
       try {
         // Aquí enviamos los datos al backend (aún por conectar)
-        const response = await fetch("URL_DEL_BACKEND/registro", {
+        const response = await fetch("http://localhost:8080/travel/usuarios", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
         });
+
         if (response.ok) {
           setMensaje("Registro exitoso, revisa tu correo para confirmación");
           setFormData({ nombre: "", apellido: "", email: "", password: "" });

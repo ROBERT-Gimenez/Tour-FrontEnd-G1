@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FormProduct from './FormProduct';
-import { CatalagoForm } from './CatalagoForm';
+import { CatalagoForm } from './CatagoriForm';
 function AdminPopup({ item, onEdit, isEditing }) {
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState(isEditing ? { ...item } : {});

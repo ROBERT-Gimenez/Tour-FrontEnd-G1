@@ -108,7 +108,7 @@ export const CatalagoForm = ({onCatalogUpdate }) => {
     return (
       <div className="characteristics-form">
         <button onClick={openModal} className="btn-open-characterist">
-           Catalogos
+          Categorías
         </button>
         {isModalOpen && (
         <div className="modal-overlay">
@@ -116,7 +116,7 @@ export const CatalagoForm = ({onCatalogUpdate }) => {
                 <div className='header-catalog'>
                 <div className='content-title'>
 
-                    <h2 className="text-xl font-bold mb-4 item1">Administrar Catalogos</h2>
+                    <h2 className="text-xl font-bold mb-4 item1">Administrar Categorías</h2>
                     {!isOpenInputs &&
                     <button onClick={openInputs} className="button-add btn-add item2">
                         <i className="fa fa-plus" aria-hidden="true"></i> Añadir

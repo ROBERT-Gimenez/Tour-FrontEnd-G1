@@ -8,6 +8,8 @@ import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
 import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
 import { ProductDetail } from "./routes/ProductDetail";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();

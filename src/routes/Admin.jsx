@@ -11,17 +11,62 @@ import DeletePopup from "../components/admin/DeletePopup.jsx";
 import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
 import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
 import { useContextGlobal } from "../components/utils/GlobalContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { state, dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
+  const [features, setFeatures] = useState([]);
+  const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
+  const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
+  const [categorias, setCategorias] = useState(state.catagorias || []);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const filteredData = productos?.filter((item) => {
+    const categoriaNombre = categorias.find(
+      (categoria) => categoria.id === item.categoria
+    )?.name;
+    
+    const matchesSearchTerm = item?.ubicacion
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "" || categoriaNombre === selectedCategory;
+
+    return matchesSearchTerm && matchesCategory;
+  });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || user.email !== "admin@travel.com") {
+      navigate(user ? "/":"/iniciar-sesion");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // Simulamos la obtención de los usuarios
+  useEffect(() => {
+    // Simula una llamada a la API para obtener los usuarios
+    const fetchedUsuarios = [
+      { id: 1, nombre: "Juan Perez", email: "juan@ejemplo.com" },
+      { id: 2, nombre: "Ana Gomez", email: "ana@ejemplo.com" },
+      { id: 3, nombre: "Carlos Ruiz", email: "carlos@ejemplo.com" },
+    ];
+    setUsuarios(fetchedUsuarios);
   }, []);
 
   const handleSearch = (e) => {
@@ -63,9 +108,13 @@ function Admin() {
     console.log("Eliminar:", item);
   };
 
-  const filteredData = productos?.filter((item) =>
+  /* const filteredData = productos?.filter((item) =>
     item?.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
   );
+ */
+  const toggleUsuariosList = () => {
+    setShowUsuarios(!showUsuarios); // Alternamos la visibilidad de la lista de usuarios
+  };
 
   return isMobile ? (
     <div className="flex flex-col items-center justify-center min-h-screen bg-red-50">
@@ -90,8 +139,21 @@ function Admin() {
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 p-10">
             Administración
           </h1>
-          
+                        
           <div className="flex items-center space-x-4 content-search-inputs">
+            
+            <div className="fitered-categori">
+            <select className="input-search" value={selectedCategory} onChange={handleCategoryChange}>
+                            <option value="">Todas las categorías</option>
+                            {categorias.map((categoria) => (
+                              <option key={categoria.id} value={categoria.name}>
+                                {categoria.name}
+                              </option>
+                            ))}
+                        </select>
+              <p>Productos: {filteredData?.length}</p>
+            </div>
+
             <div className="relative">
               <input type="text" className="input-search" value={searchTerm} onChange={handleSearch}
                 placeholder="Buscar destino..." />
@@ -105,6 +167,22 @@ function Admin() {
           </div>
 
         </div>
+
+        {/* Mostrar la lista de administradores */}
+        {showUsuarios && (
+          <div className="mt-4 p-4 bg-gray-100 rounded-md">
+            <h2 className="text-xl font-bold mb-4">Lista de Administradores</h2>
+            <ul>
+              {usuarios.map((usuario) => (
+                <li key={usuario.id} className="mb-2">
+                  <span>
+                    {usuario.nombre} ({usuario.email})
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200">

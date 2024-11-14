@@ -11,7 +11,6 @@ export const CatalagoForm = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
 
-
       const handleInputChange = (e) => {
         const { name, value, files } = e.target;
         setNewCatalogo({

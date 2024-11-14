@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from "react";
 import mockProducto from "../../components/utils/mockProducto.json";
 import { useNavigate } from "react-router-dom";
+import { useContextGlobal } from "../../components/utils/GlobalContext";
 
 const ListaDeRecomendaciones = () => {
-  const [productos, setProductos] = useState(mockProducto);
+  const { state, dispatch } = useContextGlobal();
+  const [productos, setProductos] = useState(state.productos);
   const navigate = useNavigate();
 
   const [paginaActual, setPaginaActual] = useState(1);

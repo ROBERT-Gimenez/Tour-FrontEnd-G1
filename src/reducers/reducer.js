@@ -1,5 +1,15 @@
 export const reducer = (state, action) => {
     switch (action.type) {
+      case "PUT_CARACTERISTICAS": 
+        return { ...state, caracteristicas: action.updateList };
+      case "GET_CARACTERISTICAS": 
+        return { ...state, caracteristicas: action.payload };
+      case "PUT_CATEGORIAS": 
+        return { ...state, categorias: action.updateList };
+      case "GET_CATEGORIAS": 
+        return { ...state, categorias: action.payload };
+      case "PUT_PRODUCTOS": 
+        return { ...state, productos: action.updateList };
       case "GET_PRODUCTOS": 
         return { ...state, productos: action.payload };
       case "ADD_FAV":

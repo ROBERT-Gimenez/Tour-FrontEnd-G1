@@ -3,10 +3,13 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FormProduct from './FormProduct';
-import { CatalagoForm } from './CatagoriForm';
+import { useContextGlobal } from '../utils/GlobalContext';
+
+
 function AdminPopup({ item, onEdit, isEditing }) {
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState(isEditing ? { ...item } : {});
+    const { state, dispatch } = useContextGlobal();
 
     const handleEditClick = () => {
       if (isEditing) {
@@ -16,12 +19,12 @@ function AdminPopup({ item, onEdit, isEditing }) {
           id:null,
           nombre: '', 
           img: [] , 
-          precio : '' , 
           categoria :'' ,
           ubicacion :'',
           precio : '',
           stock:0,
           comprados:0 ,
+          caracteristicas:[] ,
           fecha : null,
         });
       }
@@ -29,7 +32,25 @@ function AdminPopup({ item, onEdit, isEditing }) {
     };
   
     const handleFieldChange = (e, key) => {
-      const value = e.target.value;
+      console.log(e)
+      console.log(key)
+      if (key == "caracteristicas"){
+        const selectedValues = e.map(option => option.value);
+        setFormData(prevData => ({
+          ...prevData,
+          [key]: selectedValues, 
+
+        }));
+        dispatch("PUT_CARACTERISTICAS",  {...formData,[key]: selectedValues})
+        return
+      }
+
+      let value = e?.target?.value;
+      if (key == "categoria"){
+        dispatch( "PUT_CATEGORIAS",  {...formData,[key]: e["value"]})
+        setFormData((prev) => ({ ...prev, [key]: e["value"] }));
+        return
+      }
       setFormData((prev) => ({ ...prev, [key]: value }));
     };
   
@@ -51,7 +72,7 @@ function AdminPopup({ item, onEdit, isEditing }) {
 
         {isOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[95vh] overflow-y-auto relative z-60">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-h-[95vh] max-w-[70%] overflow-y-auto relative z-60">
             <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
               onClick={() => setIsOpen(false)} >
               <FontAwesomeIcon icon={faTimes} size="lg" />

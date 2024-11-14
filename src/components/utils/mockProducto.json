@@ -5,14 +5,15 @@
               "https://res.cloudinary.com/hello-tickets/image/upload/c_limit,f_auto,q_auto,w_1300/v1645980701/tm738okqrndc5dvepoa7.jpg",
               "https://www.ngenespanol.com/wp-content/uploads/2023/02/jardines-de-versalles.jpg"
     ],
-      "categoria": "Cultura",
-      "nombre": "Recorrido por los jardines de versalles",
-      "ubicacion": "Africa",
-      "precio": "$450", 
-      "stock": 12,
-      "comprados": 3 ,
-      "fecha":"12-04-24",
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+    "nombre": "Recorrido por los jardines de versalles",
+    "ubicacion": "Africa",
+    "precio": "$450", 
+    "stock": 12,
+    "comprados": 3 ,
+    "fecha":"12-04-24",
+    "caracteristicas":[],
+    "categoria": 1,
+    "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":2,
@@ -22,14 +23,15 @@
               "https://static.hosteltur.com/app/public/uploads/img/articles/2015/11/01/L_5c1a45260f04b_6952_Paraguay1.jpg",
               "https://www.ip.gov.py/ip/wp-content/uploads/2015/02/Ruinas-tur%C3%ADsticas.jpg"
     ],
-      "categoria": "Arquitectura",
-      "nombre": "Encarnacion ",
-      "ubicacion": "Paraguay",
-      "precio": "$450",
-      "stock": 12,
-      "comprados": 3 ,
-      "fecha":"12-05-24",
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+    "nombre": "Encarnacion ",
+    "ubicacion": "Paraguay",
+    "precio": "$450",
+    "stock": 12,
+    "comprados": 3 ,
+    "fecha":"12-05-24",
+    "caracteristicas":[],
+    "categoria": 1,
+    "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":3,
@@ -37,25 +39,27 @@
               "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/10/2f/fe/united-kingdom.jpg?w=600&h=500&s=1",
               "https://tipsparatuviaje.com/wp-content/uploads/2020/03/ojo-de-londres.jpg"
       ],
-      "categoria": "Gatronomia",
       "nombre": "Gran Bretaña",
       "ubicacion": "Londres",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"12-06-24",
+      "caracteristicas":[],
+      "categoria":1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":4,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/12/4f/54/e5.jpg"],
-      "categoria": "Arquitectura",
       "nombre": "Visita a la Estatua de la Libertad",
       "ubicacion": "Nueva York",
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
       "fecha":"12-07-24",
+      "caracteristicas":[],
+      "categoria":1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
@@ -64,37 +68,40 @@
               "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/be/34/46/caption.jpg?w=500&h=400&s=1",
               "https://www.clarin.com/2023/10/07/15Oj-5pZU_2000x1500__1.jpg"
       ],
-      "categoria": "Arquitectura",
       "nombre": "Bogota",
       "ubicacion": "Colombia",
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
       "fecha":"12-08-24",
+      "caracteristicas":[],
+      "categoria": 1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":6,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "categoria": "Gastronomia",
       "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
       "ubicacion": "Paris",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"02-09-24",
+      "caracteristicas":[],
+      "categoria": 1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":7,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "categoria": "Gastronomia",
       "nombre": "riviera maya",
       "ubicacion": "Mexico",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"12-10-24",
+      "caracteristicas":[],
+      "categoria":1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
@@ -105,13 +112,14 @@
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfSMlC_HdIAF5k7xo_h8KhZtgyR52KaMntz3ulRscMqg3-EvwEHp_UirZ_B5NGIvQCnK0&usqp=CAU",
               "https://elviajerofeliz.com/wp-content/uploads/2018/05/Que%CC%81-ver-en-Cancu%CC%81n-6.jpg"
             ],
-      "categoria": "Gastronomia",
       "nombre": "Nichupté, Villas Otoch",
       "ubicacion": "CANCUN",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"10-10-24",
+      "caracteristicas":[],
+      "categoria":1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
@@ -124,49 +132,53 @@
               "https://www.lugaresturisticosdeveracruz.com/wp-content/uploads/2018/07/Revellin-de-San-Jose-en-San-Juan-de-Ulua-2.jpg",
               "https://www.diariodexalapa.com.mx/local/ega9l4-san-juan-de-ulua/alternates/LANDSCAPE_640/San%20Juan%20de%20Ul%C3%BAa"
             ],
-      "categoria": "Gastronomia",
       "nombre": "Castillo de San Juan de Ulúa",
       "ubicacion": "VERACRUZ",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"21-10-24",
+      "caracteristicas":[],
+      "categoria":1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":10,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "categoria": "Gastronomia",
       "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
       "ubicacion": "Mexico",
       "precio": "$CHILE",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"22-09-24",
+      "caracteristicas":[],
+      "categoria": 1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":11,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "categoria": "Gastronomia",
       "nombre": "Camino de las Pardines , Valle del Madriu ...",
       "ubicacion": "ANDORRA",
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"01-10-24",
+      "caracteristicas":[],
+      "categoria": 1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     },
     {
       "id":12,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "categoria": "Gastronomia",
       "nombre": "BARCELONA",
       "ubicacion": "ESPAÑA",
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"11-12-24",
+      "caracteristicas":[],
+      "categoria": 1,
       "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
     }
   ]

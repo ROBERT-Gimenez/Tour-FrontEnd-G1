@@ -2,14 +2,23 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { useContextGlobal } from '../utils/GlobalContext';
 
 const DeletePopup = ({itemDelete, onDelete }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { state, dispatch } = useContextGlobal();
+    const [productos, setProductos] = useState(state.productos);
 
     const handleDeleteClick = () => {
         onDelete(itemDelete)
         setIsOpen(false);
-      };
+        const updatedProducts = productos.filter((f) => f.id !== itemDelete.id);
+        setProductos(updatedProducts);
+        localStorage.setItem("productos", JSON.stringify(updatedProducts));
+        window.location.reload()
+        };
+
+    
 
   return (
     <div>

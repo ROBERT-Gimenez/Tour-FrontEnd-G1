@@ -1,0 +1,29 @@
+
+[
+    {
+        "id": 1,
+        "name": "Turismo en la Playa",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9TpkrYceO3HdO9uyc0fSEUhr4K_21vl0KA&s"
+      },
+      {
+        "id": 2,
+        "name": "Turismo de Aventura",
+        "image": "https://plus.unsplash.com/premium_photo-1666963323736-5ee1c16ef19d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGFpc2FqZSUyMG5hdHVyYWx8ZW58MHx8MHx8fDA%3D"
+      },
+      {
+        "id": 3,
+        "name": "Turismo Cultural",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-iQPWNssZFBbTQF3IRHWVYQuhXI-Fl881dg&s"
+      },
+      {
+        "id": 4,
+        "name": "Turismo Gastronómico",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0RA3hsQqso9Zjqcbi23ITemwKtJBWqw69w&s"
+      },
+      {
+        "id": 5,
+        "name": "Turismo de Naturaleza",
+        "image": "https://concepto.de/wp-content/uploads/2015/03/paisaje-e1549600034372.jpg" 
+      }
+
+]

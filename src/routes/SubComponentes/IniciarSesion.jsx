@@ -16,7 +16,7 @@ const IniciarSesion = () => {
     e.preventDefault();
 
     if (email === 'user@example.com' && password === 'password123') {
-      const newUser = { name: 'John Doe', email: 'user@example.com' , token:"token" };
+      const newUser = { name: 'John Doe', email: 'user@example.com' , token:"token" ,  };
       setUser(newUser);
       setError('');
       localStorage.setItem("user", JSON.stringify(newUser));

@@ -1,31 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import "./admin.css";
+import { useContextGlobal } from '../utils/GlobalContext';
 
-export const CharacteristicsForm = ({ onFeatureUpdate }) => {
-    const [features, setFeatures] = useState([]);
+export const CharacteristicsForm = () => {
+    const { state, dispatch } = useContextGlobal();
+    const [features, setFeatures] = useState([state.caracteristicas]);
     const [newFeature, setNewFeature] = useState({id:'', name: '', icon: '' });
     const [editingFeature, setEditingFeature] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
   
 
-    const mockFeatures = [
-        { id: 1, name: 'Característica 1', icon: '🌟' },
-        { id: 2, name: 'Característica 2', icon: '🚀' },
-        { id: 3, name: 'Característica 3', icon: '💡' },
-        { id: 4, name: 'Característica 4', icon: '🎨' },
-        { id: 5, name: 'Característica 5', icon: '🔒' },
-        { id: 6, name: 'Característica 6', icon: '⚙️' },
-        { id: 7, name: 'Característica 7', icon: '📈' },
-        { id: 8, name: 'Característica 8', icon: '💻' },
-        { id: 9, name: 'Característica 9', icon: '🎯' },
-        { id: 10, name: 'Característica 10', icon: '🌍' },
-      ];
-    
-      useEffect(() => {
-        setFeatures(mockFeatures);
-        onFeatureUpdate(mockFeatures);
-      }, []);
+    useEffect(() => {
+      setFeatures(state.caracteristicas);
+    }, []);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -37,10 +25,21 @@ export const CharacteristicsForm = ({ onFeatureUpdate }) => {
         alert('Por favor, complete todos los campos');
         return;
       }
-      const updatedFeatures = [...features, { ...newFeature, id: Date.now() }];
+      const isDuplicateName = features.some(
+        (characteristic) => characteristic?.name === newFeature.name && characteristic?.id !== newFeature.id
+      );
+      if (isDuplicateName) {
+        alert(
+          "Ya existe una caracteristica con ese nombre. Por favor, elija un nombre diferente."
+        );
+        return;
+      }
+
+      const updatedFeatures = [...features, { ...newFeature, id: features.length +1 }];
       setFeatures(updatedFeatures);
+      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
+      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
       setNewFeature({id:'', name: '', icon: '' });
-      onFeatureUpdate(updatedFeatures);
       setIsOpenInputs(false);
     };
   
@@ -54,24 +53,28 @@ export const CharacteristicsForm = ({ onFeatureUpdate }) => {
         f.id === editingFeature.id ? newFeature : f
       );
       setFeatures(updatedFeatures);
+      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
+      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
       setEditingFeature(null);
       setNewFeature({id:'', name: '', icon: '' });
-      onFeatureUpdate(updatedFeatures);
     };
   
     const handleDeleteFeature = (featureId) => {
       const updatedFeatures = features.filter((f) => f.id !== featureId);
       setFeatures(updatedFeatures);
-      onFeatureUpdate(updatedFeatures);
+      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
+      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
     };
   
     const openModal = () => setIsModalOpen(true);
     const openInputs = () => setIsOpenInputs(true);
     const closeModal = () => {
+      
       setIsModalOpen(false);
       setIsOpenInputs(false);
       setEditingFeature(null);
       setNewFeature({ name: '', icon: '' });
+      window.location.reload()
     };
   
     return (
@@ -140,22 +143,32 @@ export const CharacteristicsForm = ({ onFeatureUpdate }) => {
                     <div className="feature-actions flex gap-2">
                       
                       {editingFeature && newFeature.id == feature.id ? (
+                        <>
                       <button onClick={handleSaveEdit} className="button-add btn-add item2">
                         Guardar
                       </button>
+                      <button
+                        onClick={() => handleEditFeature()}
+                        className="button-delete btn-characterist"
+                      >
+                        Cancelar
+                      </button>
+                        </>
                     ) : (
                       <>
                       <button  onClick={() => handleEditFeature(feature)}  className="button-edit btn-characterist" >
                         Editar
                       </button>
-                      </>
-                    )}
                       <button
                         onClick={() => handleDeleteFeature(feature.id)}
                         className="button-delete btn-characterist"
                       >
                         Eliminar
                       </button>
+                      </>
+                    )}
+
+                      
                     </div>
                   </li>
                 ))}

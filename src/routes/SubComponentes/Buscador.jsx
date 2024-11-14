@@ -15,8 +15,6 @@ const Buscador = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Ubicación:", ubicacion);
-    console.log("Fecha:", fecha);
   };
 
   return (

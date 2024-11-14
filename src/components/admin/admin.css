@@ -69,7 +69,7 @@
     margin-bottom: 1rem;
     flex-direction: column;
   }
-  
+
   .content-title{
     display: flex ;
     justify-content: center;
@@ -252,3 +252,5 @@
     border: 1px solid gainsboro;
     border-radius: 5px;
   }
+
+/* Form-Product */

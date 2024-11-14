@@ -1,0 +1,11 @@
+ [
+        { "id": 1, "name": "Característica 1", "icon": "🌟" },
+        { "id": 2, "name": "Característica 2", "icon": "🚀" },
+        { "id": 3, "name": "Característica 3", "icon": "💡" },
+        { "id": 4, "name": "Característica 4", "icon": "🎨" },
+        { "id": 5, "name": "Característica 5", "icon": "🔒" },
+        { "id": 6, "name": "Característica 6", "icon": "⚙️" },
+        { "id": 7, "name": "Característica 7", "icon": "📈" },
+        { "id": 8, "name": "Característica 8", "icon": "💻" },
+        { "id": 9, "name": "Característica 9", "icon": "🎯" }
+]

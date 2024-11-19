@@ -1,4 +1,3 @@
-// src/routes/SubComponentes/CrearCuenta.jsx
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
 
@@ -12,6 +11,8 @@ const CrearCuenta = () => {
   const [errors, setErrors] = useState({});
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
+  const [registrado, setRegistrado] = useState(false);
+  const [reenviarCorreo, setReenviarCorreo] = useState(false);
 
   // Validaciones de los campos
   const validarCampos = () => {
@@ -52,16 +53,18 @@ const CrearCuenta = () => {
           "aA4AqwF37UADVtIXe" // Tu ID de usuario de EmailJS
         );
 
+        setRegistrado(true); // Cambiar el estado cuando el usuario se registre
         setMensaje(
           "¡Te has registrado correctamente! Revisa tu correo para más detalles."
         );
-        setFormData({ nombre: "", apellido: "", email: "", password: "" });
+        setReenviarCorreo(true); // Mostrar el botón para reenviar el correo
       } catch (error) {
         console.log("Error al enviar el correo:", error);
         setMensaje(
           "Hubo un problema al enviar el correo. Por favor, intenta más tarde."
         );
       }
+      setLoading(false);
     } else {
       setLoading(false);
     }
@@ -70,12 +73,50 @@ const CrearCuenta = () => {
   // Manejar cambios en los campos
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    // Si el usuario empieza a escribir, deshabilitar el estado de "registrado"
+    if (registrado) {
+      setRegistrado(false);
+      setMensaje(""); // Limpiar el mensaje de éxito
+      setReenviarCorreo(false); // Ocultar el botón "Reenviar"
+    }
+  };
+
+  // Función para reenviar el correo
+  const handleReenviarCorreo = () => {
+    // Aquí puedes agregar la lógica para reenviar el correo
+    console.log("Reenviando el correo...");
+
+    // Mostrar el alert
+    alert("Hemos enviado nuevamente el correo, visita tu bandeja de entrada.");
+
+    // Ocultar el botón "Reenviar" y restaurar el estado del botón "Registrarse"
+    setReenviarCorreo(false);
+    setRegistrado(false); // El usuario puede registrarse nuevamente
+  };
+
+  // Resetear el estado cuando se haga clic derecho en cualquier parte del formulario
+  const handleRightClick = (e) => {
+    e.preventDefault(); // Prevenir el menú contextual del navegador
+    // Restablecer todos los estados a su valor inicial
+    setFormData({
+      nombre: "",
+      apellido: "",
+      email: "",
+      password: "",
+    });
+    setErrors({});
+    setMensaje("");
+    setLoading(false);
+    setRegistrado(false);
+    setReenviarCorreo(false);
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
+        onContextMenu={handleRightClick} // Detectar clic derecho
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Registro</h2>
@@ -147,12 +188,26 @@ const CrearCuenta = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white rounded-md py-2 font-semibold hover:bg-blue-600 transition duration-300"
-          disabled={loading}
+          disabled={loading || registrado} // Deshabilitar si está registrando o ya está registrado
         >
           {loading ? "Registrando..." : "Registrarse"}
         </button>
 
+        {/* Mostrar el mensaje de éxito cuando el registro haya sido exitoso */}
         {mensaje && <p className="mt-4 text-center text-gray-700">{mensaje}</p>}
+
+        {/* Mensajes adicionales y el botón "Reenviar" solo si ya se registró */}
+        {registrado && reenviarCorreo && (
+          <div className="mt-4 text-center">
+            <p className="text-gray-700">¿Aún no te llega el correo?</p>
+            <button
+              className="mt-2 bg-yellow-500 text-white rounded-md py-2 px-4"
+              onClick={handleReenviarCorreo}
+            >
+              Reenviar
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

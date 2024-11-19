@@ -1,4 +1,3 @@
-// src/App.jsx
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./routes/Home";
@@ -10,19 +9,27 @@ import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
 import { ProductDetail } from "./routes/ProductDetail";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
+import Errores from "./routes/Errores";
+import Users from "./routes/Users";
 
-const ProtectedRoute = ({ children }) => {
+{
+  /* 
+
+const ProtectedRoute = ({ children, redirectTo }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!user) {
-      navigate("/iniciar-sesion"); // Si no está autenticado, redirige al login
+      navigate(redirectTo); // Redirige al login si no está autenticado
     }
-  }, [navigate, user]);
+  }, [navigate, user, redirectTo]);
 
   return user ? children : null;
 };
+
+*/
+}
 
 function App() {
   return (
@@ -30,18 +37,39 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+
+        {/*para hacer que quede sin rutas protegidas comentar toda la funcion de ProtectedRoute y 
+        activar las rutas comentadas simples*/}
+
+        <Route path="/Admin" element={<Admin />} />
+        <Route path="/Admin/users" element={<Users />} />
+
+        {/*para hacer que quede con rutas protegidas descomentar toda la funcion de ProtectedRoute y 
+        activar las rutas comentadas que contiene el ProtectedRoute*/}
+
+        {/*
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute redirectTo="/iniciar-sesion">
               <Admin />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute redirectTo="/iniciar-sesion">
+              <Errores tipoError="401" />
+            </ProtectedRoute>
+          }
+        />
+
+         */}
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
         <Route path="/iniciar-sesion" element={<IniciarSesion />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
-        <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
+        <Route path="*" element={<Errores tipoError="404" />} />
       </Routes>
       <Footer />
     </div>

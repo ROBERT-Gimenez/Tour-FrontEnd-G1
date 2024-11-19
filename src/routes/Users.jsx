@@ -14,7 +14,7 @@ function Users() {
         {/* Botón para regresar */}
         <button
           className="btn bg-blue-500 text-white mt-6 p-2 rounded-md"
-          onClick={() => navigate("/Users")}
+          onClick={() => navigate("/Admin")}
         >
           Volver a Administración
         </button>

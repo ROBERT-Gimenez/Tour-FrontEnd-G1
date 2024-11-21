@@ -12,6 +12,7 @@ import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx
 import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
 import { useContextGlobal } from "../components/utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,28 +23,33 @@ function Admin() {
   const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
   const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
   const [categorias, setCategorias] = useState(state.catagorias || []);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const navigate = useNavigate();
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const handleCategoryChange = (selectedOptions) => {
+    setSelectedCategories(selectedOptions ? selectedOptions.map((opt) => opt.value) : []);
   };
 
   const filteredData = productos?.filter((item) => {
     const categoriaNombre = categorias.find(
       (categoria) => categoria.id === item.categoria
     )?.name;
-    
+
     const matchesSearchTerm = item?.ubicacion
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
     const matchesCategory =
-      selectedCategory === "" || categoriaNombre === selectedCategory;
+      selectedCategories.length === 0 || selectedCategories.includes(categoriaNombre);
 
     return matchesSearchTerm && matchesCategory;
   });
 
-  const navigate = useNavigate();
+  const categoryOptions = categorias.map((categoria) => ({
+    value: categoria.name,
+    label: categoria.name,
+  }));
+
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -142,17 +148,16 @@ function Admin() {
                         
           <div className="flex items-center space-x-4 content-search-inputs">
             
-            <div className="fitered-categori">
-            <select className="input-search" value={selectedCategory} onChange={handleCategoryChange}>
-                            <option value="">Todas las categorías</option>
-                            {categorias.map((categoria) => (
-                              <option key={categoria.id} value={categoria.name}>
-                                {categoria.name}
-                              </option>
-                            ))}
-                        </select>
-              <p>Productos: {filteredData?.length}</p>
-            </div>
+          <div className="fitered-categori">
+            <Select
+              isMulti
+              options={categoryOptions}
+              placeholder="Seleccione categorías"
+              onChange={handleCategoryChange}
+              classNamePrefix="react-select"
+            />
+            <p>Productos: {filteredData?.length}</p>
+          </div>
 
             <div className="relative">
               <input type="text" className="input-search" value={searchTerm} onChange={handleSearch}
@@ -186,7 +191,7 @@ function Admin() {
 
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-100 sticky top-0 z-10">
+            <thead className="bg-gray-100 sticky top-0 ">
               <tr>
                 <th className="table-header">Destino</th>
                 <th className="table-header">Nombre</th>

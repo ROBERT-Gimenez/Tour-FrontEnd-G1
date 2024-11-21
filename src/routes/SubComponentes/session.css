@@ -63,6 +63,14 @@
   .content-image{
     cursor: pointer;
   }
+  
+  .categori-img img{
+    cursor: pointer;
+    border-radius: 12rem;
+    width: 12rem;
+    transform: scale(0.8);
+    justify-self: center;
+  }
 
   button {
     transition: all 0.3s ease-in-out;

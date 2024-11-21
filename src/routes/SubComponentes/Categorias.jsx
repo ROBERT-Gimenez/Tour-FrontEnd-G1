@@ -1,40 +1,14 @@
 // src/routes/SubComponentes/Categorias.jsx
 import React, { useState } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useContextGlobal } from "../../components/utils/GlobalContext";
+import { useNavigate } from "react-router-dom";
 
 const Categorias = () => {
   const { state, dispatch } = useContextGlobal();
   const [categorias, setCategorias] = useState(state.catagorias || []);
   const [productos , setProductos ] = useState(state.productos || []);
   const [selectedCategories, setSelectedCategories] = useState([]);
-
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+  const navigate = useNavigate();
 
   const handleCategoryToggle = (categoria) => {
     setSelectedCategories((prevSelected) =>
@@ -58,9 +32,7 @@ const Categorias = () => {
   return (
     <section className="mb-8 w-full p-4">
         <section className="mb-8 w-full p-4">
-        <h2 className="text-4xl font-bold mb-6 text-center py-10">Categorías</h2>
-
-        <div className="flex flex-wrap justify-center gap-4 mb-6">
+        <div className="flex flex-wrap justify-center gap-4 mb-6  pt-12">
           {categorias.map((categoria) => (
             <button
               key={categoria.id}
@@ -75,24 +47,6 @@ const Categorias = () => {
             </button>
           ))}
         </div>
-        <Slider {...settings}>
-          {categorias.map((categoria, index) => (
-            <div key={index} className="p-4 content-image">
-              <div className="bg-white border-[#fff0c0] shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl">
-                <img
-                  src={categoria.image}
-                  alt={categoria.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-semibold mb-3 text-black-800">
-                    {categoria.name}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8">
             {filteredProductos.map((producto, index) => (

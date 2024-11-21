@@ -1,19 +1,21 @@
 //src\routes\SubComponentes\ListaDeRecomendaciones.jsx
 import React, { useState, useEffect } from "react";
-import mockProducto from "../../components/utils/mockProducto.json";
 import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../../components/utils/GlobalContext";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ListaDeRecomendaciones = () => {
   const { state, dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
+  const [categorias, setCategorias] = useState(state.catagorias || []);
   const navigate = useNavigate();
 
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 10;
   const [productosAleatorios, setProductosAleatorios] = useState([]);
 
-  // Función para generar productos aleatorios sin repetición
   const generarProductosAleatorios = () => {
     const productosMezclados = [...productos].sort(() => 0.5 - Math.random());
     setProductosAleatorios(productosMezclados);
@@ -38,6 +40,30 @@ const ListaDeRecomendaciones = () => {
     if (numeroPagina >= 1 && numeroPagina <= totalPaginas) {
       setPaginaActual(numeroPagina);
     }
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -105,6 +131,26 @@ const ListaDeRecomendaciones = () => {
           Final
         </button>
       </div>
+      <h2 className="text-4xl font-bold text-center py-5">Categorías</h2>
+
+      <Slider {...settings}>
+          {categorias.map((categoria, index) => (
+            <div key={index} className="p-4 content-image">
+              <div className="categori-img">
+                <img
+                  src={categoria.image}
+                  alt={categoria.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6 text-center">
+                  <h3 className="text-xl font-semibold mb-3 text-black-800">
+                    {categoria.name}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
     </section>
   );
 };

@@ -1,84 +1,99 @@
-//src\routes\SubComponentes\ListaDeRecomendaciones.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../../components/utils/GlobalContext";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 const ListaDeRecomendaciones = () => {
-  const { state, dispatch } = useContextGlobal();
+  const { state } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
   const [categorias, setCategorias] = useState(state.catagorias || []);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
+
+  const productosPorPagina = 10;
   const navigate = useNavigate();
 
-  const [paginaActual, setPaginaActual] = useState(1);
-  const productosPorPagina = 10;
-  const [productosAleatorios, setProductosAleatorios] = useState([]);
+  useEffect(() => {
+    filtrarProductos();
+  }, [productos, selectedCategories, paginaActual]);
 
-  const generarProductosAleatorios = () => {
-    const productosMezclados = [...productos].sort(() => 0.5 - Math.random());
-    setProductosAleatorios(productosMezclados);
+  const filtrarProductos = () => {
+    const filtrados =
+      selectedCategories.length === 0
+        ? productos
+        : productos.filter((producto) =>
+            selectedCategories.includes(
+              categorias.find((cat) => cat.id === producto.categoria)?.name
+            )
+          );
+
+    setProductosFiltrados(filtrados);
+    setPaginaActual(1); // Reiniciar a la primera página al filtrar
   };
 
-  useEffect(() => {
-    generarProductosAleatorios();
-  }, [productos]);
+  const handleCategoryToggle = (categoria) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoria)
+        ? prevSelected.filter((cat) => cat !== categoria)
+        : [...prevSelected, categoria]
+    );
+  };
+
+  const handleMostrarTodos = () => {
+    setSelectedCategories([]);
+    setPaginaActual(1);
+  };
+
+  const cambiarPagina = (numeroPagina) => {
+    setPaginaActual((prev) => Math.max(1, Math.min(numeroPagina, totalPaginas)));
+  };
 
   const indiceUltimoProducto = paginaActual * productosPorPagina;
   const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
-  const productosPaginaActual = productosAleatorios.slice(
+
+  const productosPaginaActual = productosFiltrados.slice(
     indicePrimerProducto,
     indiceUltimoProducto
   );
 
-  const totalPaginas = Math.ceil(
-    productosAleatorios.length / productosPorPagina
-  );
-
-  const cambiarPagina = (numeroPagina) => {
-    if (numeroPagina >= 1 && numeroPagina <= totalPaginas) {
-      setPaginaActual(numeroPagina);
-    }
-  };
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
 
   return (
     <section className="mb-4 w-full p-2">
       <h2 className="text-4xl font-bold mb-4 text-center py-10">
         Recomendaciones
       </h2>
+      <div className="flex flex-wrap justify-center gap-4 mb-6 pt-12">
+        <button
+          onClick={handleMostrarTodos}
+          className={`px-4 py-2 rounded-lg border ${
+            selectedCategories.length === 0
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
+          } transition-transform transform hover:scale-105`}
+        >
+          Todos los productos
+        </button>
+        {categorias.map((categoria) => (
+          <button
+          key={categoria.id}
+          className={`px-4 py-2 rounded-lg border ${
+            selectedCategories.includes(categoria.name)
+            ? "bg-[rgb(188,172,120)] text-white"
+            : "bg-gray-200 text-gray-700"
+          } transition-transform transform hover:scale-105`}
+          onClick={() => handleCategoryToggle(categoria.name)}
+          >
+            {categoria.name}
+          </button>
+        ))}
+      </div>
 
-      {productosPaginaActual.length === 0 ? (
-        <p>No hay productos disponibles en esta página.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {productosPaginaActual.map((producto, index) => (
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8">
+          {productosPaginaActual.map((producto) => (
             <div
-              key={index}
+              key={producto.id}
               className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
               onClick={() => navigate(`/producto/${producto.id}`)}
             >
@@ -95,14 +110,18 @@ const ListaDeRecomendaciones = () => {
             </div>
           ))}
         </div>
-      )}
+        {productosFiltrados.length === 0 && (
+          <p className="text-center text-gray-500 mt-4">
+            No hay productos disponibles para las categorías seleccionadas.
+          </p>
+        )}
+      </div>
 
-      {/* Controles de paginación */}
       <div className="flex justify-center mt-4 flex-wrap">
         <button
           onClick={() => cambiarPagina(1)}
           disabled={paginaActual === 1}
-          className="px-4 py-2 mx-1 mb-2 bg-[#6da590]text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
+          className="px-4 py-2 mx-1 mb-2 bg-[#6da590] text-black rounded disabled:bg-gray-400 sm:px-6 sm:py-3 text-sm sm:text-base"
         >
           Inicio
         </button>
@@ -131,26 +150,6 @@ const ListaDeRecomendaciones = () => {
           Final
         </button>
       </div>
-      <h2 className="text-4xl font-bold text-center py-5">Categorías</h2>
-
-      <Slider {...settings}>
-          {categorias.map((categoria, index) => (
-            <div key={index} className="p-4 content-image">
-              <div className="categori-img">
-                <img
-                  src={categoria.image}
-                  alt={categoria.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-semibold mb-3 text-black-800">
-                    {categoria.name}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
     </section>
   );
 };

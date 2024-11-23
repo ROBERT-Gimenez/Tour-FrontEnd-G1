@@ -1,213 +1,147 @@
 import React, { useState } from "react";
-import emailjs from "emailjs-com";
 
 const CrearCuenta = () => {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
-  const [mensaje, setMensaje] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [registrado, setRegistrado] = useState(false);
-  const [reenviarCorreo, setReenviarCorreo] = useState(false);
+  // Estados para cada campo del formulario
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Validaciones de los campos
-  const validarCampos = () => {
-    const newErrors = {};
-
-    if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
-    if (!formData.apellido.trim())
-      newErrors.apellido = "El apellido es obligatorio";
-    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Ingresa un correo válido";
-    if (!formData.password.trim() || formData.password.length < 6)
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Manejar el envío del formulario
+  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensaje("");
-    setLoading(true);
 
-    if (validarCampos()) {
-      try {
-        // Enviar el correo de bienvenida usando EmailJS
-        const templateParams = {
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          email: formData.email,
-        };
+    // Verificar que todos los campos estén completos
+    if (!username || !password || !nombre || !apellido) {
+      setError("Todos los campos son obligatorios");
+      return;
+    }
 
-        // Enviar correo con EmailJS
-        await emailjs.send(
-          "service_es6ytu7", // Reemplaza con tu ID de servicio de EmailJS
-          "template_5mgr01j", // El ID de tu plantilla
-          templateParams, // Los parámetros que reemplazan las variables en la plantilla
-          "aA4AqwF37UADVtIXe" // Tu ID de usuario de EmailJS
-        );
+    // Preparar los datos a enviar
+    const userData = {
+      username,
+      password,
+      nombre,
+      apellido,
+    };
 
-        setRegistrado(true); // Cambiar el estado cuando el usuario se registre
-        setMensaje(
-          "¡Te has registrado correctamente! Revisa tu correo para más detalles."
-        );
-        setReenviarCorreo(true); // Mostrar el botón para reenviar el correo
-      } catch (error) {
-        console.log("Error al enviar el correo:", error);
-        setMensaje(
-          "Hubo un problema al enviar el correo. Por favor, intenta más tarde."
-        );
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Enviar los datos al backend
+      const response = await fetch("http://localhost:8081/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Usuario registrado exitosamente:", data);
+        // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Error al registrar usuario");
       }
-      setLoading(false);
-    } else {
-      setLoading(false);
+    } catch (err) {
+      setError("Error de conexión. Intenta nuevamente");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  // Manejar cambios en los campos
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    // Si el usuario empieza a escribir, deshabilitar el estado de "registrado"
-    if (registrado) {
-      setRegistrado(false);
-      setMensaje(""); // Limpiar el mensaje de éxito
-      setReenviarCorreo(false); // Ocultar el botón "Reenviar"
-    }
-  };
-
-  // Función para reenviar el correo
-  const handleReenviarCorreo = () => {
-    // Aquí puedes agregar la lógica para reenviar el correo
-    console.log("Reenviando el correo...");
-
-    // Mostrar el alert
-    alert("Hemos enviado nuevamente el correo, visita tu bandeja de entrada.");
-
-    // Ocultar el botón "Reenviar" y restaurar el estado del botón "Registrarse"
-    setReenviarCorreo(false);
-    setRegistrado(false); // El usuario puede registrarse nuevamente
-  };
-
-  // Resetear el estado cuando se haga clic derecho en cualquier parte del formulario
-  const handleRightClick = (e) => {
-    e.preventDefault(); // Prevenir el menú contextual del navegador
-    // Restablecer todos los estados a su valor inicial
-    setFormData({
-      nombre: "",
-      apellido: "",
-      email: "",
-      password: "",
-    });
-    setErrors({});
-    setMensaje("");
-    setLoading(false);
-    setRegistrado(false);
-    setReenviarCorreo(false);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        onContextMenu={handleRightClick} // Detectar clic derecho
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Registro</h2>
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-6">Crear Cuenta</h2>
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
+      <form onSubmit={handleSubmit}>
+        {/* Campo para el nombre de usuario */}
         <div className="mb-4">
-          <label htmlFor="nombre" className="block font-medium text-gray-700">
-            Nombre
-          </label>
-          <input
-            type="text"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2 mt-1"
-          />
-          {errors.nombre && (
-            <p className="text-red-500 text-sm">{errors.nombre}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="apellido" className="block font-medium text-gray-700">
-            Apellido
-          </label>
-          <input
-            type="text"
-            name="apellido"
-            value={formData.apellido}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2 mt-1"
-          />
-          {errors.apellido && (
-            <p className="text-red-500 text-sm">{errors.apellido}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block font-medium text-gray-700">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700"
+          >
             Correo electrónico
           </label>
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2 mt-1"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email}</p>
-          )}
         </div>
 
+        {/* Campo para la contraseña */}
         <div className="mb-4">
-          <label htmlFor="password" className="block font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Contraseña
           </label>
           <input
             type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2 mt-1"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password}</p>
-          )}
         </div>
 
+        {/* Campo para el nombre */}
+        <div className="mb-4">
+          <label
+            htmlFor="nombre"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Nombre
+          </label>
+          <input
+            type="text"
+            id="nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        {/* Campo para el apellido */}
+        <div className="mb-6">
+          <label
+            htmlFor="apellido"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Apellido
+          </label>
+          <input
+            type="text"
+            id="apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        {/* Botón de envío */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white rounded-md py-2 font-semibold hover:bg-blue-600 transition duration-300"
-          disabled={loading || registrado} // Deshabilitar si está registrando o ya está registrado
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={isLoading}
         >
-          {loading ? "Registrando..." : "Registrarse"}
+          {isLoading ? "Registrando..." : "Crear Cuenta"}
         </button>
-
-        {/* Mostrar el mensaje de éxito cuando el registro haya sido exitoso */}
-        {mensaje && <p className="mt-4 text-center text-gray-700">{mensaje}</p>}
-
-        {/* Mensajes adicionales y el botón "Reenviar" solo si ya se registró */}
-        {registrado && reenviarCorreo && (
-          <div className="mt-4 text-center">
-            <p className="text-gray-700">¿Aún no te llega el correo?</p>
-            <button
-              className="mt-2 bg-yellow-500 text-white rounded-md py-2 px-4"
-              onClick={handleReenviarCorreo}
-            >
-              Reenviar
-            </button>
-          </div>
-        )}
       </form>
     </div>
   );

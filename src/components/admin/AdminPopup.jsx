@@ -32,8 +32,6 @@ function AdminPopup({ item, onEdit, isEditing }) {
     };
   
     const handleFieldChange = (e, key) => {
-      console.log(e)
-      console.log(key)
       if (key == "caracteristicas"){
         const selectedValues = e.map(option => option.value);
         setFormData(prevData => ({

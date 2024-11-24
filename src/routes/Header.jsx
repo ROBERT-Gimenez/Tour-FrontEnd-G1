@@ -15,8 +15,6 @@ export default function Header() {
 
   useEffect(() => {
     setRol(state.user?.roles?.[0] ?? null)
-    console.log(state.user)
-    console.log(rol)
   }, [state.user]);
 
   return (

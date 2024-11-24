@@ -1,5 +1,5 @@
 // src/routes/SubComponentes/Categorias.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContextGlobal } from "../../components/utils/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
@@ -8,11 +8,12 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Categorias = () => {
   const { state, dispatch } = useContextGlobal();
-  const [categorias, setCategorias] = useState(state.catagorias || []);
-  const [productos , setProductos ] = useState(state.productos || []);
+  const [categorias, setCategorias] = useState(state.categorias || []);
   const navigate = useNavigate();
 
-  
+  useEffect(() => {
+    setCategorias(state.categorias || []);
+  }, [state.categorias]);
   
   const settings = {
     dots: true,

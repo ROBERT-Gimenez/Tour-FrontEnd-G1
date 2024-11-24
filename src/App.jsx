@@ -9,6 +9,7 @@ import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
 import { ProductDetail } from "./routes/ProductDetail";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
+import ListUsers from "./components/admin/ListUsers";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -34,6 +35,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <ListUsers />
             </ProtectedRoute>
           }
         />

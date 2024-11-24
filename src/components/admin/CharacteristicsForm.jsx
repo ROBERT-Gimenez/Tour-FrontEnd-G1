@@ -96,7 +96,6 @@ export const CharacteristicsForm = () => {
       setIsOpenInputs(false);
       setEditingFeature(null);
       setNewFeature({ name: '', icon: '' });
-      window.location.reload()
     };
   
     return (

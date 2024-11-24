@@ -13,18 +13,22 @@ import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
 import { useContextGlobal } from "../components/utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { state, dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
-  const [features, setFeatures] = useState([]);
   const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
   const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
   const [categorias, setCategorias] = useState(state.catagorias || []);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCategorias(state.categorias || []);
+  }, [state.categorias]);
 
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions ? selectedOptions.map((opt) => opt.value) : []);
@@ -64,9 +68,7 @@ function Admin() {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Simulamos la obtención de los usuarios
   useEffect(() => {
-    // Simula una llamada a la API para obtener los usuarios
     const fetchedUsuarios = [
       { id: 1, nombre: "Juan Perez", email: "juan@ejemplo.com" },
       { id: 2, nombre: "Ana Gomez", email: "ana@ejemplo.com" },
@@ -104,7 +106,6 @@ function Admin() {
     } else {
       updateList = [...state.productos, item];
     }
-    console.log(updateList)
     localStorage.setItem("productos", JSON.stringify(updateList));
     dispatch({ type: 'PUT_PRODUCTOS' , updateList })
     setProductos(updateList)
@@ -114,10 +115,6 @@ function Admin() {
     console.log("Eliminar:", item);
   };
 
-  /* const filteredData = productos?.filter((item) =>
-    item?.ubicacion.toLowerCase().includes(searchTerm.toLowerCase())
-  );
- */
   const toggleUsuariosList = () => {
     setShowUsuarios(!showUsuarios); // Alternamos la visibilidad de la lista de usuarios
   };
@@ -166,6 +163,11 @@ function Admin() {
             </div>
             <div className="btns-popus">
             <AdminPopup item={state?.productos[0]} onEdit={handleSave} isEditing={false}/>
+            <Link to="/admin/users">
+                <button className="btn-open-characterist">
+                  Usuarios
+                </button>
+              </Link>
               <CharacteristicsForm/>
               <CatalagoForm/>
             </div>

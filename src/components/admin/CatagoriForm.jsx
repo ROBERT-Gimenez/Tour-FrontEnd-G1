@@ -6,13 +6,17 @@ import axios from 'axios';
 
 export const CatalagoForm = () => {
     const { state, dispatch } = useContextGlobal();
-    const [Catalogos, setCatalogo] = useState(state.catagorias || []);
+    const [categorias, setCategorias] = useState(state.catagorias || []);
     const [newCatalogo, setNewCatalogo] = useState({id:'', name: '', image: null });
     const [editingCatalogo, setEditingCatalogo] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
     const [loading, setLoading] = useState(false);
   
+    useEffect(() => {
+      setCategorias(state.categorias || []);
+    }, [state.categorias]);
+    
     const handleInputChange = (e) => {
       const { name, value, files } = e.target;
       setNewCatalogo({
@@ -27,7 +31,7 @@ export const CatalagoForm = () => {
         return;
       }
   
-      const isDuplicateName = Catalogos.some(
+      const isDuplicateName = Categorias.some(
         (categoria) => categoria?.name === newCatalogo.name && categoria?.id !== newCatalogo.id
       );
       if (isDuplicateName) {
@@ -42,8 +46,8 @@ export const CatalagoForm = () => {
       try {
         setLoading(true);
         const response = await axios.post('http://localhost:8080/travel/public/categorias', formData);
-        setCatalogo([...Catalogos, response.data]);
-        dispatch("PUT_CATEGORIAS", [...Catalogos, response.data]);
+        setCatalogo([...categorias, response.data]);
+        dispatch("PUT_CATEGORIAS", [...categorias, response.data]);
         setNewCatalogo({ id: '', name: '', image: null });
         setIsOpenInputs(false);
       } catch (error) {
@@ -68,7 +72,7 @@ export const CatalagoForm = () => {
         const response = await axios.put(`http://localhost:8080/travel/public/categorias/${newCatalogo.id}`, formData);
         const updatedCategory = response.data;
   
-        const updatedFeatures = Catalogos.map((f) =>
+        const updatedFeatures = categorias.map((f) =>
           f.id === updatedCategory.id ? updatedCategory : f
         );
         setCatalogo(updatedFeatures);
@@ -87,7 +91,7 @@ export const CatalagoForm = () => {
         setLoading(true);
         await axios.delete(`http://localhost:8080/travel/public/categorias/${featureId}`);
   
-        const updatedFeatures = Catalogos.filter((f) => f.id !== featureId);
+        const updatedFeatures = categorias.filter((f) => f.id !== featureId);
         setCatalogo(updatedFeatures);
         dispatch("PUT_CATEGORIAS", updatedFeatures);
       } catch (error) {
@@ -105,7 +109,6 @@ export const CatalagoForm = () => {
       setIsOpenInputs(false);
       setEditingCatalogo(null);
       setNewCatalogo({ name: '', image: '' });
-      window.location.reload()
     };
 
     const handleImageChange = (e) => {
@@ -184,7 +187,7 @@ export const CatalagoForm = () => {
                 {!isOpenInputs && (
                 <>
                 <ul className="feature-list">
-                    {Catalogos.map((catalogo) => (
+                    {categorias.map((catalogo) => (
                     <li key={catalogo.id} className="feature-item flex justify-between items-center">
                     <input
                         type="text"

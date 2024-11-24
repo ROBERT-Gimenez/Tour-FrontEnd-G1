@@ -30,6 +30,7 @@ const IniciarSesion = () => {
   };
 
   const handleLogin = (token) => {
+    localStorage.setItem("authToken", JSON.stringify(token));
     try {
       const decodedToken = jwtDecode(token);
       localStorage.setItem("user", JSON.stringify(decodedToken));
@@ -52,9 +53,7 @@ const IniciarSesion = () => {
       setError("");
       setIsPopupVisible(false);
     } catch (error) {
-      setError(error.response && error.response.status === 401
-        ? "Correo electrónico o contraseña incorrectos"
-        : "Error al conectar con el servidor");
+      setError(error?.response?.data?.errorMessage);
     }
   };
 

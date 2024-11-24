@@ -1,33 +1,65 @@
-//src\routes\SubComponentes\IniciarSesion.jsx
-import React, { useEffect, useState } from 'react';
-import './session.css'; 
-import { useNavigate } from 'react-router-dom';
-import { useContextGlobal } from '../../components/utils/GlobalContext';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useContextGlobal } from "../../components/utils/GlobalContext";
+import "./session.css";
+import logo from "../../assets/Logo.svg";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { jwtDecode } from "jwt-decode";
 
 const IniciarSesion = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const { dispatch } = useContextGlobal();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (email === 'user@example.com' && password === 'password123') {
-      const newUser = { name: 'John Doe', email: 'user@example.com' , token:"token" };
-      setUser(newUser);
-      setError('');
-      localStorage.setItem("user", JSON.stringify(newUser));
-      dispatch({ type: 'LOGIN', payload: newUser });
-      
-      setTimeout(() => {
-        navigate('/'); 
-      }, 2000);
-    } else {
-      setError('Correo electrónico o contraseña incorrectos');
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+  }, []);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleLogin = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      localStorage.setItem("user", JSON.stringify(decodedToken));
+      dispatch({ type: "LOGIN", payload: decodedToken });
+      setUser(decodedToken);
+    } catch (error) {
+      console.error("Error al decodificar el token", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8080/auth/login", {
+        username: email,
+        password: password,
+      });
+      const userData = response.data;
+      handleLogin(userData.token);
+      setError("");
+      setIsPopupVisible(false);
+    } catch (error) {
+      setError(error.response && error.response.status === 401
+        ? "Correo electrónico o contraseña incorrectos"
+        : "Error al conectar con el servidor");
+    }
+  };
+
+  const getUserInitials = (name) => {
+    return name?.split(" ").map((n) => n[0]).join("");
   };
 
   return (
@@ -35,32 +67,59 @@ const IniciarSesion = () => {
       {user ? (
         <div>
           <div className="avatar">
-            {user.name.split(' ').map((n) => n[0]).join('')}
+            {getUserInitials(user?.nombre)}
           </div>
-          <p className="welcome-message">Bienvenido, {user.name}!</p>
         </div>
       ) : (
-        <form className="form" onSubmit={handleSubmit}>
-          <h2 className="title">Iniciar sesión</h2>
-          <input
-            className="input"
-            type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className="input"
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <div className="error-message">{error}</div>}
-          <button className="button" type="submit">Iniciar sesión</button>
-        </form>
+        <div>
+          <button
+            className="button-header open-popup-button bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105"
+            onClick={() => setIsPopupVisible(true)}
+          >
+            Iniciar sesión
+          </button>
+
+          {isPopupVisible && (
+            <div className="popup-overlay">
+              <div className="popup-content">
+                <button className="close-button" onClick={() => setIsPopupVisible(false)}>
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </button>
+                <form className="form" onSubmit={handleSubmit}>
+                  <div className="logo-session">
+                    <img src={logo} alt="Logo" />
+                  </div>
+                  <h2 className="title">Iniciar sesión</h2>
+                  <input
+                    className="input"
+                    type="email"
+                    placeholder="Correo electrónico"
+                    value={email}
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <div className="password-container">
+                    <input
+                      className="input"
+                      placeholder="Contraseña"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button className="toggle-password" type="button" onClick={togglePasswordVisibility}>
+                      {showPassword ? "👁️" : "🙈"}
+                    </button>
+                  </div>
+                  {error && <div className="error-message">{error}</div>}
+                  <button className="button" type="submit">
+                    Iniciar sesión
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

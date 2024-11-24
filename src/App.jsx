@@ -6,8 +6,22 @@ import Admin from "./routes/Admin";
 import Header from "./routes/Header";
 import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
-import IniciarSesion from "./routes/SubComponentes/IniciarSesion";
 import { ProductDetail } from "./routes/ProductDetail";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+  return user ? children : null;
+};
 
 function App() {
   return (
@@ -15,9 +29,15 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
-        <Route path="/iniciar-sesion" element={<IniciarSesion />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
         <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
       </Routes>

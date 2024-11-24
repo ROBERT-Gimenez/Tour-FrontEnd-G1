@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import "./admin.css";
+import { useContextGlobal } from '../utils/GlobalContext';
+import axios from 'axios';
 
-export const CharacteristicsForm = ({ onFeatureUpdate }) => {
-    const [features, setFeatures] = useState([]);
+export const CharacteristicsForm = () => {
+    const { state, dispatch } = useContextGlobal();
+    const [features, setFeatures] = useState([state.caracteristicas]);
     const [newFeature, setNewFeature] = useState({id:'', name: '', icon: '' });
     const [editingFeature, setEditingFeature] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
   
+    const authHeader = {
+      Authorization: 'Basic ' + btoa('user@travel.com:user123')
+    };
 
-    const mockFeatures = [
-        { id: 1, name: 'Característica 1', icon: '🌟' },
-        { id: 2, name: 'Característica 2', icon: '🚀' },
-        { id: 3, name: 'Característica 3', icon: '💡' },
-        { id: 4, name: 'Característica 4', icon: '🎨' },
-        { id: 5, name: 'Característica 5', icon: '🔒' },
-        { id: 6, name: 'Característica 6', icon: '⚙️' },
-        { id: 7, name: 'Característica 7', icon: '📈' },
-        { id: 8, name: 'Característica 8', icon: '💻' },
-        { id: 9, name: 'Característica 9', icon: '🎯' },
-        { id: 10, name: 'Característica 10', icon: '🌍' },
-      ];
-    
-      useEffect(() => {
-        setFeatures(mockFeatures);
-        onFeatureUpdate(mockFeatures);
-      }, []);
-
+    useEffect(() => {
+      axios.get('http://localhost:8080/travel/public/caracteristicas')
+        .then((response) => {
+          setFeatures(response.data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener características:", error);
+        });
+    }, []);
+  
     const handleInputChange = (e) => {
       const { name, value } = e.target;
       setNewFeature({ ...newFeature, [name]: value });
@@ -37,41 +35,68 @@ export const CharacteristicsForm = ({ onFeatureUpdate }) => {
         alert('Por favor, complete todos los campos');
         return;
       }
-      const updatedFeatures = [...features, { ...newFeature, id: Date.now() }];
-      setFeatures(updatedFeatures);
-      setNewFeature({id:'', name: '', icon: '' });
-      onFeatureUpdate(updatedFeatures);
-      setIsOpenInputs(false);
+      const isDuplicateName = features.some(
+        (characteristic) => characteristic?.name === newFeature.name && characteristic?.id !== newFeature.id
+      );
+      if (isDuplicateName) {
+        alert("Ya existe una característica con ese nombre. Por favor, elija un nombre diferente.");
+        return;
+      }
+  
+      axios.post('http://localhost:8080/travel/public/caracteristicas', newFeature)
+        .then((response) => {
+          setFeatures([...features, response.data]);
+          dispatch("PUT_CARACTERISTICAS", [...features, response.data]);
+          setNewFeature({ id: '', name: '', icon: '' });
+          setIsOpenInputs(false);
+        })
+        .catch((error) => {
+          console.error("Error al agregar la característica:", error);
+        });
     };
   
     const handleEditFeature = (feature) => {
       setEditingFeature(feature);
-      setNewFeature({id:feature.id , name: feature.name, icon: feature.icon });
+      setNewFeature({ id: feature.id, name: feature.name, icon: feature.icon });
     };
   
     const handleSaveEdit = () => {
-      const updatedFeatures = features.map((f) =>
-        f.id === editingFeature.id ? newFeature : f
-      );
-      setFeatures(updatedFeatures);
-      setEditingFeature(null);
-      setNewFeature({id:'', name: '', icon: '' });
-      onFeatureUpdate(updatedFeatures);
+      axios.put(`http://localhost:8080/travel/public/caracteristicas/${editingFeature.id}`, newFeature)
+        .then((response) => {
+          const updatedFeatures = features.map((f) =>
+            f.id === editingFeature.id ? response.data : f
+          );
+          setFeatures(updatedFeatures); 
+          dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+          setEditingFeature(null);
+          setNewFeature({ id: '', name: '', icon: '' });
+        })
+        .catch((error) => {
+          console.error("Error al editar la característica:", error);
+        });
     };
   
-    const handleDeleteFeature = (featureId) => {
-      const updatedFeatures = features.filter((f) => f.id !== featureId);
-      setFeatures(updatedFeatures);
-      onFeatureUpdate(updatedFeatures);
-    };
+     const handleDeleteFeature = (featureId) => {
+    axios.delete(`http://localhost:8080/travel/public/caracteristicas/${featureId}`, { headers: authHeader })
+      .then(() => {
+        const updatedFeatures = features.filter((f) => f.id !== featureId);
+        setFeatures(updatedFeatures);
+        dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+      })
+      .catch((error) => {
+        console.error("Error al eliminar la característica:", error);
+      });
+  };
   
     const openModal = () => setIsModalOpen(true);
     const openInputs = () => setIsOpenInputs(true);
     const closeModal = () => {
+      
       setIsModalOpen(false);
       setIsOpenInputs(false);
       setEditingFeature(null);
       setNewFeature({ name: '', icon: '' });
+      window.location.reload()
     };
   
     return (
@@ -140,22 +165,32 @@ export const CharacteristicsForm = ({ onFeatureUpdate }) => {
                     <div className="feature-actions flex gap-2">
                       
                       {editingFeature && newFeature.id == feature.id ? (
+                        <>
                       <button onClick={handleSaveEdit} className="button-add btn-add item2">
                         Guardar
                       </button>
+                      <button
+                        onClick={() => handleEditFeature()}
+                        className="button-delete btn-characterist"
+                      >
+                        Cancelar
+                      </button>
+                        </>
                     ) : (
                       <>
                       <button  onClick={() => handleEditFeature(feature)}  className="button-edit btn-characterist" >
                         Editar
                       </button>
-                      </>
-                    )}
                       <button
                         onClick={() => handleDeleteFeature(feature.id)}
                         className="button-delete btn-characterist"
                       >
                         Eliminar
                       </button>
+                      </>
+                    )}
+
+                      
                     </div>
                   </li>
                 ))}

@@ -1,88 +1,101 @@
 import  { useEffect, useState } from 'react'
 import React from 'react';
 import "./admin.css";
+import { useContextGlobal } from '../utils/GlobalContext';
+import axios from 'axios';
 
-export const CatalagoForm = ({onCatalogUpdate }) => {
-    const [Catalogos, setCatalogo] = useState([]);
+export const CatalagoForm = () => {
+    const { state, dispatch } = useContextGlobal();
+    const [Catalogos, setCatalogo] = useState(state.catagorias || []);
     const [newCatalogo, setNewCatalogo] = useState({id:'', name: '', image: null });
     const [editingCatalogo, setEditingCatalogo] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
+    const [loading, setLoading] = useState(false);
   
-
-    const mockCatalog = [
-        {
-            id: 1,
-            name: 'Turismo en la Playa',
-            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9TpkrYceO3HdO9uyc0fSEUhr4K_21vl0KA&s', 
-          },
-          {
-            id: 2,
-            name: 'Turismo de Aventura',
-            image: 'https://plus.unsplash.com/premium_photo-1666963323736-5ee1c16ef19d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGFpc2FqZSUyMG5hdHVyYWx8ZW58MHx8MHx8fDA%3D', 
-          },
-          {
-            id: 3,
-            name: 'Turismo Cultural',
-            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-iQPWNssZFBbTQF3IRHWVYQuhXI-Fl881dg&s',
-          },
-          {
-            id: 4,
-            name: 'Turismo Gastronómico',
-            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0RA3hsQqso9Zjqcbi23ITemwKtJBWqw69w&s', 
-          },
-          {
-            id: 5,
-            name: 'Turismo de Naturaleza',
-            image: 'https://concepto.de/wp-content/uploads/2015/03/paisaje-e1549600034372.jpg', 
-          },
-       ];
-    
-      useEffect(() => {
-        setCatalogo(mockCatalog);
-        onCatalogUpdate(mockCatalog);
-      }, []);
-
-      const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
-        setNewCatalogo({
-          ...newCatalogo,
-          [name]: name === 'image' ? files[0] : value, 
-        });
-      };
+    const handleInputChange = (e) => {
+      const { name, value, files } = e.target;
+      setNewCatalogo({
+        ...newCatalogo,
+        [name]: name === 'image' ? files[0] : value,
+      });
+    };
   
-    const handleAddCatalog = () => {
+    const handleAddCatalog = async () => {
       if (!newCatalogo.name || !newCatalogo.image) {
         alert('Por favor, complete todos los campos');
         return;
       }
-      const updatedFeatures = [...Catalogos, { ...newCatalogo, id: Date.now() }];
-      setCatalogo(updatedFeatures);
-      setIsOpenInputs(false);
-      setNewCatalogo({id:'', name: '', image: '' });
-      onFeatureUpdate(updatedFeatures);
-      setIsOpenInputs(false);
+  
+      const isDuplicateName = Catalogos.some(
+        (categoria) => categoria?.name === newCatalogo.name && categoria?.id !== newCatalogo.id
+      );
+      if (isDuplicateName) {
+        alert('Ya existe una categoria con ese nombre. Por favor, elija un nombre diferente.');
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('name', newCatalogo.name);
+      formData.append('image', newCatalogo.image);
+  
+      try {
+        setLoading(true);
+        const response = await axios.post('http://localhost:8080/travel/public/categorias', formData);
+        setCatalogo([...Catalogos, response.data]);
+        dispatch("PUT_CATEGORIAS", [...Catalogos, response.data]);
+        setNewCatalogo({ id: '', name: '', image: null });
+        setIsOpenInputs(false);
+      } catch (error) {
+        alert('Error al agregar la categoría');
+      } finally {
+        setLoading(false);
+      }
     };
   
     const handleEditCatalog = (catalogo) => {
-        setEditingCatalogo(catalogo);
-        setNewCatalogo({id:catalogo.id , name: catalogo.name, image: catalogo.image });
+      setEditingCatalogo(catalogo);
+      setNewCatalogo({ id: catalogo.id, name: catalogo.name, image: catalogo.image });
     };
   
-    const handleSaveEdit = () => {
-      const updatedFeatures = Catalogos.map((f) =>
-        f.id === editingCatalogo.id ? newCatalogo : f
-      );
-      setCatalogo(updatedFeatures);
-      setEditingCatalogo(null);
-      setNewCatalogo({id:'', name: '', image: '' });
-      onFeatureUpdate(updatedFeatures);
+    const handleSaveEdit = async () => {
+      const formData = new FormData();
+      formData.append('name', newCatalogo.name);
+      formData.append('image', newCatalogo.image);
+  
+      try {
+        setLoading(true);
+        const response = await axios.put(`http://localhost:8080/travel/public/categorias/${newCatalogo.id}`, formData);
+        const updatedCategory = response.data;
+  
+        const updatedFeatures = Catalogos.map((f) =>
+          f.id === updatedCategory.id ? updatedCategory : f
+        );
+        setCatalogo(updatedFeatures);
+        dispatch("PUT_CATEGORIAS", updatedFeatures);
+        setEditingCatalogo(null);
+        setNewCatalogo({ id: '', name: '', image: null });
+      } catch (error) {
+        alert('Error al editar la categoría');
+      } finally {
+        setLoading(false);
+      }
     };
   
-    const handleDeleteFeature = (featureId) => {
-      const updatedFeatures = Catalogos.filter((f) => f.id !== featureId);
-      setCatalogo(updatedFeatures);
-      onFeatureUpdate(updatedFeatures);
+    const handleDeleteFeature = async (featureId) => {
+      try {
+        setLoading(true);
+        await axios.delete(`http://localhost:8080/travel/public/categorias/${featureId}`);
+  
+        const updatedFeatures = Catalogos.filter((f) => f.id !== featureId);
+        setCatalogo(updatedFeatures);
+        dispatch("PUT_CATEGORIAS", updatedFeatures);
+      } catch (error) {
+        alert('Error al eliminar la categoría');
+        console.log(error)
+      } finally {
+        setLoading(false);
+      }
     };
   
     const openModal = () => setIsModalOpen(true);
@@ -91,7 +104,8 @@ export const CatalagoForm = ({onCatalogUpdate }) => {
       setIsModalOpen(false);
       setIsOpenInputs(false);
       setEditingCatalogo(null);
-      setNewCatalogo({ name: '', icon: '' });
+      setNewCatalogo({ name: '', image: '' });
+      window.location.reload()
     };
 
     const handleImageChange = (e) => {
@@ -133,7 +147,7 @@ export const CatalagoForm = ({onCatalogUpdate }) => {
                                 name="name"
                                 value={newCatalogo.name}
                                 onChange={handleInputChange}
-                                placeholder="Nombre del Catálogo"
+                                placeholder="Nombre de la Categoria"
                                 className="input-field-form"
                                 />
                             <div className="input-group content-preview-image">
@@ -201,22 +215,24 @@ export const CatalagoForm = ({onCatalogUpdate }) => {
                     <div className="feature-actions flex gap-2">
                       
                       {editingCatalogo && newCatalogo.id == catalogo.id ? (
-                      <button onClick={handleSaveEdit} className="button-add btn-add item2">
-                        Guardar
-                      </button>
+                      <>
+                        <button onClick={handleSaveEdit} className="button-add btn-add item2">
+                          Guardar
+                        </button>
+                        <button onClick={() => handleEditCatalog()} className="button-delete btn-characterist" >
+                          Cancelar
+                        </button>
+                      </>
                     ) : (
                       <>
-                      <button  onClick={() => handleEditCatalog(catalogo)}  className="button-edit btn-characterist" >
-                        Editar
-                      </button>
+                        <button  onClick={() => handleEditCatalog(catalogo)}  className="button-edit btn-characterist" >
+                          Editar
+                        </button>
+                        <button onClick={() => handleDeleteFeature(catalogo.id)} className="button-delete btn-characterist">
+                          Eliminar
+                        </button>
                       </>
                     )}
-                      <button
-                        onClick={() => handleDeleteFeature(catalogo.id)}
-                        className="button-delete btn-characterist"
-                      >
-                        Eliminar
-                      </button>
                     </div>
                   </li>
                 ))}

@@ -74,7 +74,6 @@ const UserGrid = () => {
   };
 
   const handleRoleChange = async (userId, isAdmin) => {
-    console.log(token)
     try {
       const nuevoRol = isAdmin ? "admin" : "user";
 

@@ -106,7 +106,6 @@ function Admin() {
     } else {
       updateList = [...state.productos, item];
     }
-    console.log(updateList)
     localStorage.setItem("productos", JSON.stringify(updateList));
     dispatch({ type: 'PUT_PRODUCTOS' , updateList })
     setProductos(updateList)

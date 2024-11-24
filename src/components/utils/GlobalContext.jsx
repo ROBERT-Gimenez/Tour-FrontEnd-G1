@@ -1,14 +1,13 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../../reducers/reducer";
 import mockProducto from "../../components/utils/mockProducto.json";
-import categorias from "../../components/utils/categorias.json";
-import caracteristicas from "../../components/utils/caracteristicas.json";
+import axios from "axios";
 
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
 const products = JSON.parse(localStorage.getItem("productos")) || mockProducto;
-const catagori = JSON.parse(localStorage.getItem("catagorias")) || categorias;
-const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || caracteristicas;
+const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
+const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
 const user = JSON.parse(localStorage.getItem("user")) || [];
 
 const initialState = {
@@ -24,8 +23,26 @@ const initialState = {
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const authHeader = state.user?.token 
+  ? { Authorization: `Bearer ${state.user.token}` }
+  : {};
+
   useEffect(() => {
-    localStorage.setItem("categorias", JSON.stringify(state.catagorias));
+    const fetchCategorias = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/travel/public/categorias");
+        dispatch({ type: "GET_CATEGORIAS", payload: response.data });
+        localStorage.setItem("categorias", JSON.stringify(response.data));
+      } catch (error) {
+        console.error("Error al cargar las categorías:", error);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
+
+
+  useEffect(() => {
     localStorage.setItem("productos", JSON.stringify(state.productos));
 
   }, []);
@@ -33,10 +50,7 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("favs", JSON.stringify(state.favs));
   }, [state.favs]);
-
-  useEffect(() => {
-      localStorage.setItem("user", JSON.stringify(state.user));
-  }, [state.user]);
+  
 
   return (
     <ContextGlobal.Provider value={{ state, dispatch }}>

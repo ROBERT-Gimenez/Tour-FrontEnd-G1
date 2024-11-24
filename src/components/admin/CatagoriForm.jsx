@@ -2,6 +2,7 @@ import  { useEffect, useState } from 'react'
 import React from 'react';
 import "./admin.css";
 import { useContextGlobal } from '../utils/GlobalContext';
+import axios from 'axios';
 
 export const CatalagoForm = () => {
     const { state, dispatch } = useContextGlobal();
@@ -10,60 +11,91 @@ export const CatalagoForm = () => {
     const [editingCatalogo, setEditingCatalogo] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
-
-      const handleInputChange = (e) => {
-        const { name, value, files } = e.target;
-        setNewCatalogo({
-          ...newCatalogo,
-          [name]: name === 'image' ? files[0] : value, 
-        });
-      };
+    const [loading, setLoading] = useState(false);
   
-    const handleAddCatalog = () => {
+    const handleInputChange = (e) => {
+      const { name, value, files } = e.target;
+      setNewCatalogo({
+        ...newCatalogo,
+        [name]: name === 'image' ? files[0] : value,
+      });
+    };
+  
+    const handleAddCatalog = async () => {
       if (!newCatalogo.name || !newCatalogo.image) {
         alert('Por favor, complete todos los campos');
         return;
       }
+  
       const isDuplicateName = Catalogos.some(
         (categoria) => categoria?.name === newCatalogo.name && categoria?.id !== newCatalogo.id
       );
       if (isDuplicateName) {
-        alert(
-          "Ya existe una categoria con ese nombre. Por favor, elija un nombre diferente."
-        );
+        alert('Ya existe una categoria con ese nombre. Por favor, elija un nombre diferente.');
         return;
       }
-
-      const updatedCategori = [...Catalogos, { ...newCatalogo, id: Catalogos.length + 1  }];
-      setCatalogo(updatedCategori);
-      dispatch("PUT_CATEGORIAS",  updatedCategori)
-      localStorage.setItem("catagorias", JSON.stringify(updatedCategori));
-      setIsOpenInputs(false);
-      setNewCatalogo({id:'', name: '', image: '' });
-      setIsOpenInputs(false);
+  
+      const formData = new FormData();
+      formData.append('name', newCatalogo.name);
+      formData.append('image', newCatalogo.image);
+  
+      try {
+        setLoading(true);
+        const response = await axios.post('http://localhost:8080/travel/public/categorias', formData);
+        setCatalogo([...Catalogos, response.data]);
+        dispatch("PUT_CATEGORIAS", [...Catalogos, response.data]);
+        setNewCatalogo({ id: '', name: '', image: null });
+        setIsOpenInputs(false);
+      } catch (error) {
+        alert('Error al agregar la categoría');
+      } finally {
+        setLoading(false);
+      }
     };
-
   
     const handleEditCatalog = (catalogo) => {
-        setEditingCatalogo(catalogo);
-        setNewCatalogo({id:catalogo.id , name: catalogo.name, image: catalogo.image });
-       
+      setEditingCatalogo(catalogo);
+      setNewCatalogo({ id: catalogo.id, name: catalogo.name, image: catalogo.image });
     };
   
-    const handleSaveEdit = () => {
-      const updatedFeatures = Catalogos.map((f) =>
-        f.id === editingCatalogo.id ? newCatalogo : f
-      );
-      setCatalogo(updatedFeatures);
-      localStorage.setItem("catagorias", JSON.stringify(updatedFeatures));
-      setEditingCatalogo(null);
-      setNewCatalogo({id:'', name: '', image: '' });
+    const handleSaveEdit = async () => {
+      const formData = new FormData();
+      formData.append('name', newCatalogo.name);
+      formData.append('image', newCatalogo.image);
+  
+      try {
+        setLoading(true);
+        const response = await axios.put(`http://localhost:8080/travel/public/categorias/${newCatalogo.id}`, formData);
+        const updatedCategory = response.data;
+  
+        const updatedFeatures = Catalogos.map((f) =>
+          f.id === updatedCategory.id ? updatedCategory : f
+        );
+        setCatalogo(updatedFeatures);
+        dispatch("PUT_CATEGORIAS", updatedFeatures);
+        setEditingCatalogo(null);
+        setNewCatalogo({ id: '', name: '', image: null });
+      } catch (error) {
+        alert('Error al editar la categoría');
+      } finally {
+        setLoading(false);
+      }
     };
   
-    const handleDeleteFeature = (featureId) => {
-      const updatedFeatures = Catalogos.filter((f) => f.id !== featureId);
-      setCatalogo(updatedFeatures);
-      localStorage.setItem("catagorias", JSON.stringify(updatedFeatures));
+    const handleDeleteFeature = async (featureId) => {
+      try {
+        setLoading(true);
+        await axios.delete(`http://localhost:8080/travel/public/categorias/${featureId}`);
+  
+        const updatedFeatures = Catalogos.filter((f) => f.id !== featureId);
+        setCatalogo(updatedFeatures);
+        dispatch("PUT_CATEGORIAS", updatedFeatures);
+      } catch (error) {
+        alert('Error al eliminar la categoría');
+        console.log(error)
+      } finally {
+        setLoading(false);
+      }
     };
   
     const openModal = () => setIsModalOpen(true);

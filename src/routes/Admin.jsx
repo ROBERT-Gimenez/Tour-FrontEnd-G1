@@ -52,9 +52,9 @@ function Admin() {
 
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.email !== "admin@travel.com") {
-      navigate(user ? "/":"/iniciar-sesion");
+    const admin = state?.user?.roles[0];
+    if(admin.name != "ADMIN"){
+      navigate("/")
     }
   }, [navigate]);
 

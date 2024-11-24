@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./admin.css";
 import { useContextGlobal } from '../utils/GlobalContext';
+import axios from 'axios';
 
 export const CharacteristicsForm = () => {
     const { state, dispatch } = useContextGlobal();
@@ -10,11 +11,20 @@ export const CharacteristicsForm = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
   
+    const authHeader = {
+      Authorization: 'Basic ' + btoa('user@travel.com:user123')
+    };
 
     useEffect(() => {
-      setFeatures(state.caracteristicas);
+      axios.get('http://localhost:8080/travel/public/caracteristicas')
+        .then((response) => {
+          setFeatures(response.data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener características:", error);
+        });
     }, []);
-
+  
     const handleInputChange = (e) => {
       const { name, value } = e.target;
       setNewFeature({ ...newFeature, [name]: value });
@@ -29,42 +39,54 @@ export const CharacteristicsForm = () => {
         (characteristic) => characteristic?.name === newFeature.name && characteristic?.id !== newFeature.id
       );
       if (isDuplicateName) {
-        alert(
-          "Ya existe una caracteristica con ese nombre. Por favor, elija un nombre diferente."
-        );
+        alert("Ya existe una característica con ese nombre. Por favor, elija un nombre diferente.");
         return;
       }
-
-      const updatedFeatures = [...features, { ...newFeature, id: features.length +1 }];
-      setFeatures(updatedFeatures);
-      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
-      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
-      setNewFeature({id:'', name: '', icon: '' });
-      setIsOpenInputs(false);
+  
+      axios.post('http://localhost:8080/travel/public/caracteristicas', newFeature)
+        .then((response) => {
+          setFeatures([...features, response.data]);
+          dispatch("PUT_CARACTERISTICAS", [...features, response.data]);
+          setNewFeature({ id: '', name: '', icon: '' });
+          setIsOpenInputs(false);
+        })
+        .catch((error) => {
+          console.error("Error al agregar la característica:", error);
+        });
     };
   
     const handleEditFeature = (feature) => {
       setEditingFeature(feature);
-      setNewFeature({id:feature.id , name: feature.name, icon: feature.icon });
+      setNewFeature({ id: feature.id, name: feature.name, icon: feature.icon });
     };
   
     const handleSaveEdit = () => {
-      const updatedFeatures = features.map((f) =>
-        f.id === editingFeature.id ? newFeature : f
-      );
-      setFeatures(updatedFeatures);
-      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
-      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
-      setEditingFeature(null);
-      setNewFeature({id:'', name: '', icon: '' });
+      axios.put(`http://localhost:8080/travel/public/caracteristicas/${editingFeature.id}`, newFeature)
+        .then((response) => {
+          const updatedFeatures = features.map((f) =>
+            f.id === editingFeature.id ? response.data : f
+          );
+          setFeatures(updatedFeatures); 
+          dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+          setEditingFeature(null);
+          setNewFeature({ id: '', name: '', icon: '' });
+        })
+        .catch((error) => {
+          console.error("Error al editar la característica:", error);
+        });
     };
   
-    const handleDeleteFeature = (featureId) => {
-      const updatedFeatures = features.filter((f) => f.id !== featureId);
-      setFeatures(updatedFeatures);
-      dispatch("PUT_CARACTERISTICAS",updatedFeatures)
-      localStorage.setItem("caracteristicas", JSON.stringify(updatedFeatures));
-    };
+     const handleDeleteFeature = (featureId) => {
+    axios.delete(`http://localhost:8080/travel/public/caracteristicas/${featureId}`, { headers: authHeader })
+      .then(() => {
+        const updatedFeatures = features.filter((f) => f.id !== featureId);
+        setFeatures(updatedFeatures);
+        dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+      })
+      .catch((error) => {
+        console.error("Error al eliminar la característica:", error);
+      });
+  };
   
     const openModal = () => setIsModalOpen(true);
     const openInputs = () => setIsOpenInputs(true);

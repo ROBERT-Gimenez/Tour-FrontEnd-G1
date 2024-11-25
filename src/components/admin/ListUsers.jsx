@@ -107,7 +107,7 @@ const UserGrid = () => {
 
   return (
     <div className="user-grid-container">
-      <h2>Listado de Usuarios</h2>
+      <h2 className="title-user-list">Listado de Usuarios</h2>
       <div className="user-grid">
         {users.map((user) => (
           <div key={user.id} className="user-card">

@@ -9,6 +9,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("authToken");
     dispatch({ type: 'LOGOUT' });
     window.location.reload()
   };

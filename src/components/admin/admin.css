@@ -260,7 +260,7 @@
   min-height: 76vh;
 }
 
-h2 {
+.title-user-list {
   text-align: center;
   background-color: black;
   color: antiquewhite;

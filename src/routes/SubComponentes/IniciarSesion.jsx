@@ -4,16 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../../components/utils/GlobalContext";
 import "./session.css";
 import logo from "../../assets/Logo.svg";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from "jwt-decode";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const { dispatch } = useContextGlobal();
+  const { state , dispatch } = useContextGlobal();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +30,38 @@ const IniciarSesion = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const processingLogin = (e) =>{
+    Swal.fire({
+      title: 'Cargando...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); 
+      },
+    });
+
+    handleSubmit(e)
+      .then(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        Swal.fire({
+          icon: 'success',
+          title: 'Bienvenido ' + storedUser.nombre,
+          imageUrl: logo,
+          imageWidth: 150,
+          imageHeight: 150, 
+          imageAlt: 'Logo',
+        });
+      })
+      .catch((err) => {
+        console.log(err)
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error,
+        });
+      });
+  }
+
 
   const handleLogin = (token) => {
     localStorage.setItem("authToken", JSON.stringify(token));
@@ -49,7 +83,7 @@ const IniciarSesion = () => {
         password: password,
       });
       const userData = response.data;
-      handleLogin(userData.token);
+      await handleLogin(userData.token);
       setError("");
       setIsPopupVisible(false);
     } catch (error) {
@@ -82,9 +116,9 @@ const IniciarSesion = () => {
             <div className="popup-overlay">
               <div className="popup-content">
                 <button className="close-button" onClick={() => setIsPopupVisible(false)}>
-                  <FontAwesomeIcon icon={faArrowLeft} />
+                  <FontAwesomeIcon icon={faClose} />
                 </button>
-                <form className="form" onSubmit={handleSubmit}>
+                <form className="form" onSubmit={processingLogin}>
                   <div className="logo-session">
                     <img src={logo} alt="Logo" />
                   </div>

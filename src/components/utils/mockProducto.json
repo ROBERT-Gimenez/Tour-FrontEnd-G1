@@ -5,15 +5,15 @@
               "https://res.cloudinary.com/hello-tickets/image/upload/c_limit,f_auto,q_auto,w_1300/v1645980701/tm738okqrndc5dvepoa7.jpg",
               "https://www.ngenespanol.com/wp-content/uploads/2023/02/jardines-de-versalles.jpg"
     ],
-    "nombre": "Recorrido por los jardines de versalles",
-    "ubicacion": "Africa",
+    "nombre": "Ruta del Tango en Buenos Aires, Argentina",
+    "ubicacion": "Argentina",
     "precio": "$450", 
     "stock": 12,
     "comprados": 3 ,
     "fecha":"12-04-24",
     "caracteristicas":[],
     "categoria": 1,
-    "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+    "descripcion":"Déjate envolver por la pasión del tango en la ciudad que lo vio nacer. Recorre los barrios emblemáticos como San Telmo y La Boca, asiste a una clase de baile y disfruta de una noche mágica en una auténtica milonga porteña. Complementa la experiencia con un banquete de asado argentino y vinos de Mendoza."
     },
     {
       "id":2,
@@ -31,7 +31,7 @@
     "fecha":"12-05-24",
     "caracteristicas":[],
     "categoria": 1,
-    "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+    "descripcion":"Embárcate en un viaje inolvidable a las tierras salvajes del paraguay. Explora los impresionantes lugares del Parque Nacional. Incluye caminatas guiadas, encuentros con fauna local y la oportunidad de fotografiar paisajes únicos en el mundo."
     },
     {
       "id":3,
@@ -68,7 +68,7 @@
               "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/be/34/46/caption.jpg?w=500&h=400&s=1",
               "https://www.clarin.com/2023/10/07/15Oj-5pZU_2000x1500__1.jpg"
       ],
-      "nombre": "Bogota",
+      "nombre": "Maravillas del Caribe en Colombia",
       "ubicacion": "Colombia",
       "precio": "$450",
       "stock": 12, 
@@ -76,20 +76,20 @@
       "fecha":"12-08-24",
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"Sumérgete en el paraíso tropical de Cartagena. Este tour combina un recorrido por el casco antiguo, lleno de historia y color, con días de relax en las playas cristalinas de Islas del Rosario. Termina la experiencia con una cena al aire libre bajo las estrellas y al ritmo de música local."
     },
     {
       "id":6,
       "img": ["https://media.tacdn.com/media/attractions-splice-spp-674x446/07/84/81/c5.jpg"],
-      "nombre": "Cata de vinos en París con almuerzo de queso y charcutería",
-      "ubicacion": "Paris",
+      "nombre": "Aventura Andina en Perú",
+      "ubicacion": "Perú",
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
       "fecha":"02-09-24",
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"Descubre la magia de los Andes con este tour que te llevará desde la vibrante ciudad de Cusco hasta las maravillas de Machu Picchu. Explora los mercados tradicionales, prueba la auténtica comida peruana y disfruta de vistas espectaculares en el Valle Sagrado de los Incas. Ideal para amantes de la historia y la naturaleza."
     },
     {
       "id":7,

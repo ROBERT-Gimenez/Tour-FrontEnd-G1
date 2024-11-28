@@ -13,27 +13,47 @@ export const GaleriaImagenes = ({ images }) => {
     };
 
     return (
-        <div className="w-full mt-4">
-          <div className="flex flex-col md:flex-row gap-2 items-center">
-            <div className="md:w-1/2 ">
+        <div className="w-full mt-4 content-galery-images">
+          <div className="grid grid-cols-3 grid-rows-1 gap-2">
+            <div className="col-span-2 row-span-1">
               <img
                 src={images[0]}
                 alt="Imagen Principal"
-                className="w-full h-auto object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
               />
             </div>
-            
-            <div className="md:w-1/2 grid grid-cols-2 grid-rows-2 p-2"> 
-                {images.slice(1, 5).map((img, index) => (
-                    <div key={index} className="h-48">
-                    <img
-                    src={img}
-                    alt={`Imagen ${index + 2}`}
-                    className="w-full h-full object-cover rounded-lg p-1"
-                    />
+
+            <div className="col-start-3 row-start-1">
+              <img
+                src={images[1]}
+                alt="Imagen 1"
+                className="w-full h-full object-cover rounded-lg"
+              />
             </div>
-  ))}
-</div>
+
+            <div className="col-start-3 row-start-2">
+              <img
+                src={images[2]}
+                alt="Imagen 2"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+
+            <div className="col-start-1 row-start-2">
+              <img
+                src={images[3]}
+                alt="Imagen 3"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+
+            <div className="col-start-2 row-start-2">
+              <img
+                src={images[4]}
+                alt="Imagen 4"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
           </div>
         
           <div className="flex justify-end mt-2">

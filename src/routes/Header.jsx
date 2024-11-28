@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/Logo.svg";
 import { useContextGlobal } from "../components/utils/GlobalContext";
 import IniciarSesion from "./SubComponentes/IniciarSesion";
+
 export default function Header() {
   const { state, dispatch } = useContextGlobal();
   const [rol, setRol] = useState(state.user?.roles?.[0] ?? null);

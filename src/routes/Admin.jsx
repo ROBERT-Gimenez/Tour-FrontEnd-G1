@@ -20,7 +20,6 @@ function Admin() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { state, dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
-  const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
   const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
   const [categorias, setCategorias] = useState(state.catagorias || []);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -56,25 +55,16 @@ function Admin() {
 
 
   useEffect(() => {
-    const admin = state?.user?.roles[0];
-    if(admin.name != "ADMIN"){
+    /* const admin = state?.user?.roles[0]; */
+   /*  if(admin.name != "ADMIN"){
       navigate("/")
-    }
+    } */
   }, [navigate]);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  useEffect(() => {
-    const fetchedUsuarios = [
-      { id: 1, nombre: "Juan Perez", email: "juan@ejemplo.com" },
-      { id: 2, nombre: "Ana Gomez", email: "ana@ejemplo.com" },
-      { id: 3, nombre: "Carlos Ruiz", email: "carlos@ejemplo.com" },
-    ];
-    setUsuarios(fetchedUsuarios);
   }, []);
 
   const handleSearch = (e) => {

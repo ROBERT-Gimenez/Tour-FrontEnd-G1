@@ -1,13 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft ,faHeadset  } from '@fortawesome/free-solid-svg-icons';
-import { useContextGlobal } from "../components/utils/GlobalContext";
-import { GaleriaImagenes } from "../components/producto/GaleriaImagenes";
+import { GaleriaImagenes } from "./components/producto/GaleriaImagenes";
 import { useEffect, useState } from "react";
-import MultiCalendarSelector from "../components/producto/MultiCalendarSelector";
-import Calendar2 from "../components/producto/Calendar2";
+import Calendar2 from "./components/producto/Calendar2";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import StarRating from "../components/producto/StarRating";
+import StarRating from "./components/producto/StarRating";
+import { useContextGlobal } from "../utils/GlobalContext";
 
 export const ProductDetail = () => {
   const { id } = useParams();

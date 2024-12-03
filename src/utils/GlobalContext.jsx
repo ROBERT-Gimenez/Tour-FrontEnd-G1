@@ -1,14 +1,15 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { reducer } from "../../reducers/reducer";
-import mockProducto from "../../components/utils/mockProducto.json";
+import { reducer } from "../reducers/reducer";
+import mockProducto from "./mockProducto.json";
 import axios from "axios";
+import useAuthLogin from "../hooks/useAuthLogin";
 
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
 const products = JSON.parse(localStorage.getItem("productos")) || mockProducto;
 const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
-const user = JSON.parse(localStorage.getItem("user")) || [];
+const user = {} || {};
 
 const initialState = {
   productos: [],

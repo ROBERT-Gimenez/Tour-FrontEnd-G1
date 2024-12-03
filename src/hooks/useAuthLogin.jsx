@@ -5,20 +5,18 @@ import { jwtDecode } from "jwt-decode";
 const useAuthLogin = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [user, setUser] = useState(null);
+  const [rol, setRol] = useState(null);
+  const [user, setUser] = useState({});
 
   const loginUser = async(userData) => {
     try {
         setLoading(true);
         setError(null); 
         const data = await login(userData);
-        handleLogin(data.token)
+        const decodedToken = await handleLogin(data.token)
         checkToken();
-        return data;
+        return decodedToken;
     } catch (err) {
-        console.log(err)
         const errorMessage = err?.response?.data?.errorMessage || "Error de conexión";
         setError(errorMessage); 
         throw new Error(errorMessage); 
@@ -31,8 +29,7 @@ const useAuthLogin = () => {
     localStorage.setItem("authToken", JSON.stringify(token));
     try {
       const decodedToken = jwtDecode(token);
-      localStorage.setItem("user", JSON.stringify(decodedToken));
-      setUser(decodedToken);
+      return decodedToken
     } catch (error) {
       console.error("Error al decodificar el token", error);
     }
@@ -48,16 +45,17 @@ const useAuthLogin = () => {
     const token = localStorage.getItem("authToken");
     if (token) {
       if (isTokenExpired(token)) {
+        console.log("sin token")
         localStorage.removeItem('authToken');
         localStorage.removeItem('userFavoriteExperienceList')
-        setRole(null);
-        setUsername(null);
+        setRol(null);
+        setUser(null);
         return;
       }
       const decodedToken = decodeJwt(token);
-      setRole(decodedToken.roles);
-      setUsername(decodedToken.sub);
-      return;
+      setRol(decodedToken.roles);
+      setUser({ ...decodedToken });
+      return decodedToken
     }
     localStorage.removeItem('userFavoriteExperienceList');
   };
@@ -66,28 +64,28 @@ const useAuthLogin = () => {
     checkToken();
   }, []);
 
-  const isTokenExpired = (token) => {//ver
+  const isTokenExpired = (token) => {
     const decodedToken = decodeJwt(token);
     const expirationTime = decodedToken.exp * 1000;
     const currentTime = Date.now();
     return currentTime >= expirationTime;
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
     checkToken();
+    window.location.reload()
   };
 
   return {
     loginUser,
     loading,
     error,
-    role,
-    username,
-    logout,
+    rol,
+    user,
+    handleLogout,
     checkToken,
-    isTokenExpired,
-    user
+    isTokenExpired
   };
 };
 

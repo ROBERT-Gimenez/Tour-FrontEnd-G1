@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ImagenesForm from "./ImagenesForm";
 import Select from 'react-select';
-import { useContextGlobal } from "../utils/GlobalContext";
+import { useContextGlobal } from "../../../utils/GlobalContext";
 import MultiCalendarSelector from "../producto/MultiCalendarSelector";
 
 export default function FormProduct({ formData, onFieldChange, onImagesChange }) {

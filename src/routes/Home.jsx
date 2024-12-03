@@ -1,10 +1,10 @@
 // src/routes/Home.jsx
 
 import React from "react";
-import Buscador from "./SubComponentes/Buscador";
-import Categorias from "./SubComponentes/Categorias";
-import ListaDeRecomendaciones from "./SubComponentes/ListaDeRecomendaciones";
-import Separador from "./SubComponentes/Separador";
+import Buscador from "./components/Buscador";
+import Carrousel from "./components/Carrousel";
+import ListaDeRecomendaciones from "./components/ListaDeRecomendaciones";
+import Separador from "./components/Separador";
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
       <div className="flex-grow p-4">
         <Buscador />
         <div className="mb-8">
-          <Categorias />
+          <Carrousel />
         </div>
         <div>
           <Separador />

@@ -1,6 +1,6 @@
 import React from 'react'
-import { useContextGlobal } from '../utils/GlobalContext';
 import { useNavigate } from 'react-router-dom';
+import { useContextGlobal } from '../../../utils/GlobalContext';
 
 const Favoritos = () => {
     const { state, dispatch } = useContextGlobal();

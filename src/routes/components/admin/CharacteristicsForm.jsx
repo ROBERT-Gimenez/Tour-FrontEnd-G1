@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./admin.css";
-import { useContextGlobal } from '../utils/GlobalContext';
+import { useContextGlobal } from '../../../utils/GlobalContext';
 import axios from 'axios';
 
 export const CharacteristicsForm = () => {

@@ -1,12 +1,11 @@
-// src/routes/SubComponentes/Categorias.jsx
 import React, { useEffect, useState } from "react";
-import { useContextGlobal } from "../../components/utils/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useContextGlobal } from "../../utils/GlobalContext";
 
-const Categorias = () => {
+const Carrousel = () => {
   const { state, dispatch } = useContextGlobal();
   const [categorias, setCategorias] = useState(state.categorias || []);
   const navigate = useNavigate();
@@ -63,4 +62,4 @@ const Categorias = () => {
   );
 };
 
-export default Categorias;
+export default Carrousel;

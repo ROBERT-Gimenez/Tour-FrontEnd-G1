@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./session.css";
-import logo from "../../assets/Logo.svg";
+import logo from "../../../assets/Logo.svg";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import useAuthLogin from "../../hooks/useAuthLogin";
+import useAuthLogin from "../../../hooks/useAuthLogin";
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const {loginUser, logout, checkToken, loading, error, role, username,user} = useAuthLogin();
+  const {loginUser, error, user , handleLogout } = useAuthLogin();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -33,10 +33,10 @@ const IniciarSesion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await loginUser({ username: email, password });
+      const decodedToken = await loginUser({ username: email, password });
       Swal.fire({
         icon: "success",
-        title: "Bienvenido " + username,
+        title: "Bienvenido " + (decodedToken?.nombre),
         imageUrl: logo,
         imageWidth: 150,
         imageHeight: 150,
@@ -47,7 +47,7 @@ const IniciarSesion = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: err.message, // Muestra el mensaje del error capturado
+        text: err.message,
       });
     }
   };
@@ -57,18 +57,12 @@ const IniciarSesion = () => {
     return name?.split(" ").map((n) => n[0]).join("");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("authToken");
-    window.location.reload()
-  };
-
   return (
     <div className="container">
       {user ? (
         <div className="content-avatar">
           <div className="avatar">
-            {getUserInitials(username)}
+            {getUserInitials(user?.nombre)}
           </div>
           <Link to="/">
             <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate w-[6rem]">

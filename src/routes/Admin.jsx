@@ -6,11 +6,11 @@ import {
   faExclamationTriangle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import AdminPopup from "../components/admin/AdminPopup.jsx";
-import DeletePopup from "../components/admin/DeletePopup.jsx";
-import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
-import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
-import { useContextGlobal } from "../components/utils/GlobalContext.jsx";
+import AdminPopup from "./components/admin/AdminPopup.jsx";
+import DeletePopup from "./components/admin/DeletePopup.jsx";
+import { CharacteristicsForm } from "./components/admin/CharacteristicsForm.jsx";
+import { CatalagoForm } from "./components/admin/CatagoriForm.jsx";
+import { useContextGlobal } from "../utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Link } from "react-router-dom";

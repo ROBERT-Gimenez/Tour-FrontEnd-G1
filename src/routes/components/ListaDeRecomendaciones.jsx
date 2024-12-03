@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContextGlobal } from "../../components/utils/GlobalContext";
+import { useContextGlobal } from "../../utils/GlobalContext";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'; // Iconos de corazón de react-icons
 
 const ListaDeRecomendaciones = () => {

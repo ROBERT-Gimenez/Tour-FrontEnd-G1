@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FormProduct from './FormProduct';
-import { useContextGlobal } from '../utils/GlobalContext';
+import { useContextGlobal } from '../../../utils/GlobalContext';
 
 
 function AdminPopup({ item, onEdit, isEditing }) {

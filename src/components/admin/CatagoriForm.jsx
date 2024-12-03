@@ -7,12 +7,13 @@ import axios from 'axios';
 export const CatalagoForm = () => {
     const { state, dispatch } = useContextGlobal();
     const [categorias, setCategorias] = useState(state.catagorias || []);
-    const [newCatalogo, setNewCatalogo] = useState({id:'', name: '', image: null });
+    const [newCatalogo, setNewCatalogo] = useState({id:'', name: '', image: null , descripcion:'' });
     const [editingCatalogo, setEditingCatalogo] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
     const [loading, setLoading] = useState(false);
-  
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem("authToken"))); 
+
     useEffect(() => {
       setCategorias(state.categorias || []);
     }, [state.categorias]);
@@ -31,7 +32,7 @@ export const CatalagoForm = () => {
         return;
       }
   
-      const isDuplicateName = Categorias.some(
+      const isDuplicateName = categorias.some(
         (categoria) => categoria?.name === newCatalogo.name && categoria?.id !== newCatalogo.id
       );
       if (isDuplicateName) {
@@ -41,14 +42,19 @@ export const CatalagoForm = () => {
   
       const formData = new FormData();
       formData.append('name', newCatalogo.name);
-      formData.append('image', newCatalogo.image);
+      formData.append('descripcion', newCatalogo.descripcion);
+      formData.append('image', null);
   
       try {
         setLoading(true);
-        const response = await axios.post('http://localhost:8080/travel/public/categorias', formData);
+        const response = await axios.post('http://localhost:8080/travel/public/categorias', formData,
+          {headers: { Authorization: `Bearer ${token}`,},
+          }
+        );
+
         setCatalogo([...categorias, response.data]);
         dispatch("PUT_CATEGORIAS", [...categorias, response.data]);
-        setNewCatalogo({ id: '', name: '', image: null });
+        setNewCatalogo({ id: '', name: '', image: null , descripcion:'' });
         setIsOpenInputs(false);
       } catch (error) {
         alert('Error al agregar la categoría');

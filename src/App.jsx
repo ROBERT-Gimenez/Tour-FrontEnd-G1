@@ -10,6 +10,8 @@ import { ProductDetail } from "./routes/ProductDetail";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import ListUsers from "./components/admin/ListUsers";
+import ProductByCategori from "./components/producto/ProductByCategori";
+import Favoritos from "./components/producto/Favoritos";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -48,6 +50,8 @@ function App() {
         />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
+        <Route path="/categorias/:id" element={<ProductByCategori />} />
+        <Route path="/favoritos" element={<Favoritos />} />
         <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
       </Routes>
       <Footer />

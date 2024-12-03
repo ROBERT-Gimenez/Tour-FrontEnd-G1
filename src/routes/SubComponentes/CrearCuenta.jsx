@@ -8,13 +8,12 @@ const CrearCuenta = () => {
   const [apellido, setApellido] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(false); // Nuevo estado para manejar el correo enviado
+  const [emailSent, setEmailSent] = useState(false); 
 
-  // Función para enviar el correo de bienvenida
   const sendWelcomeEmail = () => {
     const emailData = {
-      user_name: `${nombre} ${apellido}`, // Nombre completo
-      user_email: username, // Correo del usuario registrado
+      user_name: `${nombre} ${apellido}`, 
+      user_email: username, 
       message:
         "Te agradecemos por unirte a esta bella comunidad viajera. Te enviaremos siempre las mejores ofertas personalizadas y nuevos paquetes para ti y tus seres queridos. Puedes iniciar sesión acá: http://localhost:5173/crear-cuenta",
     };
@@ -61,20 +60,17 @@ const CrearCuenta = () => {
         const data = await response.json();
         console.log("Usuario registrado exitosamente:", data);
 
-        // Enviar correo de bienvenida
         sendWelcomeEmail();
 
-        // Actualizar estado para mostrar el mensaje y botón de reenviar
         setEmailSent(true);
 
-        // Limpiar los campos del formulario si es necesario
         setUsername("");
         setPassword("");
         setNombre("");
         setApellido("");
       } else {
-        const errorData = await response.json(); // Captura el mensaje de error del backend
-        setError(errorData.errorMessage || "Error al registrar usuario"); // Muestra el mensaje del backend si está disponible
+        const errorData = await response.json();
+        setError(errorData.errorMessage || "Error al registrar usuario"); 
       }
     } catch (err) {
       setError("Error de conexión. Intenta nuevamente");
@@ -92,7 +88,7 @@ const CrearCuenta = () => {
   
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md form-create" >
       <h2 className="text-2xl font-semibold text-center mb-6">Crear Cuenta</h2>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 

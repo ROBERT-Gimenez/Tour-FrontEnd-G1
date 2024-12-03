@@ -10,10 +10,11 @@
     "precio": "$450", 
     "stock": 12,
     "comprados": 3 ,
-    "fecha":"12-04-24",
+    "fecha":[{"fecha":"2024-12-05" , "stock":12}],
     "caracteristicas":[],
     "categoria": 1,
-    "descripcion":"Déjate envolver por la pasión del tango en la ciudad que lo vio nacer. Recorre los barrios emblemáticos como San Telmo y La Boca, asiste a una clase de baile y disfruta de una noche mágica en una auténtica milonga porteña. Complementa la experiencia con un banquete de asado argentino y vinos de Mendoza."
+    "descripcion":"Déjate envolver por la pasión del tango en la ciudad que lo vio nacer. Recorre los barrios emblemáticos como San Telmo y La Boca, asiste a una clase de baile y disfruta de una noche mágica en una auténtica milonga porteña. Complementa la experiencia con un banquete de asado argentino y vinos de Mendoza.",
+    "rating":4.5
     },
     {
       "id":2,
@@ -28,10 +29,11 @@
     "precio": "$450",
     "stock": 12,
     "comprados": 3 ,
-    "fecha":"12-05-24",
+    "fecha":[{"fecha":"2024-12-05" , "stock":12},{"fecha":"2024-11-29" , "stock":22},{"fecha":"2024-11-30" , "stock":22}],
     "caracteristicas":[],
-    "categoria": 1,
-    "descripcion":"Embárcate en un viaje inolvidable a las tierras salvajes del paraguay. Explora los impresionantes lugares del Parque Nacional. Incluye caminatas guiadas, encuentros con fauna local y la oportunidad de fotografiar paisajes únicos en el mundo."
+    "categoria": 2,
+    "descripcion":"Embárcate en un viaje inolvidable a las tierras salvajes del paraguay. Explora los impresionantes lugares del Parque Nacional. Incluye caminatas guiadas, encuentros con fauna local y la oportunidad de fotografiar paisajes únicos en el mundo.",
+    "rating":3.5
     },
     {
       "id":3,
@@ -44,10 +46,11 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-06-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria":1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":4,
@@ -57,10 +60,11 @@
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
-      "fecha":"12-07-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria":1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":5,
@@ -73,10 +77,11 @@
       "precio": "$450",
       "stock": 12, 
       "comprados": 3 ,
-      "fecha":"12-08-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":22}],
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"Sumérgete en el paraíso tropical de Cartagena. Este tour combina un recorrido por el casco antiguo, lleno de historia y color, con días de relax en las playas cristalinas de Islas del Rosario. Termina la experiencia con una cena al aire libre bajo las estrellas y al ritmo de música local."
+      "descripcion":"Sumérgete en el paraíso tropical de Cartagena. Este tour combina un recorrido por el casco antiguo, lleno de historia y color, con días de relax en las playas cristalinas de Islas del Rosario. Termina la experiencia con una cena al aire libre bajo las estrellas y al ritmo de música local.",
+      "rating":2.5
     },
     {
       "id":6,
@@ -86,10 +91,11 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"02-09-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"Descubre la magia de los Andes con este tour que te llevará desde la vibrante ciudad de Cusco hasta las maravillas de Machu Picchu. Explora los mercados tradicionales, prueba la auténtica comida peruana y disfruta de vistas espectaculares en el Valle Sagrado de los Incas. Ideal para amantes de la historia y la naturaleza."
+      "descripcion":"Descubre la magia de los Andes con este tour que te llevará desde la vibrante ciudad de Cusco hasta las maravillas de Machu Picchu. Explora los mercados tradicionales, prueba la auténtica comida peruana y disfruta de vistas espectaculares en el Valle Sagrado de los Incas. Ideal para amantes de la historia y la naturaleza.",
+      "rating":2.5
     },
     {
       "id":7,
@@ -99,10 +105,11 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"12-10-24",
+      "fecha":[{"fecha":"2024-12-05"}],
       "caracteristicas":[],
       "categoria":1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":8,
@@ -117,10 +124,11 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"10-10-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria":1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":9,
@@ -137,10 +145,11 @@
       "precio": "$450",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"21-10-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria":1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":10,
@@ -150,10 +159,11 @@
       "precio": "$CHILE",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"22-09-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":11,
@@ -163,10 +173,11 @@
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"01-10-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     },
     {
       "id":12,
@@ -176,9 +187,10 @@
       "precio": "$850",
       "stock": 12,
       "comprados": 3 ,
-      "fecha":"11-12-24",
+      "fecha":[{"fecha":"2024-12-05" , "stock":12}],
       "caracteristicas":[],
       "categoria": 1,
-      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!"
+      "descripcion":"ESTA ES UNA DESCRIPCION DEBERAS!",
+      "rating":2.5
     }
   ]

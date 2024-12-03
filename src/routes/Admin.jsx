@@ -188,7 +188,7 @@ function Admin() {
                 <th className="table-header">Destino</th>
                 <th className="table-header">Nombre</th>
                 <th className="table-header">Precio</th>
-                <th className="table-header">Fecha</th>
+                {/* <th className="table-header">Fechas</th> */}
                 <th className="table-header">Disponible</th>
                 <th className="table-header">Comprados</th>
                 <th className="table-header">Acciones</th>
@@ -199,9 +199,8 @@ function Admin() {
                 <tr key={index}>
                   <td className="table-cell">{item.ubicacion}</td>
                   <td className="table-cell">{item.nombre}</td>
-                  <td className="table-cell">{item.precio}</td>
-                  <td className="table-cell">{item.fecha}</td>
-                  <td className="table-cell">{item.stock - item.comprados}</td>
+                  <td className="table-cell">{item.precio}</td>              
+                <td className="table-cell">{item.stock - item.comprados}</td>
                   <td className="table-cell">{item.comprados}</td>
                   <td className="table-cell">
                     <div className="flex gap-2">

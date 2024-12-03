@@ -3,21 +3,12 @@ import { Link } from "react-router-dom";
 import logo from "../assets/Logo.svg";
 import { useContextGlobal } from "../components/utils/GlobalContext";
 import IniciarSesion from "./SubComponentes/IniciarSesion";
+import useAuthLogin from "../hooks/useAuthLogin";
 
 export default function Header() {
   const { state, dispatch } = useContextGlobal();
-  const [rol, setRol] = useState(state.user?.roles?.[0] ?? null);
+  const {checkToken, role, username, isTokenExpired} = useAuthLogin();
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("authToken");
-    dispatch({ type: 'LOGOUT' });
-    window.location.reload()
-  };
-
-  useEffect(() => {
-    setRol(state.user?.roles?.[0] ?? null)
-  }, [state.user]);
 
   return (
     <header className="w-full fixed top-0 bg-[#fff0c0] shadow-md z-50">
@@ -33,30 +24,36 @@ export default function Header() {
           </Link>
         </div>
         <div className="btns-sessions flex space-x-2">
-          {rol?.name !== "ADMIN" ? (
+          {role !== "ADMIN" ? (
             <>
               <IniciarSesion />
-              <Link to="/crear-cuenta">
-                <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
-                  Crear cuenta
-                </button>
-              </Link>
             </>
           ) : (
             <>
               <IniciarSesion />
-              {rol?.id == 1 && (
+              {role?.id == 1 && (
                 <Link to="/admin">
                   <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate">
                     Admin
                   </button>
                 </Link>
               )}
-              <Link to="/">
-                <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate w-[6rem]">
-                  Cerrar sesión
-                </button>
-              </Link>
+            </>
+          )}
+
+          {state.user == "" ? (
+            <Link to="/crear-cuenta">
+              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
+                Crear cuenta
+              </button>
+            </Link>
+          ) : (
+            <>
+            <Link to="/favoritos">
+              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
+                Favoritos
+              </button>
+            </Link>
             </>
           )}
         </div>

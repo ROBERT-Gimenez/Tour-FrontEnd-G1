@@ -4,9 +4,9 @@ import { faArrowLeft ,faHeadset  } from '@fortawesome/free-solid-svg-icons';
 import { GaleriaImagenes } from "./components/producto/GaleriaImagenes";
 import { useEffect, useState } from "react";
 import Calendar2 from "./components/producto/Calendar2";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import StarRating from "./components/producto/StarRating";
 import { useContextGlobal } from "../utils/GlobalContext";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 export const ProductDetail = () => {
   const { id } = useParams();

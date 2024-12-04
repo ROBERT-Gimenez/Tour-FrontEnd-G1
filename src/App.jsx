@@ -6,12 +6,12 @@ import Admin from "./routes/Admin";
 import Header from "./routes/Header";
 import Footer from "./routes/Footer";
 import CrearCuenta from "./routes/components/login-Register/CrearCuenta";
-import { ProductDetail } from "./routes/ProductDetail";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import ListUsers from "./routes/components/admin/ListUsers";
 import ProductByCategori from "./routes/components/producto/ProductByCategori";
 import Favoritos from "./routes/components/producto/Favoritos";
+import { ProductDetail } from "./routes/ProductDetail";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();

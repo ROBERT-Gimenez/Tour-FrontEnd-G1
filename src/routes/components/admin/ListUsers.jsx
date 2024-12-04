@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import logo from "../../assets/Logo.svg";
+import logo from "../../../assets/Logo.svg";
 
 const UserGrid = () => {
   const [users, setUsers] = useState([]);

@@ -34,6 +34,13 @@
 
   /* Header */
 
+  .content-avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;  
+  }
+
   .avatar {
     background-color: #007bff;
     color: white;
@@ -217,4 +224,129 @@
 .react-select__value-container{
   max-height: 4rem;
   overflow-y: auto !important;
+}
+
+/* Product Detail */
+
+.content-description{
+  border-radius: 10px;
+  padding: 5px;
+  max-width: 30rem;
+}
+
+.content-caracteristic{
+  min-width: 30rem;
+  position: relative;
+  right: 5rem;
+  padding-left: 6rem;
+}
+
+.content-galery-images{
+  width: 100% !important;
+  place-self: end !important;
+}
+
+.img-grid img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.content-image-detail{
+  display: flex;
+  flex-flow: row-reverse;
+  background-color: #f7f6f8;
+  width: 60 !important;
+  padding: 0 1rem;
+}
+
+.content-purple{
+  position: absolute;
+  right: 0rem;
+  padding-left: 4rem;
+  background-color: #cc95ffbf;
+  width: 100%;
+  border-radius: 10px;
+  bottom: 5px;
+}
+
+.price{
+  border-bottom: 3px solid;
+  width: 55%;
+  font-size: larger;
+  font-weight: 800;
+  text-align: end;
+  margin-left: -1rem;
+}
+
+.btn-content{
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-submit-product{
+  background-color: #05b200;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  width: 10rem;
+  color: white;
+  box-shadow: 1px 1px 8px 1px black;
+}
+.btn-content i{
+  color: brown;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.titulo-destino{
+  border-bottom: 4px solid black;
+}
+
+@media (max-width: 888px) {
+
+  .content-caracteristic{
+    width: 18rem;
+  }
+  .content-purple{
+    position: relative;
+    right: 0rem;
+    width: 120%;
+    top: 0rem;
+    right: 4rem;
+  }
+}
+
+@media (max-width: 756px) {
+
+  .content-caracteristic {
+    position: initial;
+    padding-left: 0;
+  }
+  .content-purple {
+    width: 100%;
+  }
+
+  .content-image-detail {
+    display: flex;
+    background-color: #f7f6f8;
+    width: 60 !important;
+    padding: 0 1rem;
+    flex-direction: column-reverse;
+  }
+
+  .content-galery-images {
+    width: 100% !important;
+  }
+}
+
+.btn-heart:hover{
+  transform: none !important;
+}
+
+.form-create{
+  margin-top: 3rem;
 }

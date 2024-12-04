@@ -372,3 +372,26 @@ div:where(.swal2-container) h2:where(.swal2-title){
   background-color: transparent !important;
   margin: 0 !important;
 }
+
+.react-calendar {
+  height: 18rem;
+  transform: scale(0.7);
+  max-width: 100%;
+  background: white;
+  border: 1px solid #a0a096;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  line-height: 1.125em;
+  border-radius: 12px;
+  position: relative;
+  top: -2rem;
+}
+
+.selected-date {
+  background: #3f51b5;
+  color: white;
+  border-radius: 50%;
+}
+
+.content-calendar{
+  margin-bottom: -6rem;
+}

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import FormProduct from './FormProduct';
-import { useContextGlobal } from '../utils/GlobalContext';
+import { useContextGlobal } from '../../../utils/GlobalContext';
 
 
 function AdminPopup({ item, onEdit, isEditing }) {
@@ -25,32 +25,37 @@ function AdminPopup({ item, onEdit, isEditing }) {
           stock:0,
           comprados:0 ,
           caracteristicas:[] ,
-          fecha : null,
+          fecha : [],
         });
       }
       setIsOpen(true);
     };
   
     const handleFieldChange = (e, key) => {
-      if (key == "caracteristicas"){
-        const selectedValues = e.map(option => option.value);
-        setFormData(prevData => ({
+      if (key === 'caracteristicas') {
+        const selectedValues = e.map((option) => option.value);
+        setFormData((prevData) => ({
           ...prevData,
-          [key]: selectedValues, 
-
+          [key]: selectedValues,
         }));
-        dispatch("PUT_CARACTERISTICAS",  {...formData,[key]: selectedValues})
-        return
+        dispatch('PUT_CARACTERISTICAS', { ...formData, [key]: selectedValues });
+        return;
       }
-
-      let value = e?.target?.value;
-      if (key == "categoria"){
-        dispatch( "PUT_CATEGORIAS",  {...formData,[key]: e["value"]})
-        setFormData((prev) => ({ ...prev, [key]: e["value"] }));
-        return
+    
+      if (key === 'fecha') {
+        setFormData((prevData) => ({
+          ...prevData,
+          [key]: e,
+        }));
+        return;
       }
-      setFormData((prev) => ({ ...prev, [key]: value }));
+    
+      setFormData((prevData) => ({
+        ...prevData,
+        [key]: e?.target?.value,
+      }));
     };
+    
   
     const handleImagesChange = (newImages) => {
       setFormData((prev) => ({ ...prev, img: newImages }));

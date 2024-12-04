@@ -1,22 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo.svg";
-import { useContextGlobal } from "../components/utils/GlobalContext";
-import IniciarSesion from "./SubComponentes/IniciarSesion";
-export default function Header() {
-  const { state, dispatch } = useContextGlobal();
-  const [rol, setRol] = useState(state.user?.roles?.[0] ?? null);
+import IniciarSesion from "./components/login-Register/IniciarSesion";
+import useAuthLogin from "../hooks/useAuthLogin";
+import Swal from "sweetalert2";
+import { useContextGlobal } from "../utils/GlobalContext";
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("authToken");
-    dispatch({ type: 'LOGOUT' });
-    window.location.reload()
-  };
+
+export default function Header() {
+  const { checkToken, loading  } = useAuthLogin();
+  const [dataUser, setDataUser] = useState();
+  const [rol, setRol] = useState([{id:0 , name:""}]);
+  const { state, dispatch } = useContextGlobal();
 
   useEffect(() => {
-    setRol(state.user?.roles?.[0] ?? null)
+    checkToken()
+    if(state?.user){
+      setDataUser(state?.user)
+      setRol(state?.user?.roles)
+    }
   }, [state.user]);
+
+  useEffect(() => {
+    Swal.fire({
+      title: "Cargando...",
+      html: "Validando sesión, por favor espera.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    checkToken();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      Swal.close();
+    }
+  }, [loading]);
 
   return (
     <header className="w-full fixed top-0 bg-[#fff0c0] shadow-md z-50">
@@ -32,30 +54,30 @@ export default function Header() {
           </Link>
         </div>
         <div className="btns-sessions flex space-x-2">
-          {rol?.name !== "ADMIN" ? (
+          {(rol && rol[0]?.name !== "ADMIN" ) ? (
             <>
               <IniciarSesion />
-              <Link to="/crear-cuenta">
-                <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
-                  Crear cuenta
-                </button>
-              </Link>
             </>
           ) : (
             <>
               <IniciarSesion />
-              {rol?.id == 1 && (
+              {rol && rol[0]?.id == 1 && (
                 <Link to="/admin">
                   <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate">
                     Admin
                   </button>
                 </Link>
               )}
-              <Link to="/">
-                <button onClick={handleLogout} className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate w-[6rem]">
-                  Cerrar sesión
-                </button>
-              </Link>
+            </>
+          )}
+
+          {dataUser?.nombre && (
+            <>
+            <Link to="/favoritos">
+              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
+                Favoritos
+              </button>
+            </Link>
             </>
           )}
         </div>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ImagenesForm from "./ImagenesForm";
 import Select from 'react-select';
-import { useContextGlobal } from "../utils/GlobalContext";
+import { useContextGlobal } from "../../../utils/GlobalContext";
+import MultiCalendarSelector from "../producto/MultiCalendarSelector";
 
 export default function FormProduct({ formData, onFieldChange, onImagesChange }) {
   const { state, dispatch } = useContextGlobal();
@@ -53,7 +54,7 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
       <form>
         <div className="grid grid-cols-3 gap-4">
         {Object.keys(formData).map((key) => {
-         if (key === "img" || key === "id") return null;
+         if (key === "img" || key === "id" || key ==="rating") return null;
 
         return (
           <div key={key} className="mb-4">
@@ -74,16 +75,6 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
                   pattern="^\d+$"
                 />
               </div>
-            )}
-
-            {key === "fecha" && (
-              <input
-                type="date"
-                value={formData[key]}
-                onChange={(e) => onFieldChange(e, key)}
-                className="border border-gray-300 rounded-lg p-2 w-full"
-                placeholder="Seleccionar fecha"
-              />
             )}
 
             {key !== "categoria" && key !== "caracteristicas" && key !== "precio" && key !== "fecha" && (
@@ -107,7 +98,6 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
               />
             )}
 
-            {/* Select múltiple para "caracteristicas" */}
             {key === "caracteristicas" && (
               <Select
               isMulti
@@ -118,6 +108,12 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
               classNamePrefix="select"
               placeholder="Seleccione opciones..."
             />
+            )}
+            {key === 'fecha' && (
+             <MultiCalendarSelector
+             onDatesChange={(updatedDates) => onFieldChange(updatedDates, 'fecha')}
+             stock={formData.stock}
+              />   
             )}
           </div>
         );

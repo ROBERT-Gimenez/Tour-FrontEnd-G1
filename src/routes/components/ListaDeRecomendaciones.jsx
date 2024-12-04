@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContextGlobal } from "../../components/utils/GlobalContext";
+import { useContextGlobal } from "../../utils/GlobalContext";
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'; // Iconos de corazón de react-icons
 
 const ListaDeRecomendaciones = () => {
-  const { state } = useContextGlobal();
+  const { state , dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
-  const [categorias, setCategorias] = useState(state.catagorias || []);
+  const [categorias, setCategorias] = useState( JSON.parse(localStorage.getItem("catagorias")) || state.categorias);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
@@ -28,7 +29,7 @@ const ListaDeRecomendaciones = () => {
           );
 
     setProductosFiltrados(filtrados);
-    setPaginaActual(1); // Reiniciar a la primera página al filtrar
+    setPaginaActual(1);
   };
 
   const handleCategoryToggle = (categoria) => {
@@ -58,6 +59,17 @@ const ListaDeRecomendaciones = () => {
 
   const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
 
+  const toggleFavorito = (producto) => {
+    const isFavorito = state.favs.some((fav) => fav.id === producto.id);
+
+    if (isFavorito) {
+      dispatch({ type: "REMOVE_FAV", payload: producto });
+    } else {
+      dispatch({ type: "ADD_FAV", payload: producto });
+    }
+  };
+
+
   return (
     <section className="mb-4 w-full p-2">
       <h2 className="text-4xl font-bold mb-4 text-center py-10">
@@ -74,7 +86,7 @@ const ListaDeRecomendaciones = () => {
         >
           Todos los productos
         </button>
-        {categorias.map((categoria) => (
+        {categorias?.map((categoria) => (
           <button
           key={categoria.id}
           className={`px-4 py-2 rounded-lg border ${
@@ -91,24 +103,40 @@ const ListaDeRecomendaciones = () => {
 
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8">
-          {productosPaginaActual.map((producto) => (
-            <div
-              key={producto.id}
-              className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
-              onClick={() => navigate(`/producto/${producto.id}`)}
+        {productosPaginaActual.map((producto) => (
+        <div
+          key={producto.id}
+          className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
+          onClick={() => navigate(`/producto/${producto.id}`)}
+        >
+          <img
+            src={producto.img[0]}
+            alt="imagen producto"
+            className="w-1/3 h-auto object-cover rounded-l-lg"
+          />
+          <div className="flex flex-col justify-between p-4 w-2/3">
+            <h3 className="text-sm text-gray-600">{producto.categoria}</h3>
+            <h2 className="text-lg font-bold">{producto.nombre}</h2>
+            <p className="text-sm text-gray-600">{producto.ubicacion}</p>
+            {/* Botón de corazón para agregar a favoritos */}
+            { state.user != "" && 
+            <button
+              className="text-red-500 btn-heart"
+              onClick={(e) => {
+                e.stopPropagation(); // Para evitar que se active el click en el producto
+                toggleFavorito(producto);
+              }}
             >
-              <img
-                src={producto.img[0]}
-                alt="imagen producto"
-                className="w-1/3 h-auto object-cover rounded-l-lg"
-              />
-              <div className="flex flex-col justify-between p-4 w-2/3">
-                <h3 className="text-sm text-gray-600">{producto.categoria}</h3>
-                <h2 className="text-lg font-bold">{producto.nombre}</h2>
-                <p className="text-sm text-gray-600">{producto.ubicacion}</p>
-              </div>
-            </div>
-          ))}
+              {state.favs.some((fav) => fav.id === producto.id) ? (
+                <AiFillHeart size={24} />
+              ) : (
+                <AiOutlineHeart size={24} />
+              )}
+            </button>
+            }
+          </div>
+        </div>
+      ))}
         </div>
         {productosFiltrados.length === 0 && (
           <p className="text-center text-gray-500 mt-4">

@@ -6,11 +6,11 @@ import {
   faExclamationTriangle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import AdminPopup from "../components/admin/AdminPopup.jsx";
-import DeletePopup from "../components/admin/DeletePopup.jsx";
-import { CharacteristicsForm } from "../components/admin/CharacteristicsForm.jsx";
-import { CatalagoForm } from "../components/admin/CatagoriForm.jsx";
-import { useContextGlobal } from "../components/utils/GlobalContext.jsx";
+import AdminPopup from "./components/admin/AdminPopup.jsx";
+import DeletePopup from "./components/admin/DeletePopup.jsx";
+import { CharacteristicsForm } from "./components/admin/CharacteristicsForm.jsx";
+import { CatalagoForm } from "./components/admin/CatagoriForm.jsx";
+import { useContextGlobal } from "../utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ function Admin() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { state, dispatch } = useContextGlobal();
   const [productos, setProductos] = useState(state.productos);
-  const [usuarios, setUsuarios] = useState([]); // Nuevo estado para los usuarios
   const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
   const [categorias, setCategorias] = useState(state.catagorias || []);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -56,25 +55,16 @@ function Admin() {
 
 
   useEffect(() => {
-    const admin = state?.user?.roles[0];
-    if(admin.name != "ADMIN"){
+    /* const admin = state?.user?.roles[0]; */
+   /*  if(admin.name != "ADMIN"){
       navigate("/")
-    }
+    } */
   }, [navigate]);
 
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  useEffect(() => {
-    const fetchedUsuarios = [
-      { id: 1, nombre: "Juan Perez", email: "juan@ejemplo.com" },
-      { id: 2, nombre: "Ana Gomez", email: "ana@ejemplo.com" },
-      { id: 3, nombre: "Carlos Ruiz", email: "carlos@ejemplo.com" },
-    ];
-    setUsuarios(fetchedUsuarios);
   }, []);
 
   const handleSearch = (e) => {
@@ -198,7 +188,7 @@ function Admin() {
                 <th className="table-header">Destino</th>
                 <th className="table-header">Nombre</th>
                 <th className="table-header">Precio</th>
-                <th className="table-header">Fecha</th>
+                {/* <th className="table-header">Fechas</th> */}
                 <th className="table-header">Disponible</th>
                 <th className="table-header">Comprados</th>
                 <th className="table-header">Acciones</th>
@@ -209,9 +199,8 @@ function Admin() {
                 <tr key={index}>
                   <td className="table-cell">{item.ubicacion}</td>
                   <td className="table-cell">{item.nombre}</td>
-                  <td className="table-cell">{item.precio}</td>
-                  <td className="table-cell">{item.fecha}</td>
-                  <td className="table-cell">{item.stock - item.comprados}</td>
+                  <td className="table-cell">{item.precio}</td>              
+                <td className="table-cell">{item.stock - item.comprados}</td>
                   <td className="table-cell">{item.comprados}</td>
                   <td className="table-cell">
                     <div className="flex gap-2">

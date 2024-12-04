@@ -5,11 +5,13 @@ import Home from "./routes/Home";
 import Admin from "./routes/Admin";
 import Header from "./routes/Header";
 import Footer from "./routes/Footer";
-import CrearCuenta from "./routes/SubComponentes/CrearCuenta";
-import { ProductDetail } from "./routes/ProductDetail";
+import CrearCuenta from "./routes/components/login-Register/CrearCuenta";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
-import ListUsers from "./components/admin/ListUsers";
+import ListUsers from "./routes/components/admin/ListUsers";
+import ProductByCategori from "./routes/components/producto/ProductByCategori";
+import Favoritos from "./routes/components/producto/Favoritos";
+import { ProductDetail } from "./routes/ProductDetail";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -33,9 +35,9 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+           /*  <ProtectedRoute> */
               <Admin />
-            </ProtectedRoute>
+            /* </ProtectedRoute> */
           }
         />
         <Route
@@ -48,6 +50,8 @@ function App() {
         />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
+        <Route path="/categorias/:id" element={<ProductByCategori />} />
+        <Route path="/favoritos" element={<Favoritos />} />
         <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
       </Routes>
       <Footer />

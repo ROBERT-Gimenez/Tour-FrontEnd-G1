@@ -3,7 +3,6 @@ import api from './api';
 export const toggleFavorite = async (email, experienceId) => {
   try {
     const token = localStorage.getItem("token");
-    console.log(token)
 
     const response = await api.post(
       `/users/favorites/${email}?experienceId=${experienceId}`,
@@ -25,7 +24,6 @@ export const toggleFavorite = async (email, experienceId) => {
   }
 };
 
-console.log(localStorage.getItem("token"))
 
 export const getFavorites = async (experienceIdList) => {
   try {
@@ -35,7 +33,6 @@ export const getFavorites = async (experienceIdList) => {
     }
 
     const queryParam = experienceIdList.join(","); 
-    console.log(queryParam)
     const response = await api.get(`/experiences/favorites?experienceIdList=${queryParam}`, {
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +41,6 @@ export const getFavorites = async (experienceIdList) => {
     });
 
     if (response.status === 200) {
-      console.log(response.data)
       return response.data ;
     }
   } catch (error) {

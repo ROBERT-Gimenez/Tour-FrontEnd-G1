@@ -4,16 +4,22 @@ import logo from "../assets/Logo.svg";
 import IniciarSesion from "./components/login-Register/IniciarSesion";
 import useAuthLogin from "../hooks/useAuthLogin";
 import Swal from "sweetalert2";
+import { useContextGlobal } from "../utils/GlobalContext";
+
 
 export default function Header() {
-  const { checkToken, user, loading , rol } = useAuthLogin();
-  const [dataUser, setDataUser] = useState(user);
+  const { checkToken, loading  } = useAuthLogin();
+  const [dataUser, setDataUser] = useState();
+  const [rol, setRol] = useState([{id:0 , name:""}]);
+  const { state, dispatch } = useContextGlobal();
 
   useEffect(() => {
-    let data = checkToken()
-    setDataUser(data)
-    console.log(rol)
-  }, [loading]);
+    checkToken()
+    if(state?.user){
+      setDataUser(state?.user)
+      setRol(state?.user?.roles)
+    }
+  }, [state.user]);
 
   useEffect(() => {
     Swal.fire({
@@ -48,14 +54,14 @@ export default function Header() {
           </Link>
         </div>
         <div className="btns-sessions flex space-x-2">
-          {(rol?.name !== "ADMIN" ) ? (
+          {(rol && rol[0]?.name !== "ADMIN" ) ? (
             <>
               <IniciarSesion />
             </>
           ) : (
             <>
               <IniciarSesion />
-              {rol?.id == 1 && (
+              {rol && rol[0]?.id == 1 && (
                 <Link to="/admin">
                   <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 animate">
                     Admin
@@ -65,13 +71,7 @@ export default function Header() {
             </>
           )}
 
-          {!dataUser ? (
-            <Link to="/crear-cuenta">
-              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
-                Crear cuenta
-              </button>
-            </Link>
-          ) : (
+          {dataUser?.nombre && (
             <>
             <Link to="/favoritos">
               <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">

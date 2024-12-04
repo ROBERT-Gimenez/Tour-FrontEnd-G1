@@ -59,7 +59,7 @@ const IniciarSesion = () => {
 
   return (
     <div className="container">
-      {user ? (
+      {(user.nombre) ? (
         <div className="content-avatar">
           <div className="avatar">
             {getUserInitials(user?.nombre)}
@@ -78,6 +78,12 @@ const IniciarSesion = () => {
           >
             Iniciar sesión
           </button>
+
+          <Link to="/crear-cuenta">
+              <button className="bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105 w-[6rem]">
+                Crear cuenta
+              </button>
+          </Link>
 
           {isPopupVisible && (
             <div className="popup-overlay">

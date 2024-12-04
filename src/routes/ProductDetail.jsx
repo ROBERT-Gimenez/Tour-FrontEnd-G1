@@ -18,9 +18,6 @@ export const ProductDetail = () => {
   const producto = productos.find((prod) => prod.id === parseInt(id));
   const [stockData, setStockData] = useState(producto.fecha)
 
-  useEffect(()=>{
-    console.log(producto)
-  },[])
   const handleBackClick = () => {
     navigate(-1);
   };

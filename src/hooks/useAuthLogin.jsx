@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { login } from '../api/authLogin';
 import { jwtDecode } from "jwt-decode";
+import { useContextGlobal } from '../utils/GlobalContext';
 
 const useAuthLogin = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [rol, setRol] = useState(null);
   const [user, setUser] = useState({});
+  const { state, dispatch } = useContextGlobal();
 
   const loginUser = async(userData) => {
     try {
@@ -15,6 +17,7 @@ const useAuthLogin = () => {
         const data = await login(userData);
         const decodedToken = await handleLogin(data.token)
         checkToken();
+        dispatch({ type: 'LOGIN', payload: { ...state.user, ...decodedToken } });
         return decodedToken;
     } catch (err) {
         const errorMessage = err?.response?.data?.errorMessage || "Error de conexión";
@@ -41,11 +44,10 @@ const useAuthLogin = () => {
     return JSON.parse(decodedPayload);
   };
 
-  const checkToken = () => {//ver
+  const checkToken = () => {
     const token = localStorage.getItem("authToken");
     if (token) {
       if (isTokenExpired(token)) {
-        console.log("sin token")
         localStorage.removeItem('authToken');
         localStorage.removeItem('userFavoriteExperienceList')
         setRol(null);

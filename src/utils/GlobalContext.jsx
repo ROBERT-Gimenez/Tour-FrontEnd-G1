@@ -9,13 +9,12 @@ const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
 const products = JSON.parse(localStorage.getItem("productos")) || mockProducto;
 const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
-const user = {} || {};
 
 const initialState = {
   productos: [],
   favs: lsFavs,
   theme: true,
-  user: user || {},
+  user: {} ,
   productos: products || [],
   catagorias: catagori || [],
   caracteristicas: caracteristica || [],

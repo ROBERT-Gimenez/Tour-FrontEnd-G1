@@ -1,4 +1,4 @@
-import api from './api';
+import api from './baseApi';
 
 // Obtener todas las propiedades
 export const getProperties = async () => {
@@ -14,7 +14,7 @@ export const getPropertyByID = async (id) => {
 
 // Crear una nueva propiedad
 export const createProperty = async (property) => {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("authToken"));
     const response = await api.post('/properties', property, {headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -25,7 +25,7 @@ export const createProperty = async (property) => {
 
 // Actualizar una propiedad existente
 export const updateProperty = async (id, updatedProperty) => {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("authToken"));
     const response = await api.put(`/properties/${id}`, updatedProperty, {headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -36,7 +36,7 @@ export const updateProperty = async (id, updatedProperty) => {
 
 // Eliminar una propiedad
 export const deleteProperty = async (id) => {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("authToken"));
     const response = await api.delete(`/properties/${id}`, {headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`

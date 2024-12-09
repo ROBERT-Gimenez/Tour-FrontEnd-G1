@@ -3,10 +3,11 @@ import { reducer } from "../reducers/reducer";
 import mockProducto from "./mockProducto.json";
 import axios from "axios";
 import useAuthLogin from "../hooks/useAuthLogin";
+import { getProducts } from "../api/productos";
 
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
-const products = JSON.parse(localStorage.getItem("productos")) || mockProducto;
+const products = JSON.parse(localStorage.getItem("productos")) || [];
 const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
 
@@ -32,14 +33,23 @@ export const ContextProvider = ({ children }) => {
       try {
         const response = await axios.get("http://localhost:8080/travel/public/categorias");
         dispatch({ type: "GET_CATEGORIAS", payload: response.data });
-        localStorage.setItem("categorias", JSON.stringify(response.data));
       } catch (error) {
         console.error("Error al cargar las categorías:", error);
       }
     };
 
     fetchCategorias();
+    loadProducts()
   }, []);
+
+  const loadProducts = async () => {
+    try{
+      const response = await getProducts()
+      dispatch({ type:"GET_PRODUCTOS" , payload: response.data})
+    }catch(err){
+      console.error("Error al cargar los productos:", error);
+    }
+  }
 
 
   useEffect(() => {

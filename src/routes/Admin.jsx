@@ -152,7 +152,7 @@ function Admin() {
               <FontAwesomeIcon icon={faSearch} className="absolute top-2.5 right-3 text-gray-400" />
             </div>
             <div className="btns-popus">
-            <AdminPopup item={state?.productos[0]} onEdit={handleSave} isEditing={false}/>
+            <AdminPopup item={state?.productos} onEdit={handleSave} isEditing={false}/>
             <Link to="/admin/users">
                 <button className="btn-open-characterist">
                   Usuarios
@@ -195,7 +195,7 @@ function Admin() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredData.map((item, index) => (
+              {filteredData?.map((item, index) => (
                 <tr key={index}>
                   <td className="table-cell">{item.ubicacion}</td>
                   <td className="table-cell">{item.nombre}</td>

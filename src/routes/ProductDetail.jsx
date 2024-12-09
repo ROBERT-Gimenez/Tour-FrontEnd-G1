@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import Calendar2 from "./components/producto/Calendar2";
 import StarRating from "./components/producto/StarRating";
 import { useContextGlobal } from "../utils/GlobalContext";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-
+/* import { AiFillHeart, AiOutlineHeart } from "react-icons";
+ */
 export const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -67,8 +67,9 @@ export const ProductDetail = () => {
                 toggleFavorito(producto);
               }}
             >
-              {state.favs.some((fav) => fav.id === producto.id) ? (
-                <AiFillHeart size={24} /> ) : ( <AiOutlineHeart size={24} />  )}
+              {/* {state.favs.some((fav) => fav.id === producto.id) ? (
+                <AiFillHeart size={24} /> ) : ( <AiOutlineHeart size={24} />
+                  )} */}
             </button>}
       </div>
           <StarRating rating={producto.rating} />

@@ -15,6 +15,12 @@ const ListaDeRecomendaciones = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(state)
+    setProductos(state.productos)
+    console.log(productos)
+  }, [state]);
+
+  useEffect(() => {
     filtrarProductos();
   }, [productos, selectedCategories, paginaActual]);
 
@@ -57,7 +63,7 @@ const ListaDeRecomendaciones = () => {
     indiceUltimoProducto
   );
 
-  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const totalPaginas = Math.ceil(productosFiltrados?.length / productosPorPagina);
 
   const toggleFavorito = (producto) => {
     const isFavorito = state.favs.some((fav) => fav.id === producto.id);
@@ -103,19 +109,21 @@ const ListaDeRecomendaciones = () => {
 
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8">
-        {productosPaginaActual.map((producto) => (
+        {productosPaginaActual?.map((producto) => (
         <div
           key={producto.id}
           className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
           onClick={() => navigate(`/producto/${producto.id}`)}
         >
-          <img
-            src={producto.img[0]}
-            alt="imagen producto"
-            className="w-1/3 h-auto object-cover rounded-l-lg"
-          />
+         {producto?.imagenes && (
+            <img
+              src={producto.imagenes[0]}
+              alt="imagen producto"
+              className="w-1/3 h-auto object-cover rounded-l-lg"
+            />
+          )}
           <div className="flex flex-col justify-between p-4 w-2/3">
-            <h3 className="text-sm text-gray-600">{producto.categoria}</h3>
+            <h3 className="text-sm text-gray-600">{producto.categoria.name}</h3>
             <h2 className="text-lg font-bold">{producto.nombre}</h2>
             <p className="text-sm text-gray-600">{producto.ubicacion}</p>
             {/* Botón de corazón para agregar a favoritos */}
@@ -138,7 +146,7 @@ const ListaDeRecomendaciones = () => {
         </div>
       ))}
         </div>
-        {productosFiltrados.length === 0 && (
+        {productosFiltrados?.length === 0 && (
           <p className="text-center text-gray-500 mt-4">
             No hay productos disponibles para las categorías seleccionadas.
           </p>

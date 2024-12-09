@@ -3,58 +3,66 @@ import Calendar from "react-calendar";
 import { format } from "date-fns";
 import './producto.css';
 
-const Calendar2 = ({ stockData, onUpdateStock }) => {
+const Calendar2 = ({ fechasDisponibles, onUpdateStock }) => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [quantity, setQuantity] = useState(1);
-  
+
+  // Función para deshabilitar fechas
   const tileDisabled = ({ date }) => {
     const formattedDate = format(date, 'yyyy-MM-dd');
     const today = format(new Date(), 'yyyy-MM-dd');
     
-    return formattedDate < today || !stockData.some(d => d.fecha === formattedDate && d.stock > 0);
+    return (
+      formattedDate < today || 
+      !fechasDisponibles?.some(d => d.fecha === formattedDate && d.stock > 0)
+    );
   };
 
+  // Clase para fechas disponibles
   const tileClassName = ({ date }) => {
     const formattedDate = format(date, 'yyyy-MM-dd');
-    if (stockData.some(d => d.fecha === formattedDate && d.stock > 0)) {
-      return 'available-date'; 
+    if (fechasDisponibles?.some(d => d.fecha === formattedDate && d.stock > 0)) {
+      return 'available-date';
     }
     return '';
   };
 
+  // Manejo de selección de fechas
   const handleSelectDate = (date) => {
     const formattedDate = format(date, 'yyyy-MM-dd');
     const existingDate = selectedDates.find(d => d.fecha === formattedDate);
-    
-    const stock = stockData.find(d => d.fecha === formattedDate)?.stock || 0;
-    
-    if (stock < 1) {
+
+    const fechaDisponible = fechasDisponibles.find(d => d.fecha === formattedDate);
+    const stock = fechaDisponible?.stock || 0;
+
+    if (stock < quantity) {
       alert("No hay suficiente stock disponible para la cantidad seleccionada.");
       return;
     }
 
     if (existingDate) {
+      // Quitar fecha seleccionada
       setSelectedDates(prev => {
         const updatedDates = prev.filter(d => d.fecha !== formattedDate);
-        const updatedStockData = stockData.map(d => 
+        const updatedStockData = fechasDisponibles.map(d =>
           d.fecha === formattedDate ? { ...d, stock: d.stock + existingDate.stock } : d
         );
         onUpdateStock(updatedStockData);
         return updatedDates;
       });
     } else {
+      // Agregar fecha seleccionada
       setSelectedDates(prev => [...prev, { fecha: formattedDate, stock: quantity }]);
-      const updatedStockData = stockData.map(d => 
+      const updatedStockData = fechasDisponibles.map(d =>
         d.fecha === formattedDate ? { ...d, stock: d.stock - quantity } : d
       );
       onUpdateStock(updatedStockData);
     }
   };
 
+  // Definir rango de fechas
   const minDate = new Date();
-  minDate.setDate(minDate.getDate()); 
-
   const maxDate = new Date();
   maxDate.setMonth(maxDate.getMonth() + 2);
 
@@ -64,13 +72,13 @@ const Calendar2 = ({ stockData, onUpdateStock }) => {
         <Calendar
           value={currentDate}
           onClickDay={handleSelectDate}
-          tileClassName={tileClassName} 
-          tileDisabled={tileDisabled}  
-          minDate={minDate}             
-          maxDate={maxDate}             
-          onChange={setCurrentDate}     
-          showNeighboringMonth={true}   
-          view="month"                 
+          tileClassName={tileClassName}
+          tileDisabled={tileDisabled}
+          minDate={minDate}
+          maxDate={maxDate}
+          onChange={setCurrentDate}
+          showNeighboringMonth={true}
+          view="month"
         />
       </div>
 
@@ -78,7 +86,9 @@ const Calendar2 = ({ stockData, onUpdateStock }) => {
         <h3>Fechas seleccionadas:</h3>
         <ul>
           {selectedDates.map((date, index) => (
-            <li key={index}>{date.fecha} - {date.stock} cervezas seleccionadas</li>
+            <li key={index}>
+              {date.fecha} - {date.stock} cervezas seleccionadas
+            </li>
           ))}
         </ul>
       </div>

@@ -46,7 +46,7 @@ export default function ImagenesForm({ images, onImagesChange }) {
           Imágenes
         </label>
         <div className="grid grid-cols-2 gap-4">
-          {images.map((url, index) => (
+          {images?.map((url, index) => (
             <div key={index} className="flex flex-col items-center">
               <input type="text"  value={getImageSrc(url)} className="border border-gray-300 rounded-lg p-2 w-full mb-2"
                 onChange={(e) => handleArrayChange(index, e.target.value)}

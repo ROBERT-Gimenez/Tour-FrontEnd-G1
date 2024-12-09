@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
-import mockProducto from "./mockProducto.json";
 import axios from "axios";
-import useAuthLogin from "../hooks/useAuthLogin";
 import { getProducts } from "../api/productos";
 
 export const ContextGlobal = createContext();
@@ -45,7 +43,8 @@ export const ContextProvider = ({ children }) => {
   const loadProducts = async () => {
     try{
       const response = await getProducts()
-      dispatch({ type:"GET_PRODUCTOS" , payload: response.data})
+      console.log(response)
+      dispatch({ type:"GET_PRODUCTOS" , payload: response})
     }catch(err){
       console.error("Error al cargar los productos:", error);
     }

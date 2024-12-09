@@ -79,7 +79,7 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
       <form>
         <div className="grid grid-cols-4 gap-4">
         {Object.keys(formData).map((key) => {
-         if (key === "img" || key === "id" || key ==="rating") return null;
+         if (key === "imagenes" || key === "id" || key ==="rating" || key === "FechasDisponibles") return null;
 
         return (
           <div key={key} className="mb-4">
@@ -114,7 +114,18 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
               />
             )}
 
-            {key === "categoriaId" && (
+            { formData.categoria && key == "categoria"  ? 
+              (
+                <Select
+                options={categoriOptions}
+                value={categoriOptions?.find(option => formData.categoria.id === option.value)}
+                onChange={(e) => onFieldChange(e, key)}
+                classNamePrefix="select"
+                placeholder="Seleccione opciones..."
+              />
+            )
+            : 
+            ( !formData.categoria && key == "categoriaId" ) && (
                 <Select
                 options={categoriOptions}
                 value={categoriOptions?.find(option => formData.categoriaId === option.value)}

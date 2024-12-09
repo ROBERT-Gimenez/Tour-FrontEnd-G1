@@ -15,7 +15,7 @@ export const createProduct = async (product) => {
   const response = await api.post('/travel/public/productos', product,  
     {headers: {
       "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${token}`
+      "Authorization": `Bearer ${token}`
         }
     },);
     

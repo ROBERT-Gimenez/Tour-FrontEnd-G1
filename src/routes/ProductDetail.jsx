@@ -16,7 +16,6 @@ export const ProductDetail = () => {
   const [categorias, setCategorias] = useState(state.catagorias || []);
   const [caracteristicas, setCaracteristicas] = useState(state.caracterisiticas || []);
   const producto = productos.find((prod) => prod.id === parseInt(id));
-  const [stockData, setStockData] = useState(producto.fecha)
 
   const handleBackClick = () => {
     navigate(-1);
@@ -77,7 +76,7 @@ export const ProductDetail = () => {
 
       
       <div className="content-image-detail">
-        <GaleriaImagenes images={producto.img} />
+        <GaleriaImagenes images={producto.imagenes} />
 
         <div className="flex flex-col md:flex-row content-description">
           <div className="content-caracteristic">
@@ -96,7 +95,7 @@ export const ProductDetail = () => {
         </div> 
       </div>
         <div>
-          <Calendar2 stockData={stockData} onUpdateStock={handleUpdateStock} />
+          <Calendar2 stockData={producto.fechasDisponible} onUpdateStock={handleUpdateStock} />
         </div> 
       <div className="price">
         <h3>

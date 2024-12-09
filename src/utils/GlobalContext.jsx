@@ -7,7 +7,7 @@ import { getProducts } from "../api/productos";
 
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
-const products = JSON.parse(localStorage.getItem("productos")) || [];
+const products =[];
 const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
 
@@ -51,11 +51,6 @@ export const ContextProvider = ({ children }) => {
     }
   }
 
-
-  useEffect(() => {
-    localStorage.setItem("productos", JSON.stringify(state.productos));
-
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("favs", JSON.stringify(state.favs));

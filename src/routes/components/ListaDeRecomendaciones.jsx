@@ -52,7 +52,7 @@ const ListaDeRecomendaciones = () => {
   const indiceUltimoProducto = paginaActual * productosPorPagina;
   const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
 
-  const productosPaginaActual = productosFiltrados.slice(
+  const productosPaginaActual = productosFiltrados?.slice(
     indicePrimerProducto,
     indiceUltimoProducto
   );

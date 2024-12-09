@@ -14,7 +14,6 @@ const DeletePopup = ({itemDelete, onDelete }) => {
         setIsOpen(false);
         const updatedProducts = productos.filter((f) => f.id !== itemDelete.id);
         setProductos(updatedProducts);
-        localStorage.setItem("productos", JSON.stringify(updatedProducts));
         window.location.reload()
         };
 

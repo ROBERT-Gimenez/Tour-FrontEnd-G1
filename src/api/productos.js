@@ -10,11 +10,11 @@ export const getProductByID = async (id) => {
     return response.data;
 };
 
-export const createProduct = async (category) => {
+export const createProduct = async (product) => {
   const token = JSON.parse(localStorage.getItem("authToken"));
-  const response = await api.post('/travel/public/productos', category,  
+  const response = await api.post('/travel/public/productos', product,  
     {headers: {
-        "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token}`
         }
     },);
@@ -25,7 +25,6 @@ export const createProduct = async (category) => {
 export const updateProduct = async (id, updatedCategory) => {
   const token = JSON.parse(localStorage.getItem("authToken"));
   const response = await api.put(`/travel/public/productos/${id}`, updatedCategory, {headers: {
-    "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`
     }
 },);
@@ -35,7 +34,6 @@ export const updateProduct = async (id, updatedCategory) => {
 export const deleteProduct = async (id) => {
   const token = JSON.parse(localStorage.getItem("authToken"));
   const response = await api.delete(`/travel/public/productos/${id}`, {headers: {
-    "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`
     }
 },);

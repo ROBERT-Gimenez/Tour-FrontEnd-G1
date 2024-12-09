@@ -6,7 +6,7 @@ import {
   faExclamationTriangle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import AdminPopup from "./components/admin/AdminPopup.jsx";
+import ProductPopup from "./components/admin/ProductPopup.jsx";
 import DeletePopup from "./components/admin/DeletePopup.jsx";
 import { CharacteristicsForm } from "./components/admin/CharacteristicsForm.jsx";
 import { CatalagoForm } from "./components/admin/CatagoriForm.jsx";
@@ -14,6 +14,7 @@ import { useContextGlobal } from "../utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Link } from "react-router-dom";
+import { createProduct } from "../api/productos.js";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,10 +56,10 @@ function Admin() {
 
 
   useEffect(() => {
-    /* const admin = state?.user?.roles[0]; */
-   /*  if(admin.name != "ADMIN"){
+     const admin = state?.user?.roles;
+     if(admin && admin[0]?.name != "ADMIN"){
       navigate("/")
-    } */
+    } 
   }, [navigate]);
 
   useEffect(() => {
@@ -71,34 +72,66 @@ function Admin() {
     setSearchTerm(e.target.value);
   };
 
-  const handleSave = (item) => {
+  const handleSave = async (item) => {
     console.log("Enviar:", item);
-
-    const isDuplicateName = state.productos.some(
+  
+    const isDuplicateName = state?.productos?.some(
       (producto) => producto?.nombre === item?.nombre && producto?.id !== item.id
     );
+    
     if (isDuplicateName) {
       alert(
         "Ya existe un producto con ese nombre. Por favor, elija un nombre diferente."
       );
       return;
     }
-
+  
     let updateList;
-    const existingProductIndex = state?.productos.findIndex(
+    const existingProductIndex = state?.productos?.findIndex(
       (producto) => producto.id === item.id
     );
-
+  
     if (existingProductIndex !== -1) {
-      updateList = state.productos.map((producto, index) =>
+      updateList = state.productos?.map((producto, index) =>
         index === existingProductIndex ? item : producto
       );
     } else {
       updateList = [...state.productos, item];
     }
-    localStorage.setItem("productos", JSON.stringify(updateList));
-    dispatch({ type: 'PUT_PRODUCTOS' , updateList })
-    setProductos(updateList)
+  
+    dispatch({ type: 'PUT_PRODUCTOS', updateList });
+    setProductos(updateList);
+  
+    const formData = await setFormData(item);
+    
+    await createProduct(formData);
+  };
+  
+  const setFormData = async (item) => {
+    console.log(item);
+    const formData = new FormData();
+    formData.append("nombre", item.nombre);
+    formData.append("descripcion", item.descripcion);
+    formData.append("ubicacion", item.ubicacion);
+    formData.append("precio", item.precio);
+    formData.append("categoriaId", item.categoriaId);
+    formData.append("caracteristicaIds[]", "");
+    formData.append("fechasDisponibles[]", "");
+    item?.caracteristicas?.forEach((id) => {
+      formData.append("caracteristicaIds[]", id);
+    });
+  
+    item?.img.forEach((imagen) => {
+        formData.append("imagenes[]", imagen);
+    });
+  
+    item?.fechasDisponibles.forEach((fechaDisponible, index) => {
+      formData.append(`fechasDisponibles[${index}].fecha`, fechaDisponible.fecha);
+      formData.append(`fechasDisponibles[${index}].stock`, fechaDisponible.stock);
+      formData.append(`fechasDisponibles[${index}].duracionDias`, fechaDisponible.duracionDias);
+    });
+  
+    return formData;
   };
 
   const handleDelete = (item) => {
@@ -152,7 +185,7 @@ function Admin() {
               <FontAwesomeIcon icon={faSearch} className="absolute top-2.5 right-3 text-gray-400" />
             </div>
             <div className="btns-popus">
-            <AdminPopup item={state?.productos[0]} onEdit={handleSave} isEditing={false}/>
+            <ProductPopup item={state?.productos} onEdit={handleSave} isEditing={false}/>
             <Link to="/admin/users">
                 <button className="btn-open-characterist">
                   Usuarios
@@ -195,7 +228,7 @@ function Admin() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredData.map((item, index) => (
+              {filteredData?.map((item, index) => (
                 <tr key={index}>
                   <td className="table-cell">{item.ubicacion}</td>
                   <td className="table-cell">{item.nombre}</td>
@@ -204,7 +237,7 @@ function Admin() {
                   <td className="table-cell">{item.comprados}</td>
                   <td className="table-cell">
                     <div className="flex gap-2">
-                      <AdminPopup
+                      <ProductPopup
                         key={item.id}
                         item={item}
                         onEdit={handleSave}

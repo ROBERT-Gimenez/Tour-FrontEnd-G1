@@ -2,7 +2,8 @@ import  { useEffect, useState } from 'react'
 import React from 'react';
 import "./admin.css";
 import { useContextGlobal } from '../../../utils/GlobalContext';
-import axios from 'axios';
+import { createCategory, deleteCategory, updateCategory } from '../../../api/categories';
+import { handleClick, showErrorAlert, spinner } from '../../../api/alert';
 
 export const CatalagoForm = () => {
     const { state, dispatch } = useContextGlobal();
@@ -12,7 +13,10 @@ export const CatalagoForm = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState(JSON.parse(localStorage.getItem("authToken"))); 
+
+    useEffect(() => {
+      spinner(loading)
+    }, [loading]);
 
     useEffect(() => {
       setCategorias(state.categorias || []);
@@ -28,7 +32,7 @@ export const CatalagoForm = () => {
   
     const handleAddCatalog = async () => {
       if (!newCatalogo.name || !newCatalogo.image) {
-        alert('Por favor, complete todos los campos');
+        showErrorAlert('Por favor, complete todos los campos');
         return;
       }
   
@@ -36,28 +40,27 @@ export const CatalagoForm = () => {
         (categoria) => categoria?.name === newCatalogo.name && categoria?.id !== newCatalogo.id
       );
       if (isDuplicateName) {
-        alert('Ya existe una categoria con ese nombre. Por favor, elija un nombre diferente.');
+        showErrorAlert('Ya existe una categoria con ese nombre. Por favor, elija un nombre diferente.');
         return;
       }
   
       const formData = new FormData();
       formData.append('name', newCatalogo.name);
-      formData.append('descripcion', newCatalogo.descripcion);
-      formData.append('image', null);
+      formData.append('descripcion', newCatalogo.descripcion || " ");
+      formData.append('image', newCatalogo.image);
   
       try {
         setLoading(true);
-        const response = await axios.post('http://localhost:8080/travel/public/categorias', formData,
-          {headers: { Authorization: `Bearer ${token}`,},
-          }
-        );
-
-        setCatalogo([...categorias, response.data]);
-        dispatch("PUT_CATEGORIAS", [...categorias, response.data]);
+        const response = await createCategory(formData)
+        setCategorias((prevCategorias) => {
+          const updatedCategorias = [...prevCategorias, response];
+          dispatch("PUT_CATEGORIAS", updatedCategorias);
+          return updatedCategorias;
+        });
         setNewCatalogo({ id: '', name: '', image: null , descripcion:'' });
         setIsOpenInputs(false);
       } catch (error) {
-        alert('Error al agregar la categoría');
+        showErrorAlert(error.response.data || 'Error al agregar la categoría' )
       } finally {
         setLoading(false);
       }
@@ -75,18 +78,16 @@ export const CatalagoForm = () => {
   
       try {
         setLoading(true);
-        const response = await axios.put(`http://localhost:8080/travel/public/categorias/${newCatalogo.id}`, formData);
+        const response = await updateCategory(newCatalogo.id,formData)
         const updatedCategory = response.data;
-  
         const updatedFeatures = categorias.map((f) =>
           f.id === updatedCategory.id ? updatedCategory : f
         );
-        setCatalogo(updatedFeatures);
         dispatch("PUT_CATEGORIAS", updatedFeatures);
         setEditingCatalogo(null);
         setNewCatalogo({ id: '', name: '', image: null });
       } catch (error) {
-        alert('Error al editar la categoría');
+        showErrorAlert('Error al editar la categoría');
       } finally {
         setLoading(false);
       }
@@ -95,18 +96,17 @@ export const CatalagoForm = () => {
     const handleDeleteFeature = async (featureId) => {
       try {
         setLoading(true);
-        await axios.delete(`http://localhost:8080/travel/public/categorias/${featureId}`);
-  
+        await deleteCategory(featureId)
         const updatedFeatures = categorias.filter((f) => f.id !== featureId);
-        setCatalogo(updatedFeatures);
         dispatch("PUT_CATEGORIAS", updatedFeatures);
+        setCategorias(updatedFeatures)
       } catch (error) {
-        alert('Error al eliminar la categoría');
-        console.log(error)
+        showErrorAlert('Error al eliminar la categoría')
       } finally {
         setLoading(false);
       }
     };
+
   
     const openModal = () => setIsModalOpen(true);
     const openInputs = () => setIsOpenInputs(!isOpenInputs);
@@ -120,13 +120,16 @@ export const CatalagoForm = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setNewCatalogo({ ...newCatalogo, image: reader.result });
+            setNewCatalogo({ ...newCatalogo, image: file });
           };
-          reader.readAsDataURL(file);
-        }
       };
+
+    const getImageSrc = (image) => {
+      if (image instanceof File) {
+        return URL.createObjectURL(image);
+      }
+      return image; 
+    };
   
     return (
       <div className="characteristics-form">
@@ -161,7 +164,7 @@ export const CatalagoForm = () => {
                                 />
                             <div className="input-group content-preview-image">
                                 {newCatalogo.image && (
-                                    <img src={newCatalogo.image} alt="Imagen seleccionada" className="catalog-image-form " />
+                                    <img src={getImageSrc(newCatalogo.image)} alt="Imagen seleccionada" className="catalog-image-form " />
                                 )}
                                 <label htmlFor="image-upload" className="upload-label">
                                     <i className="fa fa-upload" aria-hidden="true"></i> Subir Imagen
@@ -194,20 +197,20 @@ export const CatalagoForm = () => {
                 <>
                 <ul className="feature-list">
                     {categorias.map((catalogo) => (
-                    <li key={catalogo.id} className="feature-item flex justify-between items-center">
+                    <li key={catalogo?.id} className="feature-item flex justify-between items-center">
                     <input
                         type="text"
                         name="name"
-                        value={editingCatalogo && newCatalogo.id == catalogo.id ? newCatalogo.name :catalogo.name }
+                        value={editingCatalogo && newCatalogo?.id == catalogo?.id ? newCatalogo?.name :catalogo?.name }
                         onChange={handleInputChange}
-                        className={"input-field " +   (newCatalogo.id == catalogo.id ? "selected-input" : "") }
-                        disabled ={!editingCatalogo || !(newCatalogo.id == catalogo.id) }
+                        className={"input-field " +   (newCatalogo?.id == catalogo?.id ? "selected-input" : "") }
+                        disabled ={!editingCatalogo || !(newCatalogo?.id == catalogo?.id) }
                     />
-                    {(newCatalogo.id != catalogo.id) ? (
-                        catalogo.image && <img src={catalogo.image} alt="Catalog" className="catalog-image" />
+                    {(newCatalogo?.id != catalogo?.id) ? (
+                        catalogo?.image && <img src={catalogo?.image} alt="Catalog" className="catalog-image" />
                         ) : (
                             <div className='content-preview-image'>
-                            {newCatalogo.image && <img src={newCatalogo.image} alt="Imagen seleccionada" className='catalog-image' />}
+                            {newCatalogo?.image && <img src={newCatalogo?.image} alt="Imagen seleccionada" className='catalog-image' />}
                             <input
                             type="file"
                             id="image-upload"
@@ -223,7 +226,7 @@ export const CatalagoForm = () => {
                     )}
                     <div className="feature-actions flex gap-2">
                       
-                      {editingCatalogo && newCatalogo.id == catalogo.id ? (
+                      {editingCatalogo && newCatalogo?.id == catalogo?.id ? (
                       <>
                         <button onClick={handleSaveEdit} className="button-add btn-add item2">
                           Guardar
@@ -237,7 +240,8 @@ export const CatalagoForm = () => {
                         <button  onClick={() => handleEditCatalog(catalogo)}  className="button-edit btn-characterist" >
                           Editar
                         </button>
-                        <button onClick={() => handleDeleteFeature(catalogo.id)} className="button-delete btn-characterist">
+                        <button onClick={() => handleClick(() => handleDeleteFeature(catalogo?.id), null)}
+                          className="button-delete btn-characterist">
                           Eliminar
                         </button>
                       </>

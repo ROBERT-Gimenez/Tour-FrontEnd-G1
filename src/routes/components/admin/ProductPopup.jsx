@@ -6,7 +6,7 @@ import FormProduct from './FormProduct';
 import { useContextGlobal } from '../../../utils/GlobalContext';
 
 
-function AdminPopup({ item, onEdit, isEditing }) {
+function ProductPopup({ item, onEdit, isEditing }) {
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState(isEditing ? { ...item } : {});
     const { state, dispatch } = useContextGlobal();
@@ -19,19 +19,21 @@ function AdminPopup({ item, onEdit, isEditing }) {
           id:null,
           nombre: '', 
           img: [] , 
-          categoria :'' ,
+          categoriaId :'' ,
           ubicacion :'',
           precio : '',
           stock:0,
           comprados:0 ,
           caracteristicas:[] ,
-          fecha : [],
+          descripcion:'' ,
+          fechasDisponibles : [],
         });
       }
       setIsOpen(true);
     };
   
     const handleFieldChange = (e, key) => {
+      console.log(e , key)
       if (key === 'caracteristicas') {
         const selectedValues = e.map((option) => option.value);
         setFormData((prevData) => ({
@@ -42,14 +44,22 @@ function AdminPopup({ item, onEdit, isEditing }) {
         return;
       }
     
-      if (key === 'fecha') {
+      if (key === 'fechasDisponibles') {
         setFormData((prevData) => ({
           ...prevData,
           [key]: e,
         }));
         return;
       }
-    
+      if (key === 'categoriaId') {
+        setFormData((prevData) => ({
+          ...prevData,
+          [key]: e?.value,
+        }));
+        return;
+      }
+
+     
       setFormData((prevData) => ({
         ...prevData,
         [key]: e?.target?.value,
@@ -105,4 +115,4 @@ function AdminPopup({ item, onEdit, isEditing }) {
   );
 }
   
-  export default AdminPopup;
+  export default ProductPopup;

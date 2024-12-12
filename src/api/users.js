@@ -8,7 +8,7 @@ export const createUser = async (user) => {
 export const getUsers = async () => {
     const token = JSON.parse(localStorage.getItem("authToken"));
 
-    const response = await fetch("http://localhost:8080/users", {
+    const response = await fetch("https://proyectofinald-production.up.railway.app/users", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`

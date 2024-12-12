@@ -22,7 +22,7 @@ const UserGrid = () => {
     });
 
     axios
-      .get('http://localhost:8080/auth/users')
+      .get('https://proyectofinald-production.up.railway.app/auth/users')
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -78,7 +78,7 @@ const UserGrid = () => {
       const nuevoRol = isAdmin ? "admin" : "user";
 
       await axios.put(
-        "http://localhost:8080/auth/actualizar-rol",
+        "https://proyectofinald-production.up.railway.app/auth/actualizar-rol",
         { userId, nuevoRol },
         {
           headers: {

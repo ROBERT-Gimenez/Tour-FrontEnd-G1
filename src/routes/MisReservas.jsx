@@ -7,7 +7,7 @@ const MisReservas = () => {
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("authToken"));
 
-    axios.get("http://localhost:8080/travel/public/reservas/mis-reservas", {
+    axios.get("https://proyectofinald-production.up.railway.app/travel/public/reservas/mis-reservas", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

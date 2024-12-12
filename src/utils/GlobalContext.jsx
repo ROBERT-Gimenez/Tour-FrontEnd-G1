@@ -28,7 +28,7 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/travel/public/categorias");
+        const response = await axios.get("https://proyectofinald-production.up.railway.app/travel/public/categorias");
         dispatch({ type: "GET_CATEGORIAS", payload: response.data });
       } catch (error) {
         console.error("Error al cargar las categorías:", error);
@@ -42,7 +42,7 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchCaracteristicas = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/travel/public/caracteristicas");
+        const response = await axios.get("https://proyectofinald-production.up.railway.app/travel/public/caracteristicas");
         dispatch({ type: "GET_CARACTERISTICAS", payload: response.data });
       } catch (error) {
         console.error("Error al cargar las caracteristicas:", error);

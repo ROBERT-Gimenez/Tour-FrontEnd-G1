@@ -27,7 +27,7 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/travel/public/productos/${id}`) // Endpoint para obtener el producto completo
+      .get(`https://proyectofinald-production.up.railway.app/travel/public/productos/${id}`) // Endpoint para obtener el producto completo
       .then(response => setProducto(response.data))
       .catch(error => console.error("Error al cargar el producto", error));
   }, []);
@@ -61,7 +61,7 @@ export const ProductDetail = () => {
 
   const cargarUsuariosReservados = (fechaId) => {
     axios
-      .get(`http://localhost:8080/travel/public/reservas/usuarios?fechaDisponibleId=${fechaId}`)
+      .get(`https://proyectofinald-production.up.railway.app/travel/public/reservas/usuarios?fechaDisponibleId=${fechaId}`)
       .then(response => setUsuariosReservados(response.data))
       .catch(error => console.error("Error al cargar usuarios reservados", error));
   };
@@ -70,7 +70,7 @@ export const ProductDetail = () => {
     const token = JSON.parse(localStorage.getItem("authToken"));
     axios
       .post(
-        `http://localhost:8080/travel/public/reservas?fechaDisponibleId=${fechaId}`,
+        `https://proyectofinald-production.up.railway.app/travel/public/reservas?fechaDisponibleId=${fechaId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

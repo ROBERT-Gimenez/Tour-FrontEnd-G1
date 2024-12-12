@@ -9,7 +9,7 @@ const ProductByCategori = () => {
     const [error, setError] = useState(null);
   
     useEffect(() => {
-      axios.get(`http://localhost:8080/travel/public/categorias/${id}`)
+      axios.get(`https://proyectofinald-production.up.railway.app/travel/public/categorias/${id}`)
         .then((response) => {
           setProductos(response.data);
           setLoading(false);

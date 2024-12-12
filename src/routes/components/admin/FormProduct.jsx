@@ -6,7 +6,7 @@ import MultiCalendarSelector from "../producto/MultiCalendarSelector";
 
 export default function FormProduct({ formData, onFieldChange, onImagesChange }) {
   const { state, dispatch } = useContextGlobal();
-  const [categorias, setCategorias] = useState(state.catagorias || []);
+  const [categorias, setCategorias] = useState(state.categorias || []);
   const [caracteristicas, setCaracteristicas] = useState(state.caracterisiticas || []);
   const [fechasDisponibles, setFechasDisponibles] = useState([{ fecha: "", stock: 0 ,duracionDias:0}]);
 
@@ -34,8 +34,13 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
 
   const caracteristicOptions = (caracteristicas || []).map(feature => ({
     value: feature.id,  
-    label: `${feature.icon} ${feature.name}`, 
-  }));
+    label: (
+        <div className="flex items-center gap-2">
+            <img src={feature.icon} alt={feature.name} className="w-5 h-5" />
+            <span>{feature.name}</span>
+        </div>
+    ),
+}));
 
   const handleFieldChange = (e, key) => {
     if (key === 'caracteristicas') {

@@ -1,206 +1,220 @@
 import React, { useEffect, useState } from 'react';
 import "./admin.css";
 import { useContextGlobal } from '../../../utils/GlobalContext';
-import axios from 'axios';
+import { createFeature, deleteFeature, updateFeature, getFeatures } from '../../../api/caracteristics';
+import { handleClick, showErrorAlert, spinner } from '../../../api/alert';
 
 export const CharacteristicsForm = () => {
     const { state, dispatch } = useContextGlobal();
-    const [features, setFeatures] = useState([state.caracteristicas]);
-    const [newFeature, setNewFeature] = useState({id:'', name: '', icon: '' });
+    const [features, setFeatures] = useState([]);
+    const [newFeature, setNewFeature] = useState({ id: '', name: '', icon: null });
     const [editingFeature, setEditingFeature] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOpenInputs, setIsOpenInputs] = useState(false);
-  
-    const authHeader = {
-      Authorization: 'Basic ' + btoa('user@travel.com:user123')
-    };
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-      axios.get('http://localhost:8080/travel/public/caracteristicas')
-        .then((response) => {
-          setFeatures(response.data);
-        })
-        .catch((error) => {
-          console.error("Error al obtener características:", error);
-        });
+        spinner(loading);
+    }, [loading]);
+
+    // Cargar características desde la BD al cargar el componente
+    useEffect(() => {
+        const fetchFeatures = async () => {
+            try {
+                const data = await getFeatures();
+                setFeatures(data);
+            } catch (error) {
+                console.error("Error al obtener características desde la BD:", error);
+            }
+        };
+        fetchFeatures();
     }, []);
-  
+
     const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setNewFeature({ ...newFeature, [name]: value });
-    };
-  
-    const handleAddFeature = () => {
-      if (!newFeature.name || !newFeature.icon) {
-        alert('Por favor, complete todos los campos');
-        return;
-      }
-      const isDuplicateName = features.some(
-        (characteristic) => characteristic?.name === newFeature.name && characteristic?.id !== newFeature.id
-      );
-      if (isDuplicateName) {
-        alert("Ya existe una característica con ese nombre. Por favor, elija un nombre diferente.");
-        return;
-      }
-  
-      axios.post('http://localhost:8080/travel/public/caracteristicas', newFeature)
-        .then((response) => {
-          setFeatures([...features, response.data]);
-          dispatch("PUT_CARACTERISTICAS", [...features, response.data]);
-          setNewFeature({ id: '', name: '', icon: '' });
-          setIsOpenInputs(false);
-        })
-        .catch((error) => {
-          console.error("Error al agregar la característica:", error);
+        const { name, value, files } = e.target;
+        setNewFeature({
+            ...newFeature,
+            [name]: name === 'icon' ? files[0] : value,
         });
     };
-  
-    const handleEditFeature = (feature) => {
-      setEditingFeature(feature);
-      setNewFeature({ id: feature.id, name: feature.name, icon: feature.icon });
+
+    const handleAddFeature = async () => {
+        if (!newFeature.name || !(newFeature.icon instanceof File)) {
+            alert('Por favor, complete todos los campos correctamente.');
+            return;
+        }
+
+        const isDuplicateName = features.some(
+            (feature) => feature?.name === newFeature.name && feature?.id !== newFeature.id
+        );
+        if (isDuplicateName) {
+            showErrorAlert('Ya existe una característica con ese nombre.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', newFeature.name);
+        formData.append('icon', newFeature.icon);
+
+        try {
+            setLoading(true);
+            const response = await createFeature(formData);
+            setFeatures([...features, response]);
+            dispatch("PUT_CARACTERISTICAS", [...features, response]);
+            setNewFeature({ id: '', name: '', icon: null });
+            setIsOpenInputs(false);
+        } catch (error) {
+            showErrorAlert('Error al agregar la característica.');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
-  
-    const handleSaveEdit = () => {
-      axios.put(`http://localhost:8080/travel/public/caracteristicas/${editingFeature.id}`, newFeature)
-        .then((response) => {
-          const updatedFeatures = features.map((f) =>
-            f.id === editingFeature.id ? response.data : f
-          );
-          setFeatures(updatedFeatures); 
-          dispatch("PUT_CARACTERISTICAS", updatedFeatures);
-          setEditingFeature(null);
-          setNewFeature({ id: '', name: '', icon: '' });
-        })
-        .catch((error) => {
-          console.error("Error al editar la característica:", error);
-        });
+
+    const handleDeleteFeature = async (featureId) => {
+        try {
+            setLoading(true);
+            await deleteFeature(featureId);
+            const updatedFeatures = features.filter((f) => f.id !== featureId);
+            setFeatures(updatedFeatures);
+            dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+        } catch (error) {
+            showErrorAlert('Error al eliminar la característica.');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
-  
-     const handleDeleteFeature = (featureId) => {
-    axios.delete(`http://localhost:8080/travel/public/caracteristicas/${featureId}`, { headers: authHeader })
-      .then(() => {
-        const updatedFeatures = features.filter((f) => f.id !== featureId);
-        setFeatures(updatedFeatures);
-        dispatch("PUT_CARACTERISTICAS", updatedFeatures);
-      })
-      .catch((error) => {
-        console.error("Error al eliminar la característica:", error);
-      });
-  };
-  
+
+    const handleSaveEdit = async () => {
+        if (!newFeature.name) {
+            alert('El nombre no puede estar vacío.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', newFeature.name);
+        if (newFeature.icon) {
+            formData.append('icon', newFeature.icon);
+        }
+
+        try {
+            setLoading(true);
+            const response = await updateFeature(editingFeature.id, formData);
+            const updatedFeatures = features.map((f) =>
+                f.id === editingFeature.id ? response : f
+            );
+            setFeatures(updatedFeatures);
+            dispatch("PUT_CARACTERISTICAS", updatedFeatures);
+            setEditingFeature(null);
+            setNewFeature({ id: '', name: '', icon: null });
+        } catch (error) {
+            showErrorAlert('Error al editar la característica.');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getImageSrc = (icon) => {
+        if (icon instanceof File) {
+            return URL.createObjectURL(icon);
+        }
+        return icon;
+    };
+
     const openModal = () => setIsModalOpen(true);
-    const openInputs = () => setIsOpenInputs(true);
     const closeModal = () => {
-      
-      setIsModalOpen(false);
-      setIsOpenInputs(false);
-      setEditingFeature(null);
-      setNewFeature({ name: '', icon: '' });
+        setIsModalOpen(false);
+        setIsOpenInputs(false);
+        setEditingFeature(null);
+        setNewFeature({ id: '', name: '', icon: null });
     };
-  
+
     return (
-      <div className="characteristics-form">
-        <button onClick={openModal} className="btn-open-characterist">
-           Características
-        </button>
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <div className='header-characterist'>
-                <h2 className="text-xl font-bold mb-4 item1">Administrar Características</h2>
-  
-                {isOpenInputs ? (
-                  <>
-                    <button onClick={handleAddFeature} className="button-add btn-add item2">
-                        + agregar
-                    </button>
-                    <div className="feature-form mb-4 item2">
-                        <input
-                            type="text"
-                            name="name"
-                            value={newFeature.name}
-                            onChange={handleInputChange}
-                            placeholder="Nombre"
-                            className="input-field"
-                        />
-                        <input
-                            type="text"
-                            name="icon"
-                            value={newFeature.icon}
-                            onChange={handleInputChange}
-                            placeholder="Ícono"
-                            className="input-field"
-                        />
+        <div className="characteristics-form">
+            <button onClick={openModal} className="btn-open-characterist">
+                Características
+            </button>
+            {isModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content model-catalog">
+                        <div className='header-catalog'>
+                            <div className='content-title'>
+                                <h2 className="text-xl font-bold mb-4 item1">Administrar Características</h2>
+                                {!isOpenInputs && (
+                                    <button onClick={() => setIsOpenInputs(true)} className="button-add btn-add item2">
+                                        <i className="fa fa-plus" aria-hidden="true"></i> Añadir caracteristica
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        {isOpenInputs && (
+                            <div className='content-catalog-form'>
+                                <div className="catalog-form mb-4 item2">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={newFeature.name}
+                                        onChange={handleInputChange}
+                                        placeholder="Nombre"
+                                        className="input-field-form"
+                                    />
+                                    <div className="input-group content-preview-image">
+                                        {newFeature.icon && (
+                                            <img src={getImageSrc(newFeature.icon)} alt="Ícono seleccionado" className="catalog-image-form" />
+                                        )}
+
+                                        <label htmlFor="icon-upload" className="upload-label">
+                                            <i className="fa fa-upload" aria-hidden="true"></i> Subir Ícono
+                                        </label>
+
+                                        <input
+                                            id="icon-upload"
+                                            type="file"
+                                            name="icon"
+                                            onChange={handleInputChange}
+                                            accept="image/*"
+                                            className="input-image hide-input-image"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className='content-btns-form'>
+                                    <button onClick={() => setIsOpenInputs(false)} className="button-close item1">
+                                        Cancelar
+                                    </button>
+                                    <button onClick={handleAddFeature} className="button-add btn-add">
+                                        + agregar
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {!isOpenInputs && (
+                            <ul className="feature-list">
+                                {features.map((feature) => (
+                                    <li key={feature.id} className="feature-item flex justify-between items-center">
+                                        <span>{feature.name}</span>
+                                        <img src={feature.icon} alt="Ícono" className="catalog-image" />
+                                        <div className="feature-actions flex gap-2">
+
+                                            <button onClick={() => handleEditFeature(feature.id)} className="button-edit btn-add">
+                                                Editar
+                                            </button>
+                                            <button onClick={() => handleDeleteFeature(feature.id)} className="button-delete btn-characterist">
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <button onClick={closeModal} className="button-close">
+                            Cerrar
+                        </button>
                     </div>
-                    <hr />
-                  </>
-                ) : (
-                  <button onClick={openInputs} className="button-add btn-add item2">
-                    <i className="fa fa-plus" aria-hidden="true"></i> Añadir
-                  </button>
-                )}
-              </div>
-  
-              <ul className="feature-list">
-                {features.map((feature) => (
-                  <li key={feature.id} className="feature-item flex justify-between items-center">
-                   <input
-                        type="text"
-                        name="name"
-                        value={editingFeature && newFeature.id == feature.id ? newFeature.name :feature.name }
-                        onChange={handleInputChange}
-                        className="input-field"
-                        disabled ={!editingFeature}
-                    />
-                   <input
-                        type="text"
-                        name="icon"
-                        value={editingFeature && newFeature.id == feature.id ? newFeature.icon : feature.icon}
-                        onChange={handleInputChange}
-                        className="input-field"
-                        disabled ={!editingFeature && newFeature.id == feature.id}
-                    />
-
-                    <div className="feature-actions flex gap-2">
-                      
-                      {editingFeature && newFeature.id == feature.id ? (
-                        <>
-                      <button onClick={handleSaveEdit} className="button-add btn-add item2">
-                        Guardar
-                      </button>
-                      <button
-                        onClick={() => handleEditFeature()}
-                        className="button-delete btn-characterist"
-                      >
-                        Cancelar
-                      </button>
-                        </>
-                    ) : (
-                      <>
-                      <button  onClick={() => handleEditFeature(feature)}  className="button-edit btn-characterist" >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDeleteFeature(feature.id)}
-                        className="button-delete btn-characterist"
-                      >
-                        Eliminar
-                      </button>
-                      </>
-                    )}
-
-                      
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <button onClick={closeModal} className="button-close">
-                Cerrar
-              </button>
-            </div>
-          </div>
-      )}
-    </div>
-  );
-}
+                </div>
+            )}
+        </div>
+    );
+};

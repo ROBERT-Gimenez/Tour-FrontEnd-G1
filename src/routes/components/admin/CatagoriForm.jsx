@@ -1,5 +1,4 @@
-import  { useEffect, useState } from 'react'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./admin.css";
 import { useContextGlobal } from '../../../utils/GlobalContext';
 import { createCategory, deleteCategory, updateCategory } from '../../../api/categories';
@@ -68,13 +67,14 @@ export const CatalagoForm = () => {
   
     const handleEditCatalog = (catalogo) => {
       setEditingCatalogo(catalogo);
-      setNewCatalogo({ id: catalogo.id, name: catalogo.name, image: catalogo.image });
+      setNewCatalogo({ id: catalogo.id, name: catalogo.name, image: catalogo.image, descripcion: catalogo.descripcion });
     };
   
     const handleSaveEdit = async () => {
       const formData = new FormData();
       formData.append('name', newCatalogo.name);
       formData.append('image', newCatalogo.image);
+      formData.append('descripcion', newCatalogo.descripcion);
   
       try {
         setLoading(true);
@@ -85,7 +85,7 @@ export const CatalagoForm = () => {
         );
         dispatch("PUT_CATEGORIAS", updatedFeatures);
         setEditingCatalogo(null);
-        setNewCatalogo({ id: '', name: '', image: null });
+        setNewCatalogo({ id: '', name: '', image: null, descripcion: '' });
       } catch (error) {
         showErrorAlert('Error al editar la categoría');
       } finally {
@@ -159,9 +159,18 @@ export const CatalagoForm = () => {
                                 name="name"
                                 value={newCatalogo.name}
                                 onChange={handleInputChange}
-                                placeholder="Nombre de la Categoria"
+                                placeholder="Nombre"
                                 className="input-field-form"
                                 />
+                                
+                                <input
+                                type="text"
+                                name="descripcion"
+                                value={newCatalogo.descripcion}
+                                onChange={handleInputChange}
+                                placeholder="Descripción"
+                                className="input-field-form"/>
+                                
                             <div className="input-group content-preview-image">
                                 {newCatalogo.image && (
                                     <img src={getImageSrc(newCatalogo.image)} alt="Imagen seleccionada" className="catalog-image-form " />
@@ -196,6 +205,12 @@ export const CatalagoForm = () => {
                 {!isOpenInputs && (
                 <>
                 <ul className="feature-list">
+                  <li className="feature-header flex justify-between items-center">
+                      <span className="header-item">Nombre</span>
+                      <span className="header-item">Descripción</span>
+                      <span className="header-item">Imagen</span>
+                      <span className="header-item">Acciones</span>
+                  </li>
                     {categorias.map((catalogo) => (
                     <li key={catalogo?.id} className="feature-item flex justify-between items-center">
                     <input
@@ -205,6 +220,16 @@ export const CatalagoForm = () => {
                         onChange={handleInputChange}
                         className={"input-field " +   (newCatalogo?.id == catalogo?.id ? "selected-input" : "") }
                         disabled ={!editingCatalogo || !(newCatalogo?.id == catalogo?.id) }
+                    />
+                    <input
+                        type="text"
+                        name="descripcion"
+                        value={editingCatalogo && newCatalogo?.id == catalogo?.id ? newCatalogo?.descripcion : catalogo?.descripcion}
+                        onChange={handleInputChange}
+                        className={"textarea-field " + (newCatalogo?.id == catalogo?.id ? "selected-input" : "")}
+                        disabled={!editingCatalogo || !(newCatalogo?.id == catalogo?.id)}
+                        rows={3} // Configura un mínimo de líneas visibles
+                        style={{ height: 'auto', overflow: 'hidden' }}
                     />
                     {(newCatalogo?.id != catalogo?.id) ? (
                         catalogo?.image && <img src={catalogo?.image} alt="Catalog" className="catalog-image" />

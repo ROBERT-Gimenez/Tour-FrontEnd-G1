@@ -6,47 +6,81 @@ import { useEffect, useState } from "react";
 import Calendar2 from "./components/producto/Calendar2";
 import StarRating from "./components/producto/StarRating";
 import { useContextGlobal } from "../utils/GlobalContext";
+import axios from "axios";
+import Calendar from "react-calendar";
+import MisReservas from "./MisReservas";
 /* import { AiFillHeart, AiOutlineHeart } from "react-icons";
  */
 export const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { state } = useContextGlobal();
-  const { productos } = state;
-  const [categorias, setCategorias] = useState(state.catagorias || []);
-  const [caracteristicas, setCaracteristicas] = useState(state.caracterisiticas || []);
-  const producto = productos.find((prod) => prod.id === parseInt(id));
+  
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
-  if (!producto) {
-    return <p>Producto no encontrado</p>;
-  }
+ 
+  const [producto, setProducto] = useState(null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const [usuariosReservados, setUsuariosReservados] = useState([]);
+
   useEffect(() => {
-    if (state.caracteristicas) {
-      setCaracteristicas(state.caracteristicas);
+    axios
+      .get(`http://localhost:8080/travel/public/productos/${id}`) // Endpoint para obtener el producto completo
+      .then(response => setProducto(response.data))
+      .catch(error => console.error("Error al cargar el producto", error));
+  }, []);
+
+  const today = new Date();
+
+  // Función para deshabilitar fechas anteriores a hoy
+  const tileDisabled = ({ date }) => {
+    return date < today; // Deshabilitar fechas pasadas
+  };
+
+  const tileClassName = ({ date }) => {
+    if (!producto) return null;
+    const dateString = date.toISOString().split('T')[0]; // Formato "YYYY-MM-DD"
+    const fecha = producto.fechasDisponibles.find(f => f.fecha === dateString);
+    if (fecha) {
+      return fecha.stock > 0 ? "disponible" : "tachada";
     }
-  }, [state.caracteristicas]);
+    return null;
+  };
 
-  // Map categories and characteristics to display names
-  const categoriaNombre = categorias.find(categoria => categoria.id === producto.categoria)?.name;
+  const onDateClick = (date) => {
+    setFechaSeleccionada(null);
+    const dateString = date.toISOString().split('T')[0]; // Formato "YYYY-MM-DD"
+    const fecha = producto.fechasDisponibles.find(f => f.fecha === dateString);
+    if (fecha) {
+      setFechaSeleccionada(fecha);
+      cargarUsuariosReservados(fecha.id);
+    }
+  };
 
-  const caracteristicOptions = (caracteristicas || []).map(feature => ({
-  value: feature.id,  
-  label: `${feature.icon} ${feature.name}`, 
-  }));
+  const cargarUsuariosReservados = (fechaId) => {
+    axios
+      .get(`http://localhost:8080/travel/public/reservas/usuarios?fechaDisponibleId=${fechaId}`)
+      .then(response => setUsuariosReservados(response.data))
+      .catch(error => console.error("Error al cargar usuarios reservados", error));
+  };
 
-  const caracteristicasNombres = caracteristicOptions
-    .filter(option => producto.caracteristicas?.includes(option.value))
-    .map(option => option.label)
-    .join(", ");
+  const realizarReserva = (fechaId) => {
+    const token = JSON.parse(localStorage.getItem("authToken"));
+    axios
+      .post(
+        `http://localhost:8080/travel/public/reservas?fechaDisponibleId=${fechaId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => alert("Reserva realizada con éxito."))
+      .catch(error => console.error("Error al realizar la reserva", error));
+  };
 
-    const handleUpdateStock = (updatedStockData) => {
-      setStockData(updatedStockData); // Actualiza el stock a nivel del componente padre
-    };
-    
+  if (!producto) return <p>Cargando producto...</p>;
   return (
       <section className="mb-4 w-full p-4 min-h-[60vh] mt-8">
         
@@ -60,16 +94,7 @@ export const ProductDetail = () => {
         <h2 className="text-lg md:text-2xl font-bold text-[rgb(31,41,55)] transition duration-300">
           {producto.nombre}
         </h2>
-        { state.user != "" &&  <button className="text-red-500 btn-heart"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavorito(producto);
-              }}
-            >
-              {/* {state.favs.some((fav) => fav.id === producto.id) ? (
-                <AiFillHeart size={24} /> ) : ( <AiOutlineHeart size={24} />
-                  )} */}
-            </button>}
+       
       </div>
           <StarRating rating={producto.rating} />
 
@@ -84,29 +109,72 @@ export const ProductDetail = () => {
 
             <div className="content-purple">
               <p className="text-sm text-gray-800 font-bold">Categoría:</p>
-              <p className="text-sm text-gray-600">{categoriaNombre || "Sin categoría"}</p>
+              <p className="text-sm text-gray-600">{producto.categoria.name || "Sin categoría"}</p>
               
               <p className="text-sm text-gray-800 font-bold mt-2">Características:</p>
               <p className="text-sm text-gray-600">
-                {caracteristicasNombres || "Sin características"}
+              <ul>
+          {producto.caracteristicas.map((caracteristica) => (
+            <li key={caracteristica.id}>
+              {caracteristica.icon} {caracteristica.name}
+            </li>
+          ))}
+        </ul>
               </p>
             </div>
           </div>
         </div> 
       </div>
         <div>
-          <Calendar2 stockData={producto.fechasDisponible} onUpdateStock={handleUpdateStock} />
+        <Calendar    tileDisabled={tileDisabled}  tileClassName={tileClassName} onClickDay={onDateClick} />
         </div> 
-      <div className="price">
-        <h3>
-          Desde {producto.precio || ""}
-        </h3>
-      </div>
-      <div className="btn-content">
-        <button className="btn-submit-product">Reservar</button>
-        <i>Asistencia al viajero <FontAwesomeIcon icon={faHeadset} size="lg" />
-        </i>
-      </div>
+        {fechaSeleccionada && (
+  <div className="p-4 bg-gray-100 rounded-lg shadow-md mb-4">
+    <h3 className="text-xl font-semibold mb-2">Información de la Reserva</h3>
+    <p className="text-gray-700">Fecha: <span className="font-bold">{fechaSeleccionada.fecha}</span></p>
+    <p className="text-gray-700">Duración: <span className="font-bold">{fechaSeleccionada.duracionDias} días</span></p>
+    <p className="text-gray-700">Disponibilidad: <span className="font-bold">{fechaSeleccionada.stock - fechaSeleccionada.disponibilidad}</span></p>
+    <p className="text-gray-700">Stock: <span className="font-bold">{fechaSeleccionada.stock}</span></p>
+
+    {usuariosReservados.length > 0 ? (
+      <>
+        <h4 className="text-lg font-semibold mt-4">Usuarios que ya reservaron:</h4>
+        <ul className="list-disc list-inside ml-5">
+          {usuariosReservados.map((usuario, index) => (
+            <li key={index} className="text-gray-700">
+              {usuario.nombre} {usuario.apellido} - 
+              <a href={`/perfil/${usuario.id}`} className="text-blue-500 hover:underline"> Ver perfil</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    ) : (
+      <p className="text-gray-700">No hay usuarios reservados para esta fecha.</p>
+    )}
+  </div>
+)}
+
+<div className="price bg-white p-4 rounded-lg shadow-md mb-4">
+  <h3 className="text-xl font-semibold">
+    Desde <span className="font-bold">{producto.precio || ""}</span>
+  </h3>
+</div>
+
+{fechaSeleccionada && (
+  <div className="btn-content flex items-center justify-between p-4 bg-white rounded-lg shadow-md mb-4">
+    <button 
+      className="btn-submit-product bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition duration-200" 
+      onClick={() => realizarReserva(fechaSeleccionada.id)}
+    >
+      Reservar
+    </button>
+    <i className="flex items-center text-gray-600">
+      Asistencia al viajero 
+      <FontAwesomeIcon icon={faHeadset} size="lg" className="ml-1" />
+    </i>
+  </div>
+)}
     </section>
+    
   );
 };

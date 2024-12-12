@@ -234,9 +234,18 @@
 
 
   .model-catalog{
-    max-width: 60%;
+    max-width: 70%;
+    max-height: 90%; /* Ajusta la altura máxima */
+    overflow-y: auto; /* Permite desplazamiento vertical si el contenido es muy grande */
+    padding: 20px;
   }
 
+  .feature-item .textarea-field {
+    width: 50%; /* Asegura que el campo ocupe todo el espacio disponible */
+    height: auto;
+    white-space: pre-wrap; /* Permite que los saltos de línea sean visibles */
+    word-wrap: break-word; /* Evita desbordamientos */
+}
   .content-btns-form{
     display: flex;
     gap: 2rem;

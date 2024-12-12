@@ -6,11 +6,10 @@ import { getProducts } from "../api/productos";
 export const ContextGlobal = createContext();
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
 const products =[];
-const catagori = JSON.parse(localStorage.getItem("catagorias")) || [];
+const catagori = JSON.parse(localStorage.getItem("categorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
 
 const initialState = {
-  productos: [],
   favs: lsFavs,
   theme: true,
   user: {} ,
@@ -39,6 +38,21 @@ export const ContextProvider = ({ children }) => {
     fetchCategorias();
     loadProducts()
   }, []);
+
+  useEffect(() => {
+    const fetchCaracteristicas = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/travel/public/caracteristicas");
+        dispatch({ type: "GET_CARACTERISTICAS", payload: response.data });
+      } catch (error) {
+        console.error("Error al cargar las caracteristicas:", error);
+      }
+    };
+
+    fetchCaracteristicas();
+    loadProducts()
+  }, []);
+
 
   const loadProducts = async () => {
     try{

@@ -1,0 +1,48 @@
+/* src/components/ProductPolicies.css */
+
+.policies-container {
+    width: 100%; /* Ocupa el 100% del contenedor */
+    padding: 1rem; /* Espaciado interno */
+    background-color: #f9f9f9; /* Fondo claro */
+    border: 1px solid #ddd; /* Borde tenue */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para realce */
+  }
+  
+  .policies-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: underline; /* Subrayado del título */
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .policies-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las columnas se ajusten si no caben */
+    gap: 1rem; /* Espacio entre columnas */
+  }
+  
+  .policy-item {
+    flex: 1 1 calc(33.333% - 1rem); /* Ocupa un tercio del ancho del contenedor */
+    min-width: 250px; /* Tamaño mínimo para columnas pequeñas */
+    background-color: #fff;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .policy-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 0.5rem;
+  }
+  
+  .policy-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+  }
+  

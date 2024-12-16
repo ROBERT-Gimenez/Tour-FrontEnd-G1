@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 import ListUsers from "./routes/components/admin/ListUsers";
 import ProductByCategori from "./routes/components/producto/ProductByCategori";
 import Favoritos from "./routes/components/producto/Favoritos";
+import Resultados from "./routes/components/producto/Resultados";
 import { ProductDetail } from "./routes/ProductDetail";
 import { useContextGlobal } from "./utils/GlobalContext";
 import Perfil from "./routes/components/Perfil";
@@ -63,6 +64,8 @@ function App() {
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/confirmacion-reserva" element={<ConfirmacionReserva />} />
         <Route path="/login" element={<IniciarSesion isPage={true} />} />
+        <Route path="/resultados" element={<Resultados />} />
+        
       </Routes>
       <Footer />
     </div>

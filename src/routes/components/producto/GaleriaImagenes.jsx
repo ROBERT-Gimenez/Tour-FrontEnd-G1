@@ -16,43 +16,43 @@ export const GaleriaImagenes = ({ images }) => {
         <div className="w-full mt-4 content-galery-images">
           <div className="grid grid-cols-3 grid-rows-1 gap-2">
             <div className="col-span-2 row-span-1">
-              <img
+            {images[0] && (<img
                 src={images[0]}
                 alt="Imagen Principal"
                 className="w-full h-full object-cover rounded-lg"
-              />
+                />)}
             </div>
 
             <div className="col-start-3 row-start-1">
-              <img
+            {images[1] && (<img
                 src={images[1]}
                 alt="Imagen 1"
                 className="w-full h-full object-cover rounded-lg"
-              />
+                />)}
             </div>
 
             <div className="col-start-3 row-start-2">
-              <img
+            {images[2] && (<img
                 src={images[2]}
                 alt="Imagen 2"
                 className="w-full h-full object-cover rounded-lg"
-              />
+                />)}
             </div>
 
             <div className="col-start-1 row-start-2">
-              <img
+            {images[3] && (<img
                 src={images[3]}
                 alt="Imagen 3"
                 className="w-full h-full object-cover rounded-lg"
-              />
+                />)}
             </div>
 
             <div className="col-start-2 row-start-2">
-              <img
+            {images[4] && (<img
                 src={images[4]}
                 alt="Imagen 4"
                 className="w-full h-full object-cover rounded-lg"
-              />
+              />)}
             </div>
           </div>
         

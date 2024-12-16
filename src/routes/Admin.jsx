@@ -9,7 +9,7 @@ import { useContextGlobal } from "../utils/GlobalContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Link } from "react-router-dom";
-import { createProduct } from "../api/productos.js";
+import { createProduct, updateProduct } from "../api/productos.js";
 import { showErrorAlert } from "../api/alert.js";
 
 function Admin() {
@@ -103,8 +103,17 @@ function Admin() {
     setProductos(updateList);
 
     const formData = await setFormData(item);
-
-    await createProduct(formData);
+    let update = false
+    productos.forEach((product) => {
+      if (product.id == item.id){
+        update = true
+      }
+    } )
+    if (update){
+      await  updateProduct(item.id , formData)
+    }else {
+      await createProduct(formData);
+    }
   };
 
   const setFormData = async (item) => {
@@ -118,11 +127,11 @@ function Admin() {
       formData.append("caracteristicaIds[]", id);
     });
 
-    item?.img.forEach((imagen) => {
+    item?.img?.forEach((imagen) => {
       formData.append("imagenes[]", imagen);
     });
 
-    item?.fechasDisponibles.forEach((fechaDisponible, index) => {
+    item?.fechasDisponibles?.forEach((fechaDisponible, index) => {
       formData.append(`fechasDisponibles[${index}].fecha`, fechaDisponible.fecha);
       formData.append(`fechasDisponibles[${index}].stock`, fechaDisponible.stock);
       formData.append(`fechasDisponibles[${index}].duracionDias`, fechaDisponible.duracionDias);

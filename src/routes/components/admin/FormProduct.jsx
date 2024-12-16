@@ -84,7 +84,8 @@ export default function FormProduct({ formData, onFieldChange, onImagesChange })
       <form>
         <div className="grid grid-cols-4 gap-4">
         {Object.keys(formData).map((key) => {
-         if (key === "imagenes" ||key === "img" ||   key === "id" || key ==="rating" || key === "FechasDisponibles") return null;
+         if (key === "imagenes" ||key === "img" || key === "puntuacionMedia" || key === "totalResenas" ||
+          key === "id" || key ==="rating" || key === "FechasDisponibles") return null;
 
         return (
           <div key={key} className="mb-4">

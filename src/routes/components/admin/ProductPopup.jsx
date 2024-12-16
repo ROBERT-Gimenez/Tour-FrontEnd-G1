@@ -58,7 +58,6 @@ function ProductPopup({ item, onEdit, isEditing }) {
         return;
       }
 
-     
       setFormData((prevData) => ({
         ...prevData,
         [key]: e?.target?.value,
@@ -71,6 +70,7 @@ function ProductPopup({ item, onEdit, isEditing }) {
     };
   
     const handleSave = () => {
+      console.log(formData)
       onEdit(formData);
       setIsOpen(false);
     };

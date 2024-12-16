@@ -15,7 +15,6 @@ export const getFeatureByID = async (id) => {
 // Crear una nueva característica
 export const createFeature = async (feature) => {
   const token = JSON.parse(localStorage.getItem("authToken"));
-  console.log(token);
   const response = await api.post('/travel/public/caracteristicas', feature, {
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -59,7 +58,6 @@ const urlToFile = async (url, filename) => {
       'Authorization': `Bearer ${token}`,
     },
   });
-  console.log(res);
   const blob = await res.blob();
   const file = new File([blob], filename, { type: blob.type });
   return file;

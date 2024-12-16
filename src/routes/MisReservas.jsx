@@ -1,35 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './reservas.css'
 
 const MisReservas = () => {
   const [reservas, setReservas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("authToken"));
+    const fetchReservas = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("authToken"));
+        const response = await axios.get(
+          "https://proyectofinald-production.up.railway.app/travel/public/reservas/mis-reservas",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setReservas(response.data);
+      } catch (err) {
+        setError("Hubo un error al cargar tus reservas. Por favor, intenta nuevamente.");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    axios.get("https://proyectofinald-production.up.railway.app/travel/public/reservas/mis-reservas", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => setReservas(response.data))
-    .catch((error) => console.error("Error al cargar las reservas", error));
+    fetchReservas();
   }, []);
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Mis Reservas</h2>
-      {reservas.length === 0 ? (
-        <p className="text-gray-600">No tienes reservas anteriores.</p>
+    <div className="mis-reservas-container">
+      <h2 className="mis-reservas-title">Mis Reservas</h2>
+
+      {isLoading ? (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p className="loading-text">Cargando tus reservas...</p>
+        </div>
+      ) : error ? (
+        <div className="error-container">
+          <p>{error}</p>
+        </div>
+      ) : reservas.length === 0 ? (
+        <p className="no-reservas-text">No tienes reservas anteriores.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="reservas-list">
           {reservas.map((reserva) => (
-            <li key={reserva.id} className="p-4 border rounded-lg bg-gray-50 shadow-sm">
-              <h3 className="text-xl font-semibold">{reserva.nombreProducto}</h3>
-              <p className="text-gray-700">Id: <span className="font-bold">{reserva.id}</span></p>
-              <p className="text-gray-700">Fecha de Tour: <span className="font-bold">{reserva.fechaTour}</span></p>
-              <p className="text-gray-700">Fecha que hizo la reserva: <span className="font-bold">{reserva.fecha}</span></p>
-              <p className="text-gray-700">Duración: <span className="font-bold">{reserva.duracionDias} días</span></p>
+            <li key={reserva.id} className="reserva-item">
+              <h3 className="reserva-title">{reserva.nombreProducto}</h3>
+              <p className="reserva-info">
+                <strong>ID:</strong> {reserva.id}
+              </p>
+              <p className="reserva-info">
+                <strong>Fecha de Tour:</strong> {reserva.fechaTour}
+              </p>
+              <p className="reserva-info">
+                <strong>Fecha de Reserva:</strong> {reserva.fecha}
+              </p>
+              <p className="reserva-info">
+                <strong>Duración:</strong> {reserva.duracionDias} días
+              </p>
             </li>
           ))}
         </ul>
@@ -39,5 +72,3 @@ const MisReservas = () => {
 };
 
 export default MisReservas;
-
-

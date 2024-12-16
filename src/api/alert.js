@@ -9,6 +9,15 @@ export const showErrorAlert = (message) => {
     });
   };
 
+export const showConfirm = (message) => {
+    Swal.fire({
+      icon: 'success', 
+      title: '¡Confirmado!',
+      text: message, 
+      confirmButtonText: 'Aceptar',
+    });
+  };
+
 export const handleClick = (acepted , cancel) => {
       Swal.fire({
         title: '¿Estás seguro?',
@@ -29,39 +38,27 @@ export const handleClick = (acepted , cancel) => {
       });
     }
 
-let spinnerTimeout;     
-export const spinner = (show) => {
-  if (show) {
-    Swal.fire({
-      title: 'Cargando...',
-      text: 'Por favor espera mientras se procesa la solicitud.',
-      didOpen: () => {
-        Swal.showLoading(); 
-      },
-      allowOutsideClick: false, 
-      showConfirmButton: false,
-    });
+    export const spinner = (show) => {
+      if (show) {
+        Swal.fire({
+          title: 'Cargando...',
+          text: 'Por favor espera mientras se procesa la solicitud.',
+          didOpen: () => {
+            Swal.showLoading(); 
+          },
+          allowOutsideClick: false, 
+          showConfirmButton: false,
+        });
+      }else{
+        Swal.close();
+      }
+    };
 
-    spinnerTimeout = setTimeout(() => {
-      Swal.close(); 
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        text: 'No se pudo completar la solicitud. Por favor, intenta nuevamente más tarde.',
-        confirmButtonText: 'Aceptar',
-      });
-    }, 10000);
-    
-  } else {
-    clearTimeout(spinnerTimeout);
-    Swal.close();
-  }
-};
 
-export const handleReserve = (acepted , cancel) => {
+export const handleReserve = (acepted , cancel , date) => {
   Swal.fire({
-    title: 'Estas por reservar la siguiente fecha',
-    text: '¿Quieres continuar con esta acción?',
+    title: `Estas por reservar la siguiente fecha : ${date.fecha}`,
+    text: '¿Quieres continuar?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Sí',

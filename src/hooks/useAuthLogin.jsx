@@ -32,7 +32,6 @@ const useAuthLogin = () => {
     localStorage.setItem("authToken", JSON.stringify(token));
     try {
       const decodedToken = jwtDecode(token);
-      console.log("Token decodificado:", decodedToken);
       setRol(decodedToken.roles || []); // Manejo de roles vacíos
       setUser({ ...decodedToken });
       return decodedToken;
@@ -64,7 +63,6 @@ const useAuthLogin = () => {
       return decodedToken
       
     }
-    console.log("Token en localStorage:", localStorage.getItem("authToken"));
     localStorage.removeItem('userFavoriteExperienceList');
   };
 

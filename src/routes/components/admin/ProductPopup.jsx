@@ -33,7 +33,6 @@ function ProductPopup({ item, onEdit, isEditing }) {
     };
   
     const handleFieldChange = (e, key) => {
-      console.log(e , key)
       if (key === 'caracteristicas') {
         const selectedValues = e.map((option) => option.value);
         setFormData((prevData) => ({

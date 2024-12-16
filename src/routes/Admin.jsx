@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { createProduct } from "../api/productos.js";
+import { showErrorAlert } from "../api/alert.js";
 
 function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,7 +83,7 @@ function Admin() {
     );
 
     if (isDuplicateName) {
-      alert("Ya existe un producto con ese nombre. Por favor, elija un nombre diferente.");
+      showErrorAlert("Ya existe un producto con ese nombre. Por favor, elija un nombre diferente.")
       return;
     }
 

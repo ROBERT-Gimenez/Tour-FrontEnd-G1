@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContextGlobal } from "../../utils/GlobalContext";
+import { showErrorAlert } from "../../api/alert";
 
 const ConfirmacionReserva = () => {
   const [reserva, setReserva] = useState(null);
@@ -14,7 +15,7 @@ const ConfirmacionReserva = () => {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
+      showErrorAlert("Sesión expirada. Por favor, inicia sesión nuevamente.")
       dispatch({ type: "LOGOUT" });
       navigate("/login");
       return;
@@ -43,7 +44,7 @@ const ConfirmacionReserva = () => {
         setProducto(productoResponse.data);
       } catch (error) {
         console.error("Error al cargar los datos de la reserva o producto:", error);
-        alert("No se pudo recuperar la información de la reserva.");
+        showErrorAlert("No se pudo recuperar la información de la reserva.");
         navigate("/perfil");
       }
     };

@@ -9,7 +9,7 @@ import Calendar from "react-calendar";
 import ProductPolicies from "./components/ProductPolicies";
 import MisReservas from "./MisReservas";
 import { useContextGlobal } from "../utils/GlobalContext";
-import { spinner } from "../api/alert";
+import {  showConfirm, showErrorAlert, spinner } from "../api/alert";
 
 
 export const ProductDetail = () => {
@@ -19,25 +19,25 @@ export const ProductDetail = () => {
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [usuariosReservados, setUsuariosReservados] = useState([]);
   const {showLoginPopup}  = useContextGlobal()
-  const [loading, setLoading] = useState(false);
-
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
-  useEffect(() => {
-    spinner(loading)
-  }, [loading]);
+
 
   useEffect(() => {
+    spinner(true)
     axios
       .get(`https://proyectofinald-production.up.railway.app/travel/public/productos/${id}`) // Endpoint para obtener el producto completo
       .then(response => {
         setProducto(response.data)
-        setLoading(true)
+        spinner(false)
       })
-      .catch(error => console.error("Error al cargar el producto", error));
+      .catch(error =>{
+         console.error("Error al cargar el producto", error)
+         showErrorAlert("Error al cargar el producto")
+        });
   }, []);
 
   const today = new Date();
@@ -79,7 +79,7 @@ export const ProductDetail = () => {
       showLoginPopup()
       return;
     }
-  
+    spinner(true)
     axios
       .post(
         `https://proyectofinald-production.up.railway.app/travel/public/reservas?fechaDisponibleId=${fechaId}`,
@@ -89,12 +89,13 @@ export const ProductDetail = () => {
         }
       )
       .then((response) => {
-        alert("Reserva realizada con éxito.");
+        spinner(false)
+        showConfirm("Reserva realizada con éxito.")
         navigate(`/confirmacion-reserva?reservaId=${response.data.id}`); // Redirige a la página de confirmación
       })
       .catch((error) => {
         console.error("Error al realizar la reserva", error);
-        alert("Hubo un problema con la reserva.");
+        showErrorAlert(error?.response?.data)
       });
   };
   
@@ -169,7 +170,7 @@ export const ProductDetail = () => {
           {usuariosReservados.map((usuario, index) => (
             <li key={index} className="text-gray-700">
               {usuario.nombre} {usuario.apellido} - 
-              <a href={`/perfil/${usuario.id}`} className="text-blue-500 hover:underline"> Ver perfil</a>
+              <a href={`/perfil`} className="text-blue-500 hover:underline"> Ver perfil</a>
             </li>
           ))}
         </ul>
@@ -190,7 +191,7 @@ export const ProductDetail = () => {
   <div className="btn-content flex items-center justify-between p-4 bg-white rounded-lg shadow-md mb-4">
     <button 
       className="btn-submit-product bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition duration-200" 
-      onClick={() => realizarReserva(fechaSeleccionada.id)}
+      onClick={() => realizarReserva(fechaSeleccionada.id) }
     >
       Reservar
     </button>

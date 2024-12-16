@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./session.css";
 import logo from "../../../assets/Logo.svg";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
@@ -9,12 +9,13 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import useAuthLogin from "../../../hooks/useAuthLogin";
 import { useContextGlobal } from "../../../utils/GlobalContext";
 
-const IniciarSesion = () => {
+const  IniciarSesion = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { isPopupVisible, showLoginPopup } = useContextGlobal();
   const [showPassword, setShowPassword] = useState(false);
   const {loginUser, error, user , handleLogout } = useAuthLogin();
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -53,6 +54,10 @@ const IniciarSesion = () => {
     }
   };
 
+  const redirect = () => {
+    navigate("/perfil")
+  }
+
 
   const getUserInitials = (name) => {
     return name?.split(" ").map((n) => n[0]).join("");
@@ -62,7 +67,7 @@ const IniciarSesion = () => {
     <div className="container">
       {(user.nombre) ? (
         <div className="content-avatar">
-          <div className="avatar">
+          <div onClick={redirect} className="avatar">
             {getUserInitials(user?.nombre)}
           </div>
           <Link to="/">

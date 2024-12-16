@@ -3,6 +3,7 @@ import { reducer } from "../reducers/reducer";
 import axios from "axios";
 import { getProducts } from "../api/productos";
 import { jwtDecode } from "jwt-decode";
+import { spinner } from "../api/alert";
 
 export const ContextGlobal = createContext();
 
@@ -34,6 +35,7 @@ export const ContextProvider = ({ children }) => {
           const productsResponse = await getProducts();
           dispatch({ type: "GET_PRODUCTOS", payload: productsResponse });
         }
+        spinner(false)
         if (!state.categorias || state.categorias.length === 0) {
           const categoriesResponse = await axios.get(
             "https://proyectofinald-production.up.railway.app/travel/public/categorias"
@@ -47,6 +49,7 @@ export const ContextProvider = ({ children }) => {
           dispatch({ type: "GET_CARACTERISTICAS", payload: featuresResponse.data });
         }
       } catch (error) {
+        showErrorAlert()
         console.error("Error inicializando datos:", error);
       }
     };

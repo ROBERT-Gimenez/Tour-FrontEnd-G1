@@ -22,7 +22,9 @@ const ListaDeRecomendaciones = () => {
 
   useEffect(() => {
     setProductos(state.productos)
-    setLoading(true)
+    if(state.productos.length <= 0){
+      setLoading(true)
+    }
   }, [state]);
 
   useEffect(() => {

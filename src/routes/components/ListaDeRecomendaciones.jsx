@@ -47,7 +47,7 @@ const ListaDeRecomendaciones = () => {
         ? productos
         : productos.filter((producto) =>
             selectedCategories.includes(
-              categorias.find((cat) => cat.id === producto.categoria)?.name
+              categorias.find((cat) => cat.id === producto?.categoria?.id)?.name
             )
           );
 

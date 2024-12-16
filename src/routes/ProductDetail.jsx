@@ -9,7 +9,7 @@ import Calendar from "react-calendar";
 import ProductPolicies from "./components/ProductPolicies";
 import MisReservas from "./MisReservas";
 import { useContextGlobal } from "../utils/GlobalContext";
-import {  showConfirm, showErrorAlert, spinner } from "../api/alert";
+import {  showConfirm, showErrorAlert, showWarningAlert, spinner } from "../api/alert";
 
 
 export const ProductDetail = () => {
@@ -95,7 +95,7 @@ export const ProductDetail = () => {
       })
       .catch((error) => {
         console.error("Error al realizar la reserva", error);
-        showErrorAlert(error?.response?.data)
+        showWarningAlert(error?.response?.data)
       });
   };
 

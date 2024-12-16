@@ -9,6 +9,15 @@ export const showErrorAlert = (message) => {
     });
   };
 
+export const showWarningAlert = (message) => {
+    Swal.fire({
+      icon: 'warning', 
+      title: '¡ops!',
+      text: message, 
+      confirmButtonText: 'Aceptar',
+    });
+  };
+
 export const showConfirm = (message) => {
     Swal.fire({
       icon: 'success', 

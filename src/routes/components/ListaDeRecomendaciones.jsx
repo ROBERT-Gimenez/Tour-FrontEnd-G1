@@ -5,9 +5,11 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { spinner } from "../../api/alert";
 
 const ListaDeRecomendaciones = () => {
-  const { state , dispatch } = useContextGlobal();
-  const [productos, setProductos] = useState(state.productos);
-  const [categorias, setCategorias] = useState( JSON.parse(localStorage.getItem("catagorias")) || state.categorias);
+  const { state, dispatch } = useContextGlobal();
+  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState(
+    JSON.parse(localStorage.getItem("categorias")) || state.categorias
+  );
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
@@ -17,19 +19,23 @@ const ListaDeRecomendaciones = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    spinner(loading)
+    spinner(loading);
   }, [loading]);
 
   useEffect(() => {
-    setProductos(state.productos)
-    if(state.productos.length <= 0){
-      setLoading(true)
+    setProductos(randomizarArray(state.productos));
+    if (state.productos.length <= 0) {
+      setLoading(true);
     }
   }, [state]);
 
   useEffect(() => {
     filtrarProductos();
-  }, [productos, selectedCategories, paginaActual]);
+  }, [productos, selectedCategories]);
+
+  const randomizarArray = (array) => {
+    return array.sort(() => Math.random() - 0.5);
+  };
 
   const filtrarProductos = () => {
     const filtrados =
@@ -42,7 +48,7 @@ const ListaDeRecomendaciones = () => {
           );
 
     setProductosFiltrados(filtrados);
-    setPaginaActual(1);
+    setPaginaActual(1); // Reiniciar a la primera página
   };
 
   const handleCategoryToggle = (categoria) => {
@@ -74,15 +80,13 @@ const ListaDeRecomendaciones = () => {
 
   const toggleFavorito = (producto) => {
     const isFavorito = state.favs.some((fav) => fav.id === producto.id);
-  
+
     if (isFavorito) {
       dispatch({ type: "REMOVE_FAV", payload: producto });
     } else {
       dispatch({ type: "ADD_FAV", payload: producto });
     }
   };
-  
-
 
   return (
     <section className="mb-4 w-full p-2">
@@ -102,13 +106,13 @@ const ListaDeRecomendaciones = () => {
         </button>
         {categorias?.map((categoria) => (
           <button
-          key={categoria.id}
-          className={`px-4 py-2 rounded-lg border ${
-            selectedCategories.includes(categoria.name)
-            ? "bg-[rgb(188,172,120)] text-white"
-            : "bg-gray-200 text-gray-700"
-          } transition-transform transform hover:scale-105`}
-          onClick={() => handleCategoryToggle(categoria.name)}
+            key={categoria.id}
+            className={`px-4 py-2 rounded-lg border ${
+              selectedCategories.includes(categoria.name)
+                ? "bg-[rgb(188,172,120)] text-white"
+                : "bg-gray-200 text-gray-700"
+            } transition-transform transform hover:scale-105`}
+            onClick={() => handleCategoryToggle(categoria.name)}
           >
             {categoria.name}
           </button>
@@ -117,42 +121,41 @@ const ListaDeRecomendaciones = () => {
 
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8">
-        {productosPaginaActual?.map((producto) => (
-        <div
-          key={producto.id}
-          className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
-          onClick={() => navigate(`/producto/${producto.id}`)}
-        >
-         {producto?.imagenes && (
-            <img
-              src={producto.imagenes[0]}
-              alt="imagen producto"
-              className="w-1/3 h-auto object-cover rounded-l-lg"
-            />
-          )}
-          <div className="flex flex-col justify-between p-4 w-2/3">
-            <h3 className="text-sm text-gray-600">{producto.categoria.name}</h3>
-            <h2 className="text-lg font-bold">{producto.nombre}</h2>
-            <p className="text-sm text-gray-600">{producto.ubicacion}</p>
-            {/* Botón de corazón para agregar a favoritos */}
-            { state.user != "" && 
-            <button
-              className="text-red-500 btn-heart"
-              onClick={(e) => {
-                e.stopPropagation(); // Para evitar que se active el click en el producto
-                toggleFavorito(producto);
-              }}
+          {productosPaginaActual?.map((producto) => (
+            <div
+              key={producto.id}
+              className="flex bg-[#D9D9D9] rounded-lg shadow-md mb-4 hover:scale-105 hover:shadow-2xl cursor-pointer"
+              onClick={() => navigate(`/producto/${producto.id}`)}
             >
-              {state.favs.some((fav) => fav.id === producto.id) ? (
-                <AiFillHeart size={24} />
-              ) : (
-                <AiOutlineHeart size={24} />
+              {producto?.imagenes && (
+                <img
+                  src={producto.imagenes[0]}
+                  alt="imagen producto"
+                  className="w-1/3 h-auto object-cover rounded-l-lg"
+                />
               )}
-            </button>
-            }
-          </div>
-        </div>
-      ))}
+              <div className="flex flex-col justify-between p-4 w-2/3">
+                <h3 className="text-sm text-gray-600">{producto.categoria.name}</h3>
+                <h2 className="text-lg font-bold">{producto.nombre}</h2>
+                <p className="text-sm text-gray-600">{producto.ubicacion}</p>
+                {state.user && (
+                  <button
+                    className="text-red-500 btn-heart"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorito(producto);
+                    }}
+                  >
+                    {state.favs.some((fav) => fav.id === producto.id) ? (
+                      <AiFillHeart size={24} />
+                    ) : (
+                      <AiOutlineHeart size={24} />
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
         {productosFiltrados?.length === 0 && (
           <p className="text-center text-gray-500 mt-4">

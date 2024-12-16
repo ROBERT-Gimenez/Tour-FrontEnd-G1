@@ -350,3 +350,25 @@
 .form-create{
   margin-top: 3rem;
 }
+
+.disponible {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+.tachada {
+  background-color: #9e9494 !important;
+  color: white !important;
+  border-radius: 50%;
+  text-decoration: line-through; 
+}
+
+.react-calendar__tile:disabled{
+  background-color: #e7e7e7 !important;
+  color: black !important;
+}
+
+.calendar-content{
+  display: flex;
+}

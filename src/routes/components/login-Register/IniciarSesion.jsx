@@ -7,11 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import useAuthLogin from "../../../hooks/useAuthLogin";
+import { useContextGlobal } from "../../../utils/GlobalContext";
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const { isPopupVisible, showLoginPopup } = useContextGlobal();
   const [showPassword, setShowPassword] = useState(false);
   const {loginUser, error, user , handleLogout } = useAuthLogin();
 
@@ -42,7 +43,7 @@ const IniciarSesion = () => {
         imageHeight: 150,
         imageAlt: "Logo",
       });
-      setIsPopupVisible(false);
+      showLoginPopup(false);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -74,7 +75,7 @@ const IniciarSesion = () => {
         <div>
           <button
             className="button-header open-popup-button bg-[#FFFFFF] text-black border border-black px-2 py-1 text-xs md:px-3 md:py-2 rounded-[50px] hover:bg-black hover:text-white hover:border-white transition duration-300 transform hover:scale-105"
-            onClick={() => setIsPopupVisible(true)}
+            onClick={() => showLoginPopup(true)}
           >
             Iniciar sesión
           </button>
@@ -88,7 +89,7 @@ const IniciarSesion = () => {
           {isPopupVisible && (
             <div className="popup-overlay">
               <div className="popup-content">
-                <button className="close-button" onClick={() => setIsPopupVisible(false)}>
+                <button className="close-button" onClick={() => showLoginPopup(false)}>
                   <FontAwesomeIcon icon={faClose} />
                 </button>
                 <form className="form" onSubmit={processingLogin}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../../utils/GlobalContext";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { spinner } from "../../api/alert";
 
 const ListaDeRecomendaciones = () => {
   const { state , dispatch } = useContextGlobal();
@@ -10,14 +11,18 @@ const ListaDeRecomendaciones = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const productosPorPagina = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(state)
+    spinner(loading)
+  }, [loading]);
+
+  useEffect(() => {
     setProductos(state.productos)
-    console.log(productos)
+    setLoading(true)
   }, [state]);
 
   useEffect(() => {

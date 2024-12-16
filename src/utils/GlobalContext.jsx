@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { reducer } from "../reducers/reducer";
 import axios from "axios";
 import { getProducts } from "../api/productos";
@@ -23,6 +23,9 @@ const initialState = {
 
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  const showLoginPopup = () => setIsPopupVisible(!isPopupVisible);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -56,7 +59,7 @@ export const ContextProvider = ({ children }) => {
   }, [state.favs]);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch }}>
+    <ContextGlobal.Provider value={{ state, dispatch , isPopupVisible, showLoginPopup  }}>
       {children}
     </ContextGlobal.Provider>
   );

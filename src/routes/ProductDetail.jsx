@@ -3,41 +3,45 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft ,faHeadset  } from '@fortawesome/free-solid-svg-icons';
 import { GaleriaImagenes } from "./components/producto/GaleriaImagenes";
 import { useEffect, useState } from "react";
-import Calendar2 from "./components/producto/Calendar2";
 import StarRating from "./components/producto/StarRating";
-import { useContextGlobal } from "../utils/GlobalContext";
 import axios from "axios";
 import Calendar from "react-calendar";
 import ProductPolicies from "./components/ProductPolicies";
 import MisReservas from "./MisReservas";
+import { useContextGlobal } from "../utils/GlobalContext";
+import { spinner } from "../api/alert";
 
 
-/* import { AiFillHeart, AiOutlineHeart } from "react-icons";
- */
 export const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+  const [producto, setProducto] = useState(null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const [usuariosReservados, setUsuariosReservados] = useState([]);
+  const {showLoginPopup}  = useContextGlobal()
+  const [loading, setLoading] = useState(false);
+
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
- 
-  const [producto, setProducto] = useState(null);
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
-  const [usuariosReservados, setUsuariosReservados] = useState([]);
+  useEffect(() => {
+    spinner(loading)
+  }, [loading]);
 
   useEffect(() => {
     axios
       .get(`https://proyectofinald-production.up.railway.app/travel/public/productos/${id}`) // Endpoint para obtener el producto completo
-      .then(response => setProducto(response.data))
+      .then(response => {
+        setProducto(response.data)
+        setLoading(true)
+      })
       .catch(error => console.error("Error al cargar el producto", error));
   }, []);
 
   const today = new Date();
 
-  // Función para deshabilitar fechas anteriores a hoy
   const tileDisabled = ({ date }) => {
     return date < today; // Deshabilitar fechas pasadas
   };
@@ -72,7 +76,7 @@ export const ProductDetail = () => {
   const realizarReserva = (fechaId) => {
     const token = JSON.parse(localStorage.getItem("authToken"));
     if (!token) {
-      navigate("/login"); // Redirige al login si no está autenticado
+      showLoginPopup()
       return;
     }
   
@@ -147,7 +151,7 @@ export const ProductDetail = () => {
           </div>
         </div> 
       </div>
-        <div>
+        <div className="calendar-content">
         <Calendar    tileDisabled={tileDisabled}  tileClassName={tileClassName} onClickDay={onDateClick} />
         </div> 
         {fechaSeleccionada && (

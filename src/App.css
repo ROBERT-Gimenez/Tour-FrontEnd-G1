@@ -82,6 +82,7 @@
     height: auto;
     width: 3rem;;
     transform: scale(1.9);
+    cursor: pointer;
   } 
 
   /* Footer */

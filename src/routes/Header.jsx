@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Logo.svg";
 import IniciarSesion from "./components/login-Register/IniciarSesion";
 import useAuthLogin from "../hooks/useAuthLogin";
@@ -12,6 +12,7 @@ export default function Header() {
   const [dataUser, setDataUser] = useState();
   const [rol, setRol] = useState([{id:0 , name:""}]);
   const { state, dispatch } = useContextGlobal();
+  const navigate = useNavigate()
 
   useEffect(() => {
     checkToken(); // Verifica el token al montar
@@ -40,18 +41,22 @@ export default function Header() {
     }
   }, [loading]);
 
+  const redirect = () => {
+    navigate("/")
+  }
+
   return (
     <header className="w-full fixed top-0 bg-[#fff0c0] shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center space-x-3">
-          <Link to="/" className="link-logo flex items-center">
+          <div onClick={redirect} className="link-logo flex items-center">
             <img src={logo} alt="Logo" className="h-10" />
             <span className="ml-2 text-xl font-bold text-gray-800 flex flex-col font-bebas">
               <span className="text-2xl">Trails</span>
               <span>Travel Tours</span>
             </span>
-          </Link>
+          </div>
         </div>
         
               {/* Botones */}

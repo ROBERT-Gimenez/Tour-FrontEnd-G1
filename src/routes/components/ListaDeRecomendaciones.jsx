@@ -23,11 +23,15 @@ const ListaDeRecomendaciones = () => {
   }, [loading]);
 
   useEffect(() => {
+    setCategorias(state.categorias)
+  }, [state.categorias]);
+
+  useEffect(() => {
     setProductos(randomizarArray(state.productos));
     if (state.productos.length <= 0) {
       setLoading(true);
     }
-  }, [state]);
+  }, [state.productos]);
 
   useEffect(() => {
     filtrarProductos();
@@ -95,7 +99,7 @@ const ListaDeRecomendaciones = () => {
       </h2>
       <div className="flex flex-wrap justify-center gap-4 mb-6 pt-12">
         <button
-          onClick={handleMostrarTodos}
+          onClick={() => {handleMostrarTodos}}
           className={`px-4 py-2 rounded-lg border ${
             selectedCategories.length === 0
               ? "bg-blue-500 text-white"

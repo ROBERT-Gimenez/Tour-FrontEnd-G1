@@ -1,31 +1,15 @@
-//mejorar buscador incluir endpoints del back
-
-
-import React, { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
 
 const Buscador = () => {
   const [busqueda, setBusqueda] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
+  const [fechaFinal, setFechaFin] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
   const navigate = useNavigate();
 
   const handleBusquedaChange = (e) => {
-    const query = e.target.value;
-    setBusqueda(query);
-
-    // Simulación de sugerencias basadas en búsqueda
-    if (query.length > 1) {
-      setSugerencias(
-        ["París", "Londres", "Nueva York", "Roma", "Berlín"].filter((sugerencia) =>
-          sugerencia.toLowerCase().includes(query.toLowerCase())
-        )
-      );
-    } else {
-      setSugerencias([]);
-    }
+    setBusqueda(e.target.value);
   };
 
   const handleFechaInicioChange = (e) => {
@@ -41,10 +25,39 @@ const Buscador = () => {
     setSugerencias([]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Navegar a los resultados de búsqueda
-    navigate(`/resultados?query=${busqueda}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+
+    // Validar que ambas fechas estén seleccionadas
+    if (!fechaInicio || !fechaFinal) {
+      alert("Por favor selecciona ambas fechas");
+      return;
+    }
+
+    try {
+      console.log("Buscando con:", busqueda, "Fecha Inicio:", fechaInicio, "Fecha Fin:", fechaFinal);
+
+      // Realizar la petición cuando el usuario presiona el botón de búsqueda
+      let url = `https://proyectofinald-production.up.railway.app/travel/public/productos/disponibles?fechaInicio=${fechaInicio}&fechaFinal=${fechaFinal}`;
+
+      // Si hay una búsqueda, agregarla a la URL
+      if (busqueda) {
+        url += `&query=${busqueda}`;
+      }
+
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Datos recibidos de la API:", data);
+
+        // Aquí pasas los resultados como parte de la URL para poder usarlos en la página de resultados
+        navigate(`/resultados?query=${busqueda}&fechaInicio=${fechaInicio}&fechaFin=${fechaFinal}`);
+      } else {
+        console.error("Error en la respuesta del servidor:", response.status);
+      }
+    } catch (error) {
+      console.error("Error obteniendo sugerencias:", error);
+    }
   };
 
   return (
@@ -69,7 +82,6 @@ const Buscador = () => {
               onChange={handleBusquedaChange}
               placeholder="Escribe un destino o actividad..."
               className="p-3 border rounded w-full"
-              required
             />
             {sugerencias.length > 0 && (
               <ul className="absolute bg-white border rounded mt-1 max-h-40 overflow-auto w-full z-10">
@@ -107,7 +119,7 @@ const Buscador = () => {
             <input
               type="date"
               id="fechaFin"
-              value={fechaFin}
+              value={fechaFinal}
               onChange={handleFechaFinChange}
               className="p-3 border rounded w-full"
               required

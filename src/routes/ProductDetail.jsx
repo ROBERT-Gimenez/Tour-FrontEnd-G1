@@ -8,7 +8,10 @@ import StarRating from "./components/producto/StarRating";
 import { useContextGlobal } from "../utils/GlobalContext";
 import axios from "axios";
 import Calendar from "react-calendar";
+import ProductPolicies from "./components/ProductPolicies";
 import MisReservas from "./MisReservas";
+
+
 /* import { AiFillHeart, AiOutlineHeart } from "react-icons";
  */
 export const ProductDetail = () => {
@@ -68,6 +71,11 @@ export const ProductDetail = () => {
 
   const realizarReserva = (fechaId) => {
     const token = JSON.parse(localStorage.getItem("authToken"));
+    if (!token) {
+      navigate("/login"); // Redirige al login si no está autenticado
+      return;
+    }
+  
     axios
       .post(
         `https://proyectofinald-production.up.railway.app/travel/public/reservas?fechaDisponibleId=${fechaId}`,
@@ -76,9 +84,23 @@ export const ProductDetail = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then(() => alert("Reserva realizada con éxito."))
-      .catch(error => console.error("Error al realizar la reserva", error));
+      .then((response) => {
+        alert("Reserva realizada con éxito.");
+        navigate(`/confirmacion-reserva?reservaId=${response.data.id}`); // Redirige a la página de confirmación
+      })
+      .catch((error) => {
+        console.error("Error al realizar la reserva", error);
+        alert("Hubo un problema con la reserva.");
+      });
   };
+  
+   // Políticas del producto de tours
+   const productPolicies = [
+    { title: "Requisitos de Participación", description: "Debe presentar una identificación válida al momento del check-in. Los participantes deben ser mayores de 18 años, o contar con un acompañante adulto si son menores." },
+    { title: "Política de Cancelación", description: "Las cancelaciones realizadas con más de 48 horas de antelación son elegibles para un reembolso completo. Cancelaciones dentro de las 48 horas previas no son reembolsables." },
+    { title: "Restricciones de Equipaje", description: "No se permite llevar equipaje de gran tamaño. Se recomienda traer solo una mochila o bolso pequeño." },
+    { title: "Código de Conducta", description: "Por favor, respete a otros participantes y guías durante el recorrido. Comportamientos inapropiados resultarán en la exclusión del tour sin reembolso." },
+  ];
 
   if (!producto) return <p>Cargando producto...</p>;
   return (
@@ -174,6 +196,8 @@ export const ProductDetail = () => {
     </i>
   </div>
 )}
+      {/* Bloque de políticas */}
+      <ProductPolicies policies={productPolicies} />
     </section>
     
   );

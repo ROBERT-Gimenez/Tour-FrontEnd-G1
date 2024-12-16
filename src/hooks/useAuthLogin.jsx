@@ -32,11 +32,15 @@ const useAuthLogin = () => {
     localStorage.setItem("authToken", JSON.stringify(token));
     try {
       const decodedToken = jwtDecode(token);
-      return decodedToken
+      console.log("Token decodificado:", decodedToken);
+      setRol(decodedToken.roles || []); // Manejo de roles vacíos
+      setUser({ ...decodedToken });
+      return decodedToken;
     } catch (error) {
       console.error("Error al decodificar el token", error);
     }
-}
+  };
+  
 
   const decodeJwt = (token) => {
     const payload = token.split('.')[1];
@@ -58,7 +62,9 @@ const useAuthLogin = () => {
       setRol(decodedToken.roles);
       setUser({ ...decodedToken });
       return decodedToken
+      
     }
+    console.log("Token en localStorage:", localStorage.getItem("authToken"));
     localStorage.removeItem('userFavoriteExperienceList');
   };
 
@@ -75,8 +81,13 @@ const useAuthLogin = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    checkToken();
-    window.location.reload()
+    localStorage.removeItem("favs"); // Limpia cualquier estado persistente
+    setRol(null);
+    setUser(null);
+    dispatch({ type: "LOGOUT" }); // Actualiza el estado global
+  
+    // Redirigir al home
+    window.location.href = "/";
   };
 
   return {

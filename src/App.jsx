@@ -12,18 +12,25 @@ import ListUsers from "./routes/components/admin/ListUsers";
 import ProductByCategori from "./routes/components/producto/ProductByCategori";
 import Favoritos from "./routes/components/producto/Favoritos";
 import { ProductDetail } from "./routes/ProductDetail";
+import { useContextGlobal } from "./utils/GlobalContext";
+import Perfil from "./routes/components/Perfil";
+import ConfirmacionReserva from "./routes/components/ConfirmacionReserva";
+import IniciarSesion from "./routes/components/login-Register/IniciarSesion";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRole }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { state } = useContextGlobal();
+  const userRoles = state?.user?.roles;
 
   useEffect(() => {
-    if (!user) {
+    if (!userRoles || (requiredRole && !userRoles.some(role => role.name === requiredRole))) {
       navigate("/");
     }
-  }, [navigate, user]);
+  }, [navigate, userRoles, requiredRole]);
 
-  return user ? children : null;
+  return userRoles && (!requiredRole || userRoles.some(role => role.name === requiredRole))
+    ? children
+    : null;
 };
 
 function App() {
@@ -35,17 +42,17 @@ function App() {
         <Route
           path="/admin"
           element={
-           /*  <ProtectedRoute> */
+            /*<ProtectedRoute>*/
               <Admin />
-            /* </ProtectedRoute> */
+            /*</ProtectedRoute>*/
           }
         />
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute>
+           <ProtectedRoute requiredRole="ADMIN">
               <ListUsers />
-            </ProtectedRoute>
+           </ProtectedRoute>
           }
         />
         <Route path="/crear-cuenta" element={<CrearCuenta />} />
@@ -53,6 +60,9 @@ function App() {
         <Route path="/categorias/:id" element={<ProductByCategori />} />
         <Route path="/favoritos" element={<Favoritos />} />
         <Route path="*" element={<h1>Error 404 - Page not Found</h1>} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/confirmacion-reserva" element={<ConfirmacionReserva />} />
+        <Route path="/login" element={<IniciarSesion isPage={true} />} />
       </Routes>
       <Footer />
     </div>

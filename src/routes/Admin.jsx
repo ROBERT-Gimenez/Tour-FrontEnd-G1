@@ -1,11 +1,6 @@
-// src/routes/Admin.jsx
-
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationTriangle,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExclamationTriangle, faSearch } from "@fortawesome/free-solid-svg-icons";
 import ProductPopup from "./components/admin/ProductPopup.jsx";
 import DeletePopup from "./components/admin/DeletePopup.jsx";
 import { CharacteristicsForm } from "./components/admin/CharacteristicsForm.jsx";
@@ -20,14 +15,31 @@ function Admin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { state, dispatch } = useContextGlobal();
-  const [productos, setProductos] = useState(state.productos);
-  const [showUsuarios, setShowUsuarios] = useState(false); // Estado para controlar si mostramos los usuarios
-  const [categorias, setCategorias] = useState(state.catagorias || []);
+  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCategorias(state.categorias || []);
+    // Verificar si el usuario es administrador
+    const adminRoles = state?.user?.roles?.some((role) => role.name === "ADMIN");
+    if (!adminRoles) {
+      navigate("/"); // Redirige si no es administrador
+    }
+  }, [state?.user?.roles, navigate]);
+
+  useEffect(() => {
+    // Sincronizar productos con el estado global
+    if (state.productos) {
+      setProductos(state.productos);
+    }
+  }, [state.productos]);
+
+  useEffect(() => {
+    // Sincronizar categorías con el estado global
+    if (state.categorias) {
+      setCategorias(state.categorias);
+    }
   }, [state.categorias]);
 
   const handleCategoryChange = (selectedOptions) => {
@@ -54,14 +66,6 @@ function Admin() {
     label: categoria.name,
   }));
 
-
-  useEffect(() => {
-     const admin = state?.user?.roles;
-     if(admin && admin[0]?.name != "ADMIN"){
-      navigate("/")
-    } 
-  }, [navigate]);
-
   useEffect(() => {
     const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", checkScreenSize);
@@ -73,24 +77,19 @@ function Admin() {
   };
 
   const handleSave = async (item) => {
-    console.log("Enviar:", item);
-  
     const isDuplicateName = state?.productos?.some(
       (producto) => producto?.nombre === item?.nombre && producto?.id !== item.id
     );
-    
+
     if (isDuplicateName) {
-      alert(
-        "Ya existe un producto con ese nombre. Por favor, elija un nombre diferente."
-      );
+      alert("Ya existe un producto con ese nombre. Por favor, elija un nombre diferente.");
       return;
     }
-  
+
     let updateList;
     const existingProductIndex = state?.productos?.findIndex(
       (producto) => producto.id === item.id
     );
-  
     if (existingProductIndex !== -1) {
       updateList = state.productos?.map((producto, index) =>
         index === existingProductIndex ? item : producto
@@ -98,48 +97,37 @@ function Admin() {
     } else {
       updateList = [...state.productos, item];
     }
-  
-    dispatch({ type: 'PUT_PRODUCTOS', updateList });
+
+    dispatch({ type: "PUT_PRODUCTOS", updateList });
     setProductos(updateList);
-  
+
     const formData = await setFormData(item);
-    
+
     await createProduct(formData);
   };
-  
+
   const setFormData = async (item) => {
-    console.log(item);
     const formData = new FormData();
     formData.append("nombre", item.nombre);
     formData.append("descripcion", item.descripcion);
     formData.append("ubicacion", item.ubicacion);
     formData.append("precio", item.precio);
     formData.append("categoriaId", item.categoriaId);
-    formData.append("caracteristicaIds[]", "");
-    formData.append("fechasDisponibles[]", "");
     item?.caracteristicas?.forEach((id) => {
       formData.append("caracteristicaIds[]", id);
     });
-  
+
     item?.img.forEach((imagen) => {
-        formData.append("imagenes[]", imagen);
+      formData.append("imagenes[]", imagen);
     });
-  
+
     item?.fechasDisponibles.forEach((fechaDisponible, index) => {
       formData.append(`fechasDisponibles[${index}].fecha`, fechaDisponible.fecha);
       formData.append(`fechasDisponibles[${index}].stock`, fechaDisponible.stock);
       formData.append(`fechasDisponibles[${index}].duracionDias`, fechaDisponible.duracionDias);
     });
-  
+
     return formData;
-  };
-
-  const handleDelete = (item) => {
-    console.log("Eliminar:", item);
-  };
-
-  const toggleUsuariosList = () => {
-    setShowUsuarios(!showUsuarios); // Alternamos la visibilidad de la lista de usuarios
   };
 
   return isMobile ? (
@@ -149,12 +137,10 @@ function Admin() {
           icon={faExclamationTriangle}
           className="text-red-500 text-4xl mb-4"
         />
-        <h2 className="text-xl font-bold text-red-600 mb-2">
-          Acceso Restringido
-        </h2>
+        <h2 className="text-xl font-bold text-red-600 mb-2">Acceso Restringido</h2>
         <p className="text-gray-700">
-          No se puede acceder a esta vista desde un dispositivo móvil. Por
-          favor, utilice un dispositivo con una pantalla más grande.
+          No se puede acceder a esta vista desde un dispositivo móvil. Por favor, utilice un
+          dispositivo con una pantalla más grande.
         </p>
       </div>
     </div>
@@ -165,55 +151,37 @@ function Admin() {
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 p-10">
             Administración
           </h1>
-                        
           <div className="flex items-center space-x-4 content-search-inputs">
-            
-          <div className="fitered-categori">
-            <Select
-              isMulti
-              options={categoryOptions}
-              placeholder="Seleccione categorías"
-              onChange={handleCategoryChange}
-              classNamePrefix="react-select"
-            />
-            <p>Productos: {filteredData?.length}</p>
-          </div>
-
+            <div className="fitered-categori">
+              <Select
+                isMulti
+                options={categoryOptions}
+                placeholder="Seleccione categorías"
+                onChange={handleCategoryChange}
+                classNamePrefix="react-select"
+              />
+              <p>Productos: {filteredData?.length}</p>
+            </div>
             <div className="relative">
-              <input type="text" className="input-search" value={searchTerm} onChange={handleSearch}
-                placeholder="Buscar destino..." />
+              <input
+                type="text"
+                className="input-search"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Buscar destino..."
+              />
               <FontAwesomeIcon icon={faSearch} className="absolute top-2.5 right-3 text-gray-400" />
             </div>
             <div className="btns-popus">
-            <ProductPopup item={state?.productos} onEdit={handleSave} isEditing={false}/>
-            <Link to="/admin/users">
-                <button className="btn-open-characterist">
-                  Usuarios
-                </button>
+              <ProductPopup item={state?.productos} onEdit={handleSave} isEditing={false} />
+              <Link to="/admin/users">
+                <button className="btn-open-characterist">Usuarios</button>
               </Link>
-              <CharacteristicsForm/>
-              <CatalagoForm/>
+              <CharacteristicsForm />
+              <CatalagoForm />
             </div>
           </div>
-
         </div>
-
-        {/* Mostrar la lista de administradores */}
-        {showUsuarios && (
-          <div className="mt-4 p-4 bg-gray-100 rounded-md">
-            <h2 className="text-xl font-bold mb-4">Lista de Administradores</h2>
-            <ul>
-              {usuarios.map((usuario) => (
-                <li key={usuario.id} className="mb-2">
-                  <span>
-                    {usuario.nombre} ({usuario.email})
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-100 sticky top-0 ">
@@ -221,7 +189,6 @@ function Admin() {
                 <th className="table-header">Destino</th>
                 <th className="table-header">Nombre</th>
                 <th className="table-header">Precio</th>
-                {/* <th className="table-header">Fechas</th> */}
                 <th className="table-header">Disponible</th>
                 <th className="table-header">Comprados</th>
                 <th className="table-header">Acciones</th>
@@ -232,8 +199,8 @@ function Admin() {
                 <tr key={index}>
                   <td className="table-cell">{item.ubicacion}</td>
                   <td className="table-cell">{item.nombre}</td>
-                  <td className="table-cell">{item.precio}</td>              
-                <td className="table-cell">{item.stock - item.comprados}</td>
+                  <td className="table-cell">{item.precio}</td>
+                  <td className="table-cell">{item.stock - item.comprados}</td>
                   <td className="table-cell">{item.comprados}</td>
                   <td className="table-cell">
                     <div className="flex gap-2">
@@ -243,7 +210,7 @@ function Admin() {
                         onEdit={handleSave}
                         isEditing={true}
                       />
-                      <DeletePopup itemDelete={item} onDelete={handleDelete} />
+                      <DeletePopup itemDelete={item} onDelete={() => {}} />
                     </div>
                   </td>
                 </tr>

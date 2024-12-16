@@ -14,10 +14,10 @@ export default function Header() {
   const { state, dispatch } = useContextGlobal();
 
   useEffect(() => {
-    checkToken()
-    if(state?.user){
-      setDataUser(state?.user)
-      setRol(state?.user?.roles)
+    checkToken(); // Verifica el token al montar
+    if (state?.user) {
+      setDataUser(state?.user);
+      setRol(state?.user?.roles || []); // Actualiza roles
     }
   }, [state.user]);
 
@@ -53,6 +53,8 @@ export default function Header() {
             </span>
           </Link>
         </div>
+        
+              {/* Botones */}
         <div className="btns-sessions flex space-x-2">
           {(rol && rol[0]?.name !== "ADMIN" ) ? (
             <>

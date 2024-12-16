@@ -67,13 +67,14 @@ const ListaDeRecomendaciones = () => {
 
   const toggleFavorito = (producto) => {
     const isFavorito = state.favs.some((fav) => fav.id === producto.id);
-
+  
     if (isFavorito) {
       dispatch({ type: "REMOVE_FAV", payload: producto });
     } else {
       dispatch({ type: "ADD_FAV", payload: producto });
     }
   };
+  
 
 
   return (

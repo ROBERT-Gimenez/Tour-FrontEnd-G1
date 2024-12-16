@@ -2,18 +2,21 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
 import axios from "axios";
 import { getProducts } from "../api/productos";
+import { jwtDecode } from "jwt-decode";
 
 export const ContextGlobal = createContext();
+
 const lsFavs = JSON.parse(localStorage.getItem("favs")) || [];
-const products =[];
 const catagori = JSON.parse(localStorage.getItem("categorias")) || [];
 const caracteristica = JSON.parse(localStorage.getItem("caracteristicas")) || [];
+const storedToken = JSON.parse(localStorage.getItem("authToken"));
+const initialUser = storedToken ? jwtDecode(storedToken) : null;
 
 const initialState = {
   favs: lsFavs,
   theme: true,
-  user: {} ,
-  productos: products || [],
+  user: initialUser,
+  productos: [],
   catagorias: catagori || [],
   caracteristicas: caracteristica || [],
 };
@@ -21,54 +24,36 @@ const initialState = {
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const authHeader = state.user?.token 
-  ? { Authorization: `Bearer ${state.user.token}` }
-  : {};
-
   useEffect(() => {
-    const fetchCategorias = async () => {
+    const initializeData = async () => {
       try {
-        const response = await axios.get("https://proyectofinald-production.up.railway.app/travel/public/categorias");
-        dispatch({ type: "GET_CATEGORIAS", payload: response.data });
+        if (!state.productos || state.productos.length === 0) {
+          const productsResponse = await getProducts();
+          dispatch({ type: "GET_PRODUCTOS", payload: productsResponse });
+        }
+        if (!state.categorias || state.categorias.length === 0) {
+          const categoriesResponse = await axios.get(
+            "https://proyectofinald-production.up.railway.app/travel/public/categorias"
+          );
+          dispatch({ type: "GET_CATEGORIAS", payload: categoriesResponse.data });
+        }
+        if (!state.caracteristicas || state.caracteristicas.length === 0) {
+          const featuresResponse = await axios.get(
+            "https://proyectofinald-production.up.railway.app/travel/public/caracteristicas"
+          );
+          dispatch({ type: "GET_CARACTERISTICAS", payload: featuresResponse.data });
+        }
       } catch (error) {
-        console.error("Error al cargar las categorías:", error);
+        console.error("Error inicializando datos:", error);
       }
     };
 
-    fetchCategorias();
-    loadProducts()
-  }, []);
-
-  useEffect(() => {
-    const fetchCaracteristicas = async () => {
-      try {
-        const response = await axios.get("https://proyectofinald-production.up.railway.app/travel/public/caracteristicas");
-        dispatch({ type: "GET_CARACTERISTICAS", payload: response.data });
-      } catch (error) {
-        console.error("Error al cargar las caracteristicas:", error);
-      }
-    };
-
-    fetchCaracteristicas();
-    loadProducts()
-  }, []);
-
-
-  const loadProducts = async () => {
-    try{
-      const response = await getProducts()
-      console.log(response)
-      dispatch({ type:"GET_PRODUCTOS" , payload: response})
-    }catch(err){
-      console.error("Error al cargar los productos:", error);
-    }
-  }
-
+    initializeData();
+  }, [state.productos, state.categorias, state.caracteristicas]);
 
   useEffect(() => {
     localStorage.setItem("favs", JSON.stringify(state.favs));
   }, [state.favs]);
-  
 
   return (
     <ContextGlobal.Provider value={{ state, dispatch }}>
@@ -77,6 +62,4 @@ export const ContextProvider = ({ children }) => {
   );
 };
 
-export const useContextGlobal = () => {
-  return useContext(ContextGlobal);
-};
+export const useContextGlobal = () => useContext(ContextGlobal);

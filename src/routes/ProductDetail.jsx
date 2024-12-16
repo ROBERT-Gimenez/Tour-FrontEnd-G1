@@ -98,6 +98,17 @@ export const ProductDetail = () => {
         showErrorAlert(error?.response?.data)
       });
   };
+
+  const getImageSrc = (icon) => {
+    if (icon instanceof File) {
+        return URL.createObjectURL(icon);
+    }
+    return icon;
+};
+
+  const redirect = () => {
+    navigate("/perfil")
+  } 
   
    // Políticas del producto de tours
    const productPolicies = [
@@ -140,11 +151,14 @@ export const ProductDetail = () => {
               
               <p className="text-sm text-gray-800 font-bold mt-2">Características:</p>
               <p className="text-sm text-gray-600">
-              <ul>
+              <ul className="ul-content">
           {producto.caracteristicas.map((caracteristica) => (
-            <li key={caracteristica.id}>
-              {caracteristica.icon} {caracteristica.name}
+            <>
+            <li className="caracteristic-content" key={caracteristica.id}>
+            <img src={getImageSrc(caracteristica.icon)} alt="Ícono seleccionado" className="catalog-image-form" />
+            <p>{caracteristica.name}</p>
             </li>
+            </>
           ))}
         </ul>
               </p>
@@ -170,7 +184,7 @@ export const ProductDetail = () => {
           {usuariosReservados.map((usuario, index) => (
             <li key={index} className="text-gray-700">
               {usuario.nombre} {usuario.apellido} - 
-              <a href={`/perfil`} className="text-blue-500 hover:underline"> Ver perfil</a>
+              <a onClick={redirect} className="text-blue-500 hover:underline"> Ver perfil</a>
             </li>
           ))}
         </ul>

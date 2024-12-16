@@ -212,7 +212,17 @@
 
   .catalog-image-form{
     width: 8;
-    max-width:8rem;
+    max-width:2rem;
+  }
+
+  .caracteristic-content p {
+    font-size: 10px;
+  }
+
+  .ul-content{
+    display: flex;
+    gap: 1rem;
+    flex-flow: wrap;
   }
 
   .input-image{

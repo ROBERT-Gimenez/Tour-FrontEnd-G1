@@ -35,16 +35,7 @@ const MisReservas = () => {
     <div className="mis-reservas-container">
       <h2 className="mis-reservas-title">Mis Reservas</h2>
 
-      {isLoading ? (
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p className="loading-text">Cargando tus reservas...</p>
-        </div>
-      ) : error ? (
-        <div className="error-container">
-          <p>{error}</p>
-        </div>
-      ) : reservas.length === 0 ? (
+      {!isLoading && reservas.length === 0 ? (
         <p className="no-reservas-text">No tienes reservas anteriores.</p>
       ) : (
         <ul className="reservas-list">

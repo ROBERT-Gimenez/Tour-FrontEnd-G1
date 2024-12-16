@@ -3,7 +3,7 @@ import { reducer } from "../reducers/reducer";
 import axios from "axios";
 import { getProducts } from "../api/productos";
 import { jwtDecode } from "jwt-decode";
-import { spinner } from "../api/alert";
+import { showErrorAlert, spinner } from "../api/alert";
 
 export const ContextGlobal = createContext();
 
